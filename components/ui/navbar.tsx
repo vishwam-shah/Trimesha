@@ -12,9 +12,10 @@ export function Navbar({ className }: { className?: string }) {
     <div className={cn("fixed top-4 left-0 right-0 z-50 px-4", className)}>
       <div className="mx-auto max-w-6xl flex items-center justify-center relative">
         <div className="absolute left-4 flex items-center gap-4">
-          <a href="#" className="text-2xl md:text-xl font-bold text-black dark:text-white">
+          {/* <a href="#" className="text-2xl md:text-xl font-bold text-black dark:text-white">
             TRIMESHA
-          </a>
+          </a> */}
+          <img src="logo/1_dark.png" alt="Trimesha Logo" className="h-45 mt-10"  />
         </div>
 
         {/* Desktop menu */}
