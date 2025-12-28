@@ -16,7 +16,7 @@ const coFounders = [
     location: "Siddhant Mehta",
     flag: IndianFlag,
     stats: "Co-Founder",
-    desc: "Software Engineer",
+    desc: "Lead Software Engineer",
     href: "#",
     themeColor: "150 50% 25%",
   },
@@ -32,7 +32,7 @@ const coFounders = [
   },
   {
     imageUrl:
-      "/testimonial/jay_01.jpg",
+      "/testimonial/Jay_01.jpg",
     location: "Jay Trivedi",
     flag: IndianFlag,
     stats: "Co-Founder",

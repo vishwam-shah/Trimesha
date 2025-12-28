@@ -15,7 +15,7 @@ export function Navbar({ className }: { className?: string }) {
           {/* <a href="#" className="text-2xl md:text-xl font-bold text-black dark:text-white">
             TRIMESHA
           </a> */}
-          <img src="logo/1_dark.png" alt="Trimesha Logo" className="h-45 mt-10"  />
+          <img src="logo/logo_dark.png" alt="Trimesha Logo" className="h-45 mt-10"  />
         </div>
 
         {/* Desktop menu */}
