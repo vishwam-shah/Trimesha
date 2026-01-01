@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { HoveredLink, Menu, MenuItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
@@ -10,12 +11,22 @@ const menuItems = [
   {
     title: "Services",
     icon: "line-md:cog-loop",
-    items: ["Web Development", "Interface Design", "Search Engine Optimization", "Branding"],
+    items: [
+      { name: "Web Development", href: "/services#web-development" },
+      { name: "Interface Design", href: "/services#interface-design" },
+      { name: "Search Engine Optimization", href: "/services#seo" },
+      { name: "Branding", href: "/services#branding" }
+    ],
   },
   {
     title: "Products",
     icon: "line-md:document-code",
-    items: ["Analytics Platform", "AI Assistant", "Cloud Storage", "API Services"],
+    items: [
+      { name: "Analytics Platform", href: "/products#analytics-platform" },
+      { name: "AI Assistant", href: "/products#ai-assistant" },
+      { name: "Cloud Storage", href: "/products#cloud-storage" },
+      { name: "API Services", href: "/products#api-services" }
+    ],
   },
   {
     title: "Pricing",
@@ -39,26 +50,28 @@ export function Navbar({ className }: { className?: string }) {
       <div className="mx-auto max-w-7xl flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center shrink-0">
-          <img src="logo/logo_dark.png" alt="Trimesha Logo" className="h-12 sm:h-16 lg:h-28" />
+          <Link href="/" className="cursor-pointer">
+            <img src="logo/logo_dark.png" alt="Trimesha Logo" className="h-12 sm:h-16 lg:h-28" />
+          </Link>
         </div>
 
         {/* Desktop menu - centered */}
         <div className="hidden lg:flex flex-1 justify-center">
           <Menu setActive={setActive}>
-            <MenuItem setActive={setActive} active={active} item="Services">
+            <MenuItem setActive={setActive} active={active} item="Services" href="/services">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Web Development</HoveredLink>
-                <HoveredLink href="#">Interface Design</HoveredLink>
-                <HoveredLink href="#">Search Engine Optimization</HoveredLink>
-                <HoveredLink href="#">Branding</HoveredLink>
+                <HoveredLink href="/services#web-development">Web Development</HoveredLink>
+                <HoveredLink href="/services#interface-design">Interface Design</HoveredLink>
+                <HoveredLink href="/services#seo">Search Engine Optimization</HoveredLink>
+                <HoveredLink href="/services#branding">Branding</HoveredLink>
               </div>
             </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Products">
+            <MenuItem setActive={setActive} active={active} item="Products" href="/products">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Analytics Platform</HoveredLink>
-                <HoveredLink href="#">AI Assistant</HoveredLink>
-                <HoveredLink href="#">Cloud Storage</HoveredLink>
-                <HoveredLink href="#">API Services</HoveredLink>
+                <HoveredLink href="/products#analytics-platform">Analytics Platform</HoveredLink>
+                <HoveredLink href="/products#ai-assistant">AI Assistant</HoveredLink>
+                <HoveredLink href="/products#cloud-storage">Cloud Storage</HoveredLink>
+                <HoveredLink href="/products#api-services">API Services</HoveredLink>
               </div>
             </MenuItem>
             <MenuItem setActive={setActive} active={active} item="Pricing">
@@ -191,21 +204,25 @@ export function Navbar({ className }: { className?: string }) {
                           className="overflow-hidden"
                         >
                           <div className="pt-2 pl-4 space-y-1">
-                            {menu.items.map((item, itemIndex) => (
-                              <motion.a
-                                key={item}
-                                href="#"
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ delay: itemIndex * 0.05 }}
-                                className="flex items-center gap-3 p-3 rounded-xl hover:bg-violet-100/50 dark:hover:bg-violet-900/20 transition-colors group"
-                              >
-                                <div className="w-2 h-2 rounded-full bg-violet-400 group-hover:bg-violet-500 transition-colors" />
-                                <span className="text-gray-600 dark:text-gray-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
-                                  {item}
-                                </span>
-                              </motion.a>
-                            ))}
+                            {menu.items.map((item, itemIndex) => {
+                              const itemName = typeof item === 'string' ? item : item.name;
+                              const itemHref = typeof item === 'string' ? '#' : item.href;
+                              return (
+                                <motion.a
+                                  key={itemName}
+                                  href={itemHref}
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  transition={{ delay: itemIndex * 0.05 }}
+                                  className="flex items-center gap-3 p-3 rounded-xl hover:bg-violet-100/50 dark:hover:bg-violet-900/20 transition-colors group"
+                                >
+                                  <div className="w-2 h-2 rounded-full bg-violet-400 group-hover:bg-violet-500 transition-colors" />
+                                  <span className="text-gray-600 dark:text-gray-400 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+                                    {itemName}
+                                  </span>
+                                </motion.a>
+                              );
+                            })}
                           </div>
                         </motion.div>
                       )}
