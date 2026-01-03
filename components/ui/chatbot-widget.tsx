@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User, X, MessageCircle } from 'lucide-react';
+import { Send, Bot, User, X, MessageCircle, MessageSquare, HelpCircle, FileText } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
 import { cn } from '@/lib/utils';
@@ -13,6 +13,8 @@ interface Message {
   sender: 'user' | 'bot';
   timestamp: Date;
 }
+
+type TabType = 'conversation' | 'faqs' | 'articles';
 
 interface ChatbotWidgetProps {
   botName?: string;
@@ -26,6 +28,7 @@ export function ChatbotWidget({
   onSendMessage,
 }: ChatbotWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<TabType>('conversation');
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
@@ -175,6 +178,49 @@ export function ChatbotWidget({
               </button>
             </div>
 
+            {/* Tab Navigation */}
+            <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 flex">
+              <button
+                onClick={() => setActiveTab('conversation')}
+                className={cn(
+                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2',
+                  activeTab === 'conversation'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                )}
+              >
+                <MessageSquare className="w-4 h-4" />
+                Conversation
+              </button>
+              <button
+                onClick={() => setActiveTab('faqs')}
+                className={cn(
+                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2',
+                  activeTab === 'faqs'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                )}
+              >
+                <HelpCircle className="w-4 h-4" />
+                FAQs
+              </button>
+              <button
+                onClick={() => setActiveTab('articles')}
+                className={cn(
+                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2',
+                  activeTab === 'articles'
+                    ? 'text-blue-600 dark:text-blue-400 border-b-2 border-blue-600 dark:border-blue-400'
+                    : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
+                )}
+              >
+                <FileText className="w-4 h-4" />
+                Articles
+              </button>
+            </div>
+
+            {/* Content Area */}
+            {activeTab === 'conversation' && (
+              <>
             {/* Messages Container */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-800">
               <AnimatePresence initial={false}>
@@ -284,6 +330,56 @@ export function ChatbotWidget({
                 </Button>
               </div>
             </div>
+            </>
+            )}
+
+            {/* FAQs Tab */}
+            {activeTab === 'faqs' && (
+              <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center p-8"
+                >
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                    <HelpCircle className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                    FAQs
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Coming Soon
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                    We're working on bringing you frequently asked questions.
+                  </p>
+                </motion.div>
+              </div>
+            )}
+
+            {/* Articles Tab */}
+            {activeTab === 'articles' && (
+              <div className="flex-1 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center p-8"
+                >
+                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
+                    <FileText className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2">
+                    Articles
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Coming Soon
+                  </p>
+                  <p className="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                    We're curating helpful articles for you.
+                  </p>
+                </motion.div>
+              </div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
