@@ -8,7 +8,7 @@ export const BookCallButton = () => {
   const { setOpen } = useModal();
 
   return (
-    <div className="hidden sm:block border-2 p-1 rounded-full border-dotted border-secondary cursor-pointer">
+    <div className="hidden sm:block border-2 p-1 rounded-full border-dotted border-purple-600 dark:border-purple-400 cursor-pointer">
       <Button
         onClick={() => {
           if (!document.documentElement.classList.contains("dark")) {
@@ -17,10 +17,10 @@ export const BookCallButton = () => {
           setOpen(true)
         }}
         aria-label="Book a call"
-        className="relative w-25 h-25 rounded-full overflow-hidden p-0 grid place-content-center bg-primary hover:bg-primary dark:bg-black dark:text-white"
+        className="relative w-25 h-25 rounded-full overflow-hidden p-0 grid place-content-center bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700"
       >
         <p
-          className="absolute inset-0 animate-[text-rotation_8s_linear_infinite]"
+          className="absolute inset-0 animate-[text-rotation_8s_linear_infinite] text-white"
         >
           {Array.from(text).map((char, i) => (
             <span
@@ -41,12 +41,12 @@ export const BookCallButton = () => {
           ))}
         </p>
 
-        <div className="group-hover:scale-110 relative w-10 h-10 rounded-full text-primary bg-white flex items-center justify-center overflow-hidden dark:bg-black dark:text-white">
+        <div className="group-hover:scale-110 relative w-10 h-10 rounded-full bg-white flex items-center justify-center overflow-hidden">
           <svg
             viewBox="0 0 14 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute w-4 h-4 transition-transform duration-300 ease-in-out hover-arrow-out"
+            className="absolute w-4 h-4 text-purple-600 transition-transform duration-300 ease-in-out hover-arrow-out"
           >
             <path
               d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"
@@ -57,7 +57,7 @@ export const BookCallButton = () => {
             viewBox="0 0 14 15"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
-            className="absolute w-4 h-4 transition-transform duration-300 ease-in-out hover-arrow-in"
+            className="absolute w-4 h-4 text-purple-600 transition-transform duration-300 ease-in-out hover-arrow-in"
             style={{ transform: "translate(-150%, 150%)" }}
           >
             <path

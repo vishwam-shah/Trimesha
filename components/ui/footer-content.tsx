@@ -11,7 +11,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Facebook, Instagram, Linkedin, Moon, Send, Sun, Twitter } from "lucide-react"
+import { Moon, Send, Sun } from "lucide-react"
+import { Icon } from "@iconify/react"
 
 function FooterContent() {
   const [isDarkMode, setIsDarkMode] = React.useState(true)
@@ -53,19 +54,19 @@ function FooterContent() {
           <div>
             <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
             <nav className="space-y-2 text-sm">
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#" className="block transition-colors hover:text-purple-600 dark:hover:text-purple-400">
                 Home
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#" className="block transition-colors hover:text-purple-600 dark:hover:text-purple-400">
                 About Us
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#" className="block transition-colors hover:text-purple-600 dark:hover:text-purple-400">
                 Services
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#" className="block transition-colors hover:text-purple-600 dark:hover:text-purple-400">
                 Products
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#" className="block transition-colors hover:text-purple-600 dark:hover:text-purple-400">
                 Contact
               </a>
             </nav>
@@ -85,8 +86,8 @@ function FooterContent() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Facebook className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full cursor-pointer">
+                      <Icon icon="mdi:facebook" className="h-4 w-4" />
                       <span className="sr-only">Facebook</span>
                     </Button>
                   </TooltipTrigger>
@@ -98,8 +99,8 @@ function FooterContent() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Twitter className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full cursor-pointer">
+                      <Icon icon="mdi:twitter" className="h-4 w-4" />
                       <span className="sr-only">Twitter</span>
                     </Button>
                   </TooltipTrigger>
@@ -111,8 +112,8 @@ function FooterContent() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Instagram className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full cursor-pointer">
+                      <Icon icon="mdi:instagram" className="h-4 w-4" />
                       <span className="sr-only">Instagram</span>
                     </Button>
                   </TooltipTrigger>
@@ -124,8 +125,8 @@ function FooterContent() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
-                      <Linkedin className="h-4 w-4" />
+                    <Button variant="outline" size="icon" className="rounded-full cursor-pointer">
+                      <Icon icon="mdi:linkedin" className="h-4 w-4" />
                       <span className="sr-only">LinkedIn</span>
                     </Button>
                   </TooltipTrigger>
@@ -154,13 +155,13 @@ function FooterContent() {
             © 2025 Your Company. All rights reserved.
           </p>
           <nav className="flex gap-4 text-sm">
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="#" className="transition-colors hover:text-purple-600 dark:hover:text-purple-400">
               Privacy Policy
             </a>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="#" className="transition-colors hover:text-purple-600 dark:hover:text-purple-400">
               Terms of Service
             </a>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="#" className="transition-colors hover:text-purple-600 dark:hover:text-purple-400">
               Cookie Settings
             </a>
           </nav>

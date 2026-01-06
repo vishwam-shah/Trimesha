@@ -113,6 +113,7 @@
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(calc(-100% - var(--gap)));
   }
@@ -122,6 +123,7 @@
   from {
     transform: translateY(0);
   }
+
   to {
     transform: translateY(calc(-100% - var(--gap)));
   }
@@ -148,6 +150,7 @@ body {
     opacity: 0;
     transform: translateY(-10px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -159,6 +162,7 @@ body {
     opacity: 0;
     transform: translateY(40px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -178,6 +182,7 @@ body {
   0% {
     background-position: 0%;
   }
+
   100% {
     background-position: 200%;
   }
@@ -185,6 +190,23 @@ body {
 
 .animate-rainbow {
   animation: rainbow 2s linear infinite;
+}
+
+/* Spotlight animation */
+@keyframes spotlight {
+  0% {
+    opacity: 0;
+    transform: translate(-72%, -62%) scale(0.5);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -40%) scale(1);
+  }
+}
+
+.animate-spotlight {
+  animation: spotlight 2s ease 0.75s 1 forwards;
 }
 
 /* Navbar shadow */
@@ -232,7 +254,13 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Ensure text-white works on all elements including links */
+  .text-white {
+    color: rgb(255 255 255) !important;
   }
 }

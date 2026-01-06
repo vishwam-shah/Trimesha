@@ -13,7 +13,7 @@ export function RainbowButton({
   return (
     <button
       className={cn(
-        "group relative inline-flex h-11 animate-rainbow cursor-pointer items-center justify-center rounded-xl border-0 bg-size-[200%] px-8 py-2 font-medium text-primary-foreground [background-clip:padding-box,border-box,border-box] bg-origin-border [border:calc(0.08*1rem)_solid_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        "group relative inline-flex h-11 animate-rainbow cursor-pointer items-center justify-center rounded-xl border-0 bg-size-[200%] px-8 py-2 font-medium text-white [background-clip:padding-box,border-box,border-box] bg-origin-border [border:calc(0.08*1rem)_solid_transparent] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
 
         // Push animation on click
         "transition-all duration-150 ease-out",
@@ -38,8 +38,6 @@ export function RainbowButton({
         "dark:shadow-[0_4px_0_0_rgba(139,92,246,0.5),0_6px_20px_rgba(139,92,246,0.3)]",
         "dark:hover:shadow-[0_6px_0_0_rgba(139,92,246,0.5),0_8px_25px_rgba(139,92,246,0.35)]",
         "dark:active:shadow-[0_1px_0_0_rgba(139,92,246,0.5),0_2px_10px_rgba(139,92,246,0.2)]",
-
-        "dark:text-white",
 
         className,
       )}

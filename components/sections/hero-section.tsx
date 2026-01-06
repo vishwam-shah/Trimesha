@@ -2,25 +2,13 @@
 
 import { Hero } from "@/components/ui/hero";
 
-interface HeroSectionProps {
-  title?: string;
-  subtitle?: string;
-  eyebrow?: string;
-  ctaLabel?: string;
-}
-
-export function HeroSection({
-  title = "Build smarter tools for modern teams",
-  subtitle = "Streamline your workflow and boost productivity with intuitive solutions. Security, speed, and simplicity—all in one platform.",
-  eyebrow = "Next-Gen Productivity",
-  ctaLabel = "Get Started",
-}: HeroSectionProps) {
+export function HeroSection() {
   return (
     <Hero
-      title={title}
-      subtitle={subtitle}
-      eyebrow={eyebrow}
-      ctaLabel={ctaLabel}
+      title="AI-Powered Solutions That Scale Your Vision Into Reality"
+      subtitle="From concept to deployment, we craft intelligent custom software that transforms challenges into opportunities and accelerates your growth"
+      eyebrow="Next-Gen AI Development"
+      ctaLabel="Get Started"
     />
   );
 }

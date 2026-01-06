@@ -36,7 +36,11 @@ const menuItems = [
   {
     title: "About",
     icon: "line-md:account",
-    items: ["Our Story", "Team", "Careers", "Contact"],
+    items: [
+      { name: "Our Story", href: "/about" },
+      { name: "Team", href: "/about#team" },
+      { name: "Careers", href: "#" }
+    ],
   },
 ];
 
@@ -82,12 +86,11 @@ export function Navbar({ className }: { className?: string }) {
                 <HoveredLink href="#">Enterprise</HoveredLink>
               </div>
             </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="About">
+            <MenuItem setActive={setActive} active={active} item="About" href="/about">
               <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Our Story</HoveredLink>
-                <HoveredLink href="#">Team</HoveredLink>
+                <HoveredLink href="/about">Our Story</HoveredLink>
+                <HoveredLink href="/about#team">Team</HoveredLink>
                 <HoveredLink href="#">Careers</HoveredLink>
-                <HoveredLink href="#">Contact</HoveredLink>
               </div>
             </MenuItem>
           </Menu>
