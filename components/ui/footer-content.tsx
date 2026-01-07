@@ -71,7 +71,7 @@ function FooterContent() {
               </a>
             </nav>
           </div>
-          <div>
+          {/* <div>
             <h3 className="mb-4 text-lg font-semibold">Contact Us</h3>
             <address className="space-y-2 text-sm not-italic">
               <p>124th floor, Burj Khalifa</p>
@@ -79,7 +79,7 @@ function FooterContent() {
               <p>Downtown Dubai, UAE</p>
               <p>Email: hello@trimesha.com</p>
             </address>
-          </div>
+          </div> */}
           <div className="relative">
             <h3 className="mb-4 text-lg font-semibold">Follow Us</h3>
             <div className="mb-6 flex space-x-4">
