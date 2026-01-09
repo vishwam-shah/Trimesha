@@ -95,7 +95,7 @@ export function Chatbot({
       )}
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-violet-600 text-white p-4 flex items-center gap-3">
+      <div className="bg-linear-to-r from-purple-600 to-violet-600 text-white p-4 flex items-center gap-3">
         <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
           <Bot className="w-6 h-6" />
         </div>
@@ -121,7 +121,7 @@ export function Chatbot({
               )}
             >
               {message.sender === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-linear-0">
                   <Bot className="w-5 h-5 text-white" />
                 </div>
               )}
@@ -130,7 +130,7 @@ export function Chatbot({
                 className={cn(
                   'max-w-[70%] rounded-2xl px-4 py-2 shadow-sm',
                   message.sender === 'user'
-                    ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-br-sm'
+                    ? 'bg-linear-to-r from-purple-600 to-violet-600 text-white rounded-br-sm'
                     : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-sm'
                 )}
               >
@@ -151,7 +151,7 @@ export function Chatbot({
               </div>
 
               {message.sender === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center shrink-0">
                   <User className="w-5 h-5 text-gray-700 dark:text-gray-200" />
                 </div>
               )}
@@ -166,7 +166,7 @@ export function Chatbot({
             animate={{ opacity: 1, y: 0 }}
             className="flex gap-3"
           >
-            <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-600 to-violet-600 flex items-center justify-center shrink-0">
               <Bot className="w-5 h-5 text-white" />
             </div>
             <div className="bg-white dark:bg-gray-700 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
@@ -207,7 +207,7 @@ export function Chatbot({
           <Button
             onClick={handleSend}
             disabled={!inputValue.trim()}
-            className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white"
+            className="bg-linear-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white"
           >
             <Send className="w-4 h-4" />
           </Button>
