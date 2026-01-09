@@ -55,10 +55,10 @@ export const Card = ({
           width: '100%',
           maxWidth: '1152px',
         }}
-        className='flex flex-col md:flex-row relative min-h-[600px] md:h-[500px] rounded-2xl shadow-2xl origin-top overflow-hidden'
+        className='flex flex-col md:flex-row relative h-[550px] rounded-2xl shadow-2xl origin-top overflow-hidden'
       >
         {/* Content Side */}
-        <div className='w-full md:w-[45%] p-8 md:p-12 flex flex-col justify-center bg-black/10 backdrop-blur-sm min-h-[300px] md:min-h-0'>
+        <div className='w-full md:w-[45%] p-8 md:p-12 flex flex-col justify-center bg-black/10 backdrop-blur-sm'>
           <div className='flex-1 flex flex-col justify-center'>
             <h2 className='text-3xl md:text-4xl font-bold text-white mb-6 leading-tight'>
               {title}

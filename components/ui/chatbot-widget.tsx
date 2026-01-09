@@ -120,7 +120,7 @@ export function ChatbotWidget({
           {!isOpen && (
             <motion.button
               onClick={() => setIsOpen(true)}
-              className="group relative w-16 h-16 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center"
+              className="group relative w-16 h-16 bg-gradient-to-r from-purple-600 to-violet-600 rounded-full shadow-lg hover:shadow-xl transition-shadow duration-300 flex items-center justify-center cursor-pointer"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
               initial={{ opacity: 0, scale: 0 }}
@@ -172,9 +172,9 @@ export function ChatbotWidget({
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors"
+                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center transition-colors cursor-pointer"
               >
-                <X className="w-5 h-5" />
+                <X className="w-5 h-5 cursor-pointer" />
               </button>
             </div>
 
@@ -195,7 +195,7 @@ export function ChatbotWidget({
               <button
                 onClick={() => setActiveTab('faqs')}
                 className={cn(
-                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2',
+                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer',
                   activeTab === 'faqs'
                     ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -207,7 +207,7 @@ export function ChatbotWidget({
               <button
                 onClick={() => setActiveTab('articles')}
                 className={cn(
-                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2',
+                  'flex-1 py-3 px-4 text-sm font-medium transition-colors flex items-center justify-center gap-2 cursor-pointer',
                   activeTab === 'articles'
                     ? 'text-purple-600 dark:text-purple-400 border-b-2 border-purple-600 dark:border-purple-400'
                     : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'
@@ -331,6 +331,116 @@ export function ChatbotWidget({
               </div>
             </div>
             </>
+                {/* Messages Container */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-800">
+                  <AnimatePresence initial={false}>
+                    {messages.map((message) => (
+                      <motion.div
+                        key={message.id}
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.2 }}
+                        className={cn(
+                          'flex gap-2',
+                          message.sender === 'user' ? 'justify-end' : 'justify-start'
+                        )}
+                      >
+                        {message.sender === 'bot' && (
+                          <div className="w-7 h-7 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-shrink-0">
+                            <Bot className="w-4 h-4 text-white" />
+                          </div>
+                        )}
+
+                        <div
+                          className={cn(
+                            'max-w-[75%] rounded-2xl px-3 py-2 shadow-sm',
+                            message.sender === 'user'
+                              ? 'bg-gradient-to-r from-purple-600 to-violet-600 text-white rounded-br-sm'
+                              : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-sm'
+                          )}
+                        >
+                          <p className="text-sm leading-relaxed">{message.content}</p>
+                          <p
+                            className={cn(
+                              'text-xs mt-1',
+                              message.sender === 'user'
+                                ? 'text-white/70'
+                                : 'text-gray-500 dark:text-gray-400'
+                            )}
+                          >
+                            {message.timestamp.toLocaleTimeString([], {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </p>
+                        </div>
+
+                        {message.sender === 'user' && (
+                          <div className="w-7 h-7 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center flex-shrink-0">
+                            <User className="w-4 h-4 text-gray-700 dark:text-gray-200" />
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+
+                  {/* Typing Indicator */}
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex gap-2"
+                    >
+                      <div className="w-7 h-7 rounded-full bg-gradient-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-shrink-0">
+                        <Bot className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="bg-white dark:bg-gray-700 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+                        <div className="flex gap-1">
+                          <motion.div
+                            className="w-2 h-2 bg-gray-400 rounded-full"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                          />
+                          <motion.div
+                            className="w-2 h-2 bg-gray-400 rounded-full"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                          />
+                          <motion.div
+                            className="w-2 h-2 bg-gray-400 rounded-full"
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                          />
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input Area */}
+                <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
+                  <div className="flex gap-2">
+                    <Input
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Type your message..."
+                      className="flex-1 text-sm"
+                    />
+                    <Button
+                      onClick={handleSend}
+                      disabled={!inputValue.trim()}
+                      className="bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white px-4"
+                      size="sm"
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </>
             )}
 
             {/* FAQs Tab */}
