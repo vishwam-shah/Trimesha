@@ -31,15 +31,15 @@ const coFounders = [
     href: "#",
     themeColor: "250 50% 30%",
   },
-  {
-    imageUrl: "/testimonial/Jay_01.jpg",
-    location: "Jay Trivedi",
-    flag: IndianFlag,
-    stats: "Co-Founder",
-    desc: "AI Researcher",
-    href: "#",
-    themeColor: "30 70% 40%",
-  },
+  // {
+  //   imageUrl: "/testimonial/Jay_01.jpg",
+  //   location: "Jay Trivedi",
+  //   flag: IndianFlag,
+  //   stats: "Co-Founder",
+  //   desc: "AI Researcher",
+  //   href: "#",
+  //   themeColor: "30 70% 40%",
+  // },
 ];
 
 export function TestimonialsSection() {
