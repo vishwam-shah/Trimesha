@@ -38,8 +38,14 @@ const menuItems = [
     icon: "line-md:account",
     items: [
       { name: "Our Story", href: "/about" },
-      { name: "Team", href: "/about#team" },
-      { name: "Careers", href: "/careers" }
+      { name: "Team", href: "/about#team" }
+    ],
+  },
+  {
+    title: "Careers",
+    icon: "line-md:briefcase-twotone",
+    items: [
+      { name: "Open Positions", href: "/careers" }
     ],
   },
 ];
@@ -90,7 +96,11 @@ export function Navbar({ className }: { className?: string }) {
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="/about">Our Story</HoveredLink>
                 <HoveredLink href="/about#team">Team</HoveredLink>
-                <HoveredLink href="/careers">Careers</HoveredLink>
+              </div>
+            </MenuItem>
+            <MenuItem setActive={setActive} active={active} item="Careers" href="/careers">
+              <div className="flex flex-col space-y-4 text-sm">
+                <HoveredLink href="/careers">Open Positions</HoveredLink>
               </div>
             </MenuItem>
           </Menu>

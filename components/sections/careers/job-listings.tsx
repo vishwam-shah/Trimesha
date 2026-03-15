@@ -12,10 +12,10 @@ import { ApplicationForm } from "./application-form";
 
 const positions = [
     {
-        title: "Social Media Handler",
+        title: "Social Media Manager Intern",
         type: "Unpaid Internship",
         experience: "0 Years (Freshers Welcome)",
-        description: "We are looking for a creative and passionate Social Media Handler to manage our social media presence and engage with our community. This is a great opportunity for students and freshers to gain hands-on experience in digital marketing.",
+        description: "We are looking for a creative and passionate Social Media Manager Intern to manage our social media presence and engage with our community. This is a unpaid internship and intern gets to learn a lot of things which he can learn from startups.",
         benefits: [
             "Certificate of Completion",
             "Certificate of Experience",
@@ -23,6 +23,19 @@ const positions = [
             "Flexible Working Hours"
         ],
         tags: ["Social Media", "Marketing", "Internship", "Remote"]
+    },
+    {
+        title: "LinkedIn and Outreach Manager Intern",
+        type: "Unpaid Internship",
+        experience: "0 Years (Freshers Welcome)",
+        description: "We are looking for a driven LinkedIn and Outreach Manager Intern to manage our professional network and lead generation. This is a unpaid internship and intern gets to learn a lot of things which he can learn from startups.",
+        benefits: [
+            "Certificate of Completion",
+            "Certificate of Experience",
+            "Professional Mentorship",
+            "Flexible Working Hours"
+        ],
+        tags: ["LinkedIn", "Outreach", "Internship", "Remote"]
     }
 ];
 

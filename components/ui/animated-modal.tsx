@@ -10,6 +10,7 @@ import React, {
   useState,
 } from "react";
 import { Slot } from "@radix-ui/react-slot";
+import { createPortal } from "react-dom";
 
 interface ModalContextType {
   open: boolean;
@@ -73,6 +74,11 @@ export const ModalBody = ({
 }) => {
   const { open } = useModal();
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -85,7 +91,9 @@ export const ModalBody = ({
   const { setOpen } = useModal();
   useOutsideClick(modalRef, () => setOpen(false));
 
-  return (
+  if (!mounted) return <></>;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -141,7 +149,8 @@ export const ModalBody = ({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 };
 
