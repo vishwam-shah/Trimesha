@@ -8,50 +8,50 @@ const digitalServices = [
   {
     title: "Web Development",
     description: "We craft high-performance, SEO-optimized websites and web applications using cutting-edge technologies like Next.js, React, and TypeScript.",
-    link: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&auto=format&fit=crop",
-    color: "#5196fd",
+    link: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&auto=format&fit=crop&q=80",
+    color: "#1e3a5f",
   },
   {
     title: "Mobile Applications",
     description: "Build powerful native iOS and Android applications with React Native and Flutter for seamless cross-platform experiences.",
-    link: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&auto=format&fit=crop",
-    color: "#8f89ff",
+    link: "https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?w=1200&auto=format&fit=crop&q=80",
+    color: "#3b1f6e",
   },
   {
     title: "Custom Software",
     description: "Enterprise-grade software solutions tailored to your unique business needs. CRM systems, ERP solutions, and workflow automation.",
-    link: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop",
-    color: "#13006c",
+    link: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=1200&auto=format&fit=crop&q=80",
+    color: "#0d3b2e",
   },
   {
     title: "UI/UX Design",
     description: "Transform your vision into stunning, user-centered interfaces through research-driven wireframes, prototypes, and design systems.",
-    link: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&auto=format&fit=crop",
-    color: "#ed649e",
+    link: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=1200&auto=format&fit=crop&q=80",
+    color: "#6b1540",
   },
   {
     title: "Cloud Infrastructure",
     description: "Deploy and scale with confidence on AWS, Azure, or Google Cloud with CI/CD pipelines and 99.9% uptime guarantee.",
-    link: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&fit=crop",
-    color: "#fd521a",
+    link: "https://images.unsplash.com/photo-1544197150-b99a580bb7a8?w=1200&auto=format&fit=crop&q=80",
+    color: "#7a2c0a",
   },
   {
     title: "Cybersecurity",
     description: "Protect your digital assets with enterprise-grade security solutions, penetration testing, and 24/7 threat monitoring.",
-    link: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop",
-    color: "#00a8cc",
+    link: "https://images.unsplash.com/photo-1614064641938-3bbee52942c7?w=1200&auto=format&fit=crop&q=80",
+    color: "#003d4d",
   },
   {
     title: "API Development",
     description: "Build robust RESTful and GraphQL APIs with scalable microservices architecture and seamless third-party integrations.",
-    link: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&auto=format&fit=crop",
-    color: "#ff6b6b",
+    link: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80",
+    color: "#5c1a1a",
   },
   {
     title: "Data Analytics",
     description: "Unlock the power of your data with AI-driven analytics, custom dashboards, and machine learning models.",
-    link: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop",
-    color: "#4ecdc4",
+    link: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80",
+    color: "#0a3d3d",
   },
 ];
 
@@ -77,7 +77,10 @@ export function FeaturesSection() {
       {/* Stacking Cards */}
       <div className="w-full">
         {digitalServices.map((service, i) => {
-          const targetScale = 1 - (digitalServices.length - i) * 0.05;
+          const n = digitalServices.length;
+          const targetScale = 1 - (n - i) * 0.05;
+          // Spread ranges evenly across [0, 1] so every card gets a fair share
+          const rangeStart = i / n;
           return (
             <Card
               key={`service_${i}`}
@@ -87,7 +90,7 @@ export function FeaturesSection() {
               color={service.color}
               description={service.description}
               progress={scrollYProgress}
-              range={[i * 0.25, 1]}
+              range={[rangeStart, 1]}
               targetScale={targetScale}
             />
           );
