@@ -12,9 +12,26 @@ import { ApplicationForm } from "./application-form";
 
 const positions = [
     {
+        title: "Full Stack Developer",
+        type: "Full-Time (Paid)",
+        experience: "0–2 Years",
+        compensation: "Month 1: Fixed Probation Stipend · Month 2+: Performance-Based Pay",
+        description: "We are looking for a passionate Full Stack Developer to join the Trimesha core team. You will work on real-world client projects — building scalable web apps, REST APIs, and intuitive UIs using modern tech stacks like Next.js, Node.js, and PostgreSQL. The first month is a paid probation period to help you settle in; from month two onwards, your compensation grows with your performance and contribution.",
+        benefits: [
+            "Paid Probation Period (Month 1)",
+            "Performance-Based Salary (Month 2+)",
+            "Real Client Projects",
+            "Mentorship & Code Reviews",
+            "Flexible Remote Work",
+            "Fast Career Growth"
+        ],
+        tags: ["Full-Time", "Paid", "Full Stack", "Remote", "Next.js", "Node.js"]
+    },
+    {
         title: "Social Media Manager Intern",
         type: "Unpaid Internship",
         experience: "0 Years (Freshers Welcome)",
+        compensation: null,
         description: "We are looking for a creative and passionate Social Media Manager Intern to manage our social media presence and engage with our community. This is a unpaid internship and intern gets to learn a lot of things which he can learn from startups.",
         benefits: [
             "Certificate of Completion",
@@ -28,6 +45,7 @@ const positions = [
         title: "LinkedIn and Outreach Manager Intern",
         type: "Unpaid Internship",
         experience: "0 Years (Freshers Welcome)",
+        compensation: null,
         description: "We are looking for a driven LinkedIn and Outreach Manager Intern to manage our professional network and lead generation. This is a unpaid internship and intern gets to learn a lot of things which he can learn from startups.",
         benefits: [
             "Certificate of Completion",
@@ -81,7 +99,7 @@ export function JobListings() {
                                     <h3 className="text-2xl md:text-3xl font-bold mb-2 text-foreground group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
                                         {job.title}
                                     </h3>
-                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-6">
+                                    <div className="flex flex-wrap gap-4 text-sm text-muted-foreground mb-4">
                                         <div className="flex items-center gap-1">
                                             <Icon icon="line-md:briefcase-twotone" className="w-4 h-4" />
                                             {job.type}
@@ -91,6 +109,12 @@ export function JobListings() {
                                             Experience: {job.experience}
                                         </div>
                                     </div>
+                                    {job.compensation && (
+                                        <div className="flex items-center gap-2 mb-6 px-4 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-700/40 w-fit">
+                                            <Icon icon="line-md:money" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                                            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300">{job.compensation}</span>
+                                        </div>
+                                    )}
                                     <p className="text-muted-foreground mb-8 text-lg leading-relaxed">
                                         {job.description}
                                     </p>
