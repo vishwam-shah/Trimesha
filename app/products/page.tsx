@@ -163,7 +163,6 @@ const slides: ProductSlide[] = [
   },
 ];
 
-/** Stable component type (not defined inside the page) + inline hide so no FOUC before Tailwind/GSAP */
 function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide }) {
   return (
     <div
@@ -334,8 +333,6 @@ export default function ProductsPage() {
   useEffect(() => {
     let isCancelled = false;
     const data = slides;
-
-    // FIX: Increased card dimensions
     const CARD_W = 320;
     const CARD_H = 440;
     const CARD_LABEL_H = 110;
@@ -347,7 +344,6 @@ export default function ProductsPage() {
     const INTRO_DUR = 0.88;
     const INTRO_DELAY = 0.38;
     const INTRO_STAGGER = 0.06;
-    /** Horizontal nudge only — careers-style entrance is mostly opacity + vertical drift */
     const CARD_ENTRANCE_X = 56;
 
     const CARDS_BOTTOM_MARGIN = 100;
@@ -443,8 +439,6 @@ export default function ProductsPage() {
       set(`${inactiveSel} .features-row`, { y: 40, opacity: 0 });
       set(`${inactiveSel} .cta`, { y: 60 });
     }
-
-    /** Lines stay in their boxes while opacity + y run — avoids a pile-up at the top */
     function prepDetailLines(panelSel: string) {
       set(`${panelSel} .text`, { y: 20, opacity: 0 });
       set(`${panelSel} .title-1`, { y: 28, opacity: 0 });
@@ -535,7 +529,6 @@ export default function ProductsPage() {
           scale: 1,
           opacity: 0,
         });
-        // FIX: content z-index decreases as idx increases (front card = highest z)
         set(getContent(i), {
           x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP),
           zIndex: 50 - idx,
@@ -580,7 +573,6 @@ export default function ProductsPage() {
           y: offsetTop + CARD_H - CARD_LABEL_H,
           width: CARD_W,
           height: CARD_LABEL_H,
-          // FIX: front card gets highest z-index, each subsequent card lower
           zIndex: 50 - idx,
           opacity: 1,
           duration: INTRO_DUR,
@@ -653,7 +645,6 @@ export default function ProductsPage() {
       revealDetailLines(detActive, 0.06, INTRO_EASE, resolve);
 
       const [active, ...rest] = order;
-      // last item in rest is the card that just came from the front (now going to back)
       const prv = rest[rest.length - 1];
 
       set(getCard(prv), { zIndex: 10 });
@@ -667,7 +658,6 @@ export default function ProductsPage() {
         ease: EASE,
       });
 
-      // Animate the new front (active) card to slot 0
       gsap.to(getCard(active), {
         x: offsetLeft,
         y: offsetTop,
@@ -676,7 +666,6 @@ export default function ProductsPage() {
         borderRadius: 10,
         ease: EASE,
         onComplete: () => {
-          // FIX: place prv card at the correct tail position = rest.length (last slot)
           const xNew = offsetLeft + rest.length * (CARD_W + GAP);
 
           set(getCard(prv), {
@@ -688,7 +677,6 @@ export default function ProductsPage() {
             borderRadius: 10,
             scale: 1,
           });
-          // FIX: prv content goes to last slot with lowest z-index
           set(getContent(prv), {
             x: xNew,
             y: offsetTop + CARD_H - CARD_LABEL_H,
@@ -701,7 +689,6 @@ export default function ProductsPage() {
         },
       });
 
-      // FIX: active card's content goes to slot 0 with highest z-index (50)
       gsap.to(getContent(active), {
         x: offsetLeft,
         y: offsetTop + CARD_H - CARD_LABEL_H,
@@ -712,11 +699,8 @@ export default function ProductsPage() {
         duration: 0.35,
         ease: EASE,
       });
-
-      // FIX: rest cards (excluding prv) animate to slots 1..N with correct x and z-index
       rest.forEach((i, idx) => {
         if (i === prv) return;
-        // slot index is idx+1 because slot 0 is the active card
         const slotIdx = idx + 1;
         const xNew = offsetLeft + slotIdx * (CARD_W + GAP);
         set(getCard(i), { zIndex: 30 });
@@ -728,7 +712,6 @@ export default function ProductsPage() {
           ease: EASE,
           delay: 0.1 * slotIdx,
         });
-        // FIX: z-index decreases as slot index increases (further back = lower z)
         gsap.to(getContent(i), {
           x: xNew,
           y: offsetTop + CARD_H - CARD_LABEL_H,
@@ -783,7 +766,6 @@ export default function ProductsPage() {
         img.src = src;
       });
 
-    /** Inject after helpers exist; position + hide same tick so nothing stacks at (0,0). */
     demoEl.innerHTML = makeCards() + makeContents();
     slideNums.innerHTML = makeNumbers();
     layoutOffsets();
