@@ -1,281 +1,689 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 import { Header } from "@/components/layout/header";
 import { PageLoader } from "@/components/common/page-loader";
-import { GlowCard } from "@/components/ui/spotlight-card";
-import { Icon } from "@iconify/react";
-import { motion } from "framer-motion";
 
-const products = [
+type ProductSlide = {
+  place: string;
+  title: string;
+  title2: string;
+  description: string;
+  image: string;
+  url: string;
+  category: string;
+  features: string[];
+};
+
+const slides: ProductSlide[] = [
   {
-    id: "analytics-platform",
-    title: "Analytics Platform",
-    icon: "material-symbols:analytics",
-    shortDesc: "Gain insights from your data",
-    description: "Transform raw data into actionable insights with our comprehensive analytics platform. Track metrics, visualize trends, and make data-driven decisions with ease.",
-    features: [
-      { text: "Real-time Data Processing", icon: "line-md:speedometer-loop" },
-      { text: "Custom Dashboards", icon: "line-md:grid-3-twotone" },
-      { text: "Advanced Visualization", icon: "line-md:chart-twotone" },
-      { text: "Data Export & Reports", icon: "line-md:document-report-twotone" },
-      { text: "Team Collaboration", icon: "line-md:account-multiple" },
-      { text: "API Integration", icon: "line-md:uploading-loop" },
-    ],
-    technologies: [
-      { name: "React", icon: "logos:react" },
-      { name: "Python", icon: "logos:python" },
-      { name: "TensorFlow", icon: "logos:tensorflow" },
-      { name: "PostgreSQL", icon: "logos:postgresql" }
-    ],
-    benefits: [
-      { text: "Make data-driven decisions", icon: "line-md:confirm-circle-twotone" },
-      { text: "Improve business efficiency", icon: "line-md:speedometer-loop" },
-      { text: "Track KPIs in real-time", icon: "line-md:chart-twotone" },
-      { text: "Reduce costs & optimize", icon: "line-md:arrow-down-circle" },
-    ],
-    glowColor: 'blue' as const,
+    place: "Product 01 · F&B / ERP",
+    title: "RESTAURANT",
+    title2: "ERP DASHBOARD",
+    description:
+      "Supercharge your restaurant with AI-powered operations. Manage orders, tables, inventory, and staff in real-time. Boost efficiency by 40% and watch your profitability soar.",
+    image: "/products/product1.jpg",
+    url: "https://restauranterpdashboardruchi.vercel.app",
+    category: "F&B / ERP",
+    features: ["Live Order Mgmt", "Table Planning", "Inventory Control", "Sales Analytics"],
   },
   {
-    id: "ai-assistant",
-    title: "AI Assistant",
-    icon: "material-symbols:psychology",
-    shortDesc: "Intelligent automation powered by AI",
-    description: "Leverage cutting-edge artificial intelligence to automate tasks, answer questions, and enhance productivity. Our AI Assistant learns from your workflow to provide personalized support.",
-    features: [
-      { text: "Natural Language Processing", icon: "line-md:chat-twotone" },
-      { text: "Task Automation", icon: "line-md:cog-loop" },
-      { text: "24/7 Availability", icon: "line-md:moon-filled-to-sunny-filled-loop-transition" },
-      { text: "Multi-language Support", icon: "line-md:text-box-multiple-twotone" },
-      { text: "Learning & Adaptation", icon: "line-md:lightbulb-twotone" },
-      { text: "Seamless Integration", icon: "line-md:uploading-loop" },
-    ],
-    technologies: [
-      { name: "OpenAI", icon: "simple-icons:openai" },
-      { name: "Python", icon: "logos:python" },
-      { name: "FastAPI", icon: "simple-icons:fastapi" },
-      { name: "Redis", icon: "logos:redis" }
-    ],
-    benefits: [
-      { text: "Increase productivity by 40%", icon: "line-md:arrow-up-circle-twotone" },
-      { text: "Automate repetitive tasks", icon: "line-md:cog-loop" },
-      { text: "Reduce response time", icon: "line-md:speedometer-loop" },
-      { text: "Improve customer satisfaction", icon: "line-md:heart-twotone" },
-    ],
-    glowColor: 'purple' as const,
+    place: "Product 02 · Healthcare",
+    title: "HOSPITAL",
+    title2: "MANAGEMENT",
+    description:
+      "Transform healthcare delivery with seamless patient workflows. Reduce wait times, enhance care coordination, and elevate patient satisfaction with integrated hospital operations.",
+    image: "/products/product2.jpg",
+    url: "https://hms-khaki-eta.vercel.app",
+    category: "Healthcare",
+    features: ["Patient Registration", "Appointment Slots", "EHR Records", "Pharmacy Module"],
   },
   {
-    id: "cloud-storage",
-    title: "Cloud Storage",
-    icon: "material-symbols:cloud",
-    shortDesc: "Secure and scalable cloud storage",
-    description: "Store, manage, and access your files from anywhere with our secure cloud storage solution. Enterprise-grade security with unlimited scalability.",
-    features: [
-      { text: "Unlimited Storage", icon: "line-md:cloud-up-twotone-loop" },
-      { text: "End-to-End Encryption", icon: "line-md:shield-check" },
-      { text: "File Versioning", icon: "line-md:document-list-twotone" },
-      { text: "Cross-Platform Sync", icon: "line-md:uploading-loop" },
-      { text: "Advanced Sharing", icon: "line-md:account-multiple" },
-      { text: "Automatic Backup", icon: "line-md:cloud-download-loop" },
-    ],
-    technologies: [
-      { name: "AWS S3", icon: "logos:aws-s3" },
-      { name: "Docker", icon: "logos:docker-icon" },
-      { name: "Kubernetes", icon: "logos:kubernetes" },
-      { name: "MongoDB", icon: "logos:mongodb-icon" }
-    ],
-    benefits: [
-      { text: "99.99% uptime guarantee", icon: "line-md:confirm-circle-twotone" },
-      { text: "Military-grade encryption", icon: "line-md:shield-check" },
-      { text: "Access from anywhere", icon: "line-md:map-marker-twotone" },
-      { text: "Automatic scaling", icon: "line-md:arrow-up" },
-    ],
-    glowColor: 'green' as const,
+    place: "Product 03 · AI / Communication",
+    title: "AI WHATSAPP",
+    title2: "PLATFORM",
+    description:
+      "Unleash AI-powered conversations on WhatsApp. Automate customer support, drive sales, and reach millions instantly. Scale your business without scaling your team.",
+    image: "/products/product3.jpg",
+    url: "https://ai-whatsapp-platform.vercel.app",
+    category: "AI / Comms",
+    features: ["AI Chatbot Builder", "Broadcasts", "Unified Inbox", "WA Commerce"],
   },
   {
-    id: "api-services",
-    title: "API Services",
-    icon: "material-symbols:api",
-    shortDesc: "Powerful APIs for seamless integration",
-    description: "Connect your applications with our robust API services. RESTful and GraphQL APIs with comprehensive documentation and developer tools.",
-    features: [
-      { text: "RESTful API", icon: "line-md:uploading-loop" },
-      { text: "GraphQL Support", icon: "line-md:document-code" },
-      { text: "Webhook Integration", icon: "line-md:external-link" },
-      { text: "Rate Limiting", icon: "line-md:speedometer-loop" },
-      { text: "API Analytics", icon: "line-md:chart-twotone" },
-      { text: "Developer Portal", icon: "line-md:account-small-twotone" },
-    ],
-    technologies: [
-      { name: "Node.js", icon: "logos:nodejs-icon" },
-      { name: "GraphQL", icon: "logos:graphql" },
-      { name: "Docker", icon: "logos:docker-icon" },
-      { name: "Nginx", icon: "logos:nginx" }
-    ],
-    benefits: [
-      { text: "Easy integration", icon: "line-md:confirm-circle-twotone" },
-      { text: "Comprehensive docs", icon: "line-md:document-list-twotone" },
-      { text: "High performance", icon: "line-md:speedometer-loop" },
-      { text: "Reliable & scalable", icon: "line-md:arrow-up-circle" },
-    ],
-    glowColor: 'orange' as const,
+    place: "Product 04 · Design / UI-UX",
+    title: "Pack &",
+    title2: "Move",
+    description:
+      "Your ultimate design blueprint. Every pixel perfected. Every interaction intuitive. Steal the best UX patterns and ship beautiful apps faster than ever.",
+    image: "/products/product4.jpg",
+    url: "https://mobileapplicationdesign.vercel.app",
+    category: "Utility",
+    features: ["Pixel-Perfect UI", "Dark & Light Mode", "Component Library", "Prototypes"],
+  },
+  {
+    place: "Product 05 · Automotive / CRM",
+    title: "VEHICLE",
+    title2: "CRM DASHBOARD",
+    description:
+      "Rev up your dealership sales. Track every lead, close deals faster, and maximize customer lifetime value. The competitive edge every dealer needs.",
+    image: "/products/product6.jpg",
+    url: "https://vehiclecrmdashboard.vercel.app",
+    category: "Auto / CRM",
+    features: ["Vehicle Inventory", "Lead Pipeline", "Deal Tracking", "Finance Calc"],
+  },
+  {
+    place: "Product 06 · Automation / DevTools",
+    title: "PIPELINE",
+    title2: "BUILDER",
+    description:
+      "No-code automation for everyone. Build complex workflows visually. No coding needed. Integrate anything. Deploy instantly. Watch repetitive tasks disappear.",
+    image: "/products/product7.jpg",
+    url: "https://pipeline-builder-gold.vercel.app",
+    category: "Automation",
+    features: ["Visual Canvas", "Conditional Logic", "API Connectors", "1-click Deploy"],
+  },
+  {
+    place: "Product 07 · Entertainment / Media",
+    title: "VINYL",
+    title2: "MUSIC PLAYER",
+    description:
+      "Experience music like never before. Local files, YouTube, JioSaavn — all in one stunning player. Nostalgia meets modern tech. Pure audio bliss.",
+    image: "/products/product5.jpg",
+    url: "https://music-player-ecru-six.vercel.app",
+    category: "Media",
+    features: ["Local Playback", "YouTube & JioSaavn", "Playlists", "Favourites"],
+  },
+  {
+    place: "Product 08 · Computer Vision",
+    title: "FACE",
+    title2: "RECOGNITION",
+    description:
+      "Next-gen security at your fingertips. Real-time face recognition for access control and attendance. See who matters in seconds. Security reimagined.",
+    image: "/products/product8.jpg",
+    url: "",
+    category: "AI / Security",
+    features: ["Live Detection", "Access Control", "Attendance Logs", "Alerts & Reports"],
+  },
+  {
+    place: "Product 09 · Trading & Finance",
+    title: "INTRADAY",
+    title2: "TRADING DESK",
+    description:
+      "Trade like a pro. Real-time feeds, instant execution, risk control. Every second counts. This dashboard puts you ahead of the market.",
+    image: "/products/product9.jpg",
+    url: "",
+    category: "FinTech",
+    features: ["Live Tickers", "Watchlists", "P&L Overview", "Risk Heatmaps"],
+  },
+  {
+    place: "Product 10 · E‑commerce",
+    title: "ONLINE",
+    title2: "GROCERY STORE",
+    description:
+      "Grocery shopping, perfected. Smart recommendations. Fast checkout. Same-day delivery. Your pantry, always full. Your life, always easier.",
+    image: "/products/product10.jpg",
+    url: "",
+    category: "E‑commerce",
+    features: ["Smart Cart", "Repeat Orders", "Slot Booking", "Offers & Coupons"],
+  },
+  {
+    place: "Product 11 · People Ops",
+    title: "HR",
+    title2: "INSIGHTS DESK",
+    description:
+      "Unlock your people's potential. See performance at a glance. Make data-driven hiring decisions. Build the team you've always wanted.",
+    image: "/products/product11.jpg",
+    url: "",
+    category: "HR / People",
+    features: ["Headcount View", "Attrition Trends", "Hiring Funnel", "Engagement Metrics"],
+  },
+  {
+    place: "Product 12 · Dairy Supply",
+    title: "DAIRYFLOW",
+    title2: "SUPPLY CHAIN",
+    description:
+      "A dairy supply management console to track milk collection, chilling centers, logistics, quality checks, and retailer deliveries in real time.",
+    image: "/products/product12.jpg",
+    url: "https://replicatedesignfromfile.vercel.app/",
+    category: "Supply Chain",
+    features: ["Milk Collection", "Route Tracking", "Quality Logs", "Outlet Orders"],
+  },
+  {
+    place: "Product 13 · Secure Storage",
+    title: "VAULT",
+    title2: "",
+    description: "",
+    image: "/products/product13.jpg",
+    url: "",
+    category: "",
+    features: [],
   },
 ];
 
+
 export default function ProductsPage() {
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const data = slides;
+
+    const CARD_W = 180;
+    const CARD_H = 270;
+    const GAP    = 16;
+    const NUM_SZ = 50;
+    const EASE   = "sine.inOut";
+
+    let offsetTop  = 0;
+    let offsetLeft = 0;
+    let order      = data.map((_, i) => i);
+    let detailsEven = true;
+
+    const { set } = gsap;
+    const getCard    = (i: number) => `#card${i}`;
+    const getContent = (i: number) => `#card-content-${i}`;
+    const getNum     = (i: number) => `#slide-item-${i}`;
+
+    const makeCards = () =>
+      data.map((item, idx) => `
+        <div id="card${idx}" style="
+          position:absolute;left:0;top:0;
+          background:center/cover no-repeat url('${item.image}');
+          box-shadow:8px 8px 24px 4px rgba(0,0,0,0.85);
+          border-radius:14px;overflow:hidden;will-change:transform;">
+          <div style="position:absolute;inset:0;
+            background:linear-gradient(160deg,rgba(0,0,0,0.30) 0%,rgba(0,0,0,0.70) 55%,rgba(0,0,0,0.94) 100%);">
+          </div>
+        </div>`).join("");
+
+    const makeContents = () =>
+      data.map((item, idx) => `
+        <div id="card-content-${idx}" style="
+          position:absolute;left:0;top:0;
+          color:#fff;box-sizing:border-box;
+          padding:10px 10px 0;pointer-events:none;overflow:hidden;">
+          <div style="width:18px;height:3px;border-radius:99px;background:#ecad29;margin-bottom:6px;"></div>
+          <div style="font-size:8px;font-weight:600;text-transform:uppercase;
+            letter-spacing:0.12em;opacity:0.7;line-height:1.3;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${item.place}
+          </div>
+          <div style="font-weight:700;font-size:14px;font-family:'Oswald',sans-serif;
+            line-height:1.15;margin-top:3px;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${item.title}
+          </div>
+          <div style="font-weight:700;font-size:14px;font-family:'Oswald',sans-serif;
+            line-height:1.15;
+            white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${item.title2}
+          </div>
+        </div>`).join("");
+
+    const makeNumbers = () =>
+      data.map((_, idx) => `
+        <div id="slide-item-${idx}" style="
+          width:${NUM_SZ}px;height:${NUM_SZ}px;
+          position:absolute;top:0;left:0;
+          display:grid;place-items:center;
+          font-size:26px;font-weight:700;color:#fff;
+          font-family:'Oswald',sans-serif;">
+          ${idx + 1}
+        </div>`).join("");
+
+    const demoEl    = document.getElementById("demo");
+    const slideNums = document.getElementById("slide-numbers");
+    if (!demoEl || !slideNums) return;
+
+    demoEl.innerHTML    = makeCards() + makeContents();
+    slideNums.innerHTML = makeNumbers();
+
+    function animate(target: gsap.TweenTarget, duration: number, props: gsap.TweenVars) {
+      return new Promise<void>((res) =>
+        gsap.to(target, { ...props, duration, onComplete: () => res() })
+      );
+    }
+
+    function init() {
+      const HEADER_H = 80;
+      const [active, ...rest] = order;
+      const detActive   = detailsEven ? "#details-even" : "#details-odd";
+      const detInactive = detailsEven ? "#details-odd"  : "#details-even";
+      const W = window.innerWidth;
+      const H = window.innerHeight;
+      const usableHeight = H - HEADER_H;
+      offsetTop  = HEADER_H + usableHeight - CARD_H - 210;
+      offsetLeft = Math.max(Math.round(W * 0.46), W - data.length * (CARD_W + GAP) - 40);
+      set("#pagination", {
+        top: offsetTop + CARD_H + 24,
+        left: offsetLeft,
+        y: 80, opacity: 0, zIndex: 60,
+      });
+
+      set(getCard(active), { x: 0, y: 0, width: W, height: H, borderRadius: 0, zIndex: 20 });
+      set(getContent(active), { x: 0, y: 0, opacity: 0 });
+
+      set(detActive,   { opacity: 0, zIndex: 22, x: -220 });
+      set(detInactive, { opacity: 0, zIndex: 12 });
+      set(`${detInactive} .text`,         { y: 100 });
+      set(`${detInactive} .title-1`,      { y: 100 });
+      set(`${detInactive} .title-2`,      { y: 100 });
+      set(`${detInactive} .desc`,         { y: 50  });
+      set(`${detInactive} .features-row`, { y: 40, opacity: 0 });
+      set(`${detInactive} .cta`,          { y: 60  });
+      set(".progress-sub-foreground", { width: 240 * (1 / order.length) * (active + 1) });
+
+      rest.forEach((i, idx) => {
+        set(getCard(i), {
+          x: W + idx * (CARD_W + GAP), y: offsetTop,
+          width: CARD_W, height: CARD_H, zIndex: 30, borderRadius: 14,
+        });
+        set(getContent(i), {
+          x: W + idx * (CARD_W + GAP), y: offsetTop,
+          width: CARD_W, height: CARD_H, zIndex: 40,
+        });
+        set(getNum(i), { x: (idx + 1) * NUM_SZ });
+      });
+
+      set(".indicator", { x: -W });
+
+      const START = 0.6;
+      gsap.to(".cover", {
+        x: W + 400, delay: 0.5, ease: EASE,
+        onComplete: () => { setTimeout(() => { if (!isCancelled) loop(); }, 500); },
+      });
+      rest.forEach((i, idx) => {
+        gsap.to(getCard(i), {
+          x: offsetLeft + idx * (CARD_W + GAP), zIndex: 30,
+          delay: START + 0.06 * idx, ease: EASE,
+        });
+        gsap.to(getContent(i), {
+          x: offsetLeft + idx * (CARD_W + GAP), y: offsetTop,
+          width: CARD_W, height: CARD_H,
+          zIndex: 40, delay: START + 0.06 * idx, ease: EASE,
+        });
+      });
+
+      gsap.to("#pagination", { y: 0, opacity: 1, ease: EASE, delay: START });
+      gsap.to(detActive,     { opacity: 1, x: 0,  ease: EASE, delay: START });
+    }
+    function step() {
+      return new Promise<void>((resolve) => {
+        order.push(order.shift() as number);
+        detailsEven = !detailsEven;
+
+        const detActive   = detailsEven ? "#details-even" : "#details-odd";
+        const detInactive = detailsEven ? "#details-odd"  : "#details-even";
+        const d = data[order[0]];
+
+        const q = <T extends Element>(sel: string) =>
+          document.querySelector<T>(`${detActive} ${sel}`);
+
+        const placeEl    = q<HTMLElement>(".place-box .text");
+        const t1El       = q<HTMLElement>(".title-1");
+        const t2El       = q<HTMLElement>(".title-2");
+        const descEl     = q<HTMLElement>(".desc");
+        const featEl     = q<HTMLElement>(".features-row");
+        const linkEl     = q<HTMLAnchorElement>(".cta a");
+        const catEl      = q<HTMLElement>(".category-pill");
+
+        if (placeEl) placeEl.textContent = d.place;
+        if (t1El)    t1El.textContent    = d.title;
+        if (t2El)    t2El.textContent    = d.title2;
+        if (descEl)  descEl.textContent  = d.description;
+        if (linkEl)  linkEl.href         = d.url;
+        if (catEl)   catEl.textContent   = d.category;
+        if (featEl)  featEl.innerHTML    = d.features.map(f =>
+          `<span style="display:inline-flex;align-items:center;
+            background:linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%);
+            border:1.5px solid rgba(0, 217, 255, 0.6);
+            color:#00d9ff;font-size:9.5px;font-weight:700;text-transform:uppercase;
+            letter-spacing:0.1em;padding:6px 12px;border-radius:99px;white-space:nowrap;
+            box-shadow:0 0 12px rgba(0, 217, 255, 0.2);">
+            ${f}
+          </span>`).join("");
+
+        set(detActive, { zIndex: 22 });
+        gsap.to(detActive,                      { opacity: 1, delay: 0.4,  ease: EASE });
+        gsap.to(`${detActive} .text`,           { y: 0, delay: 0.10, duration: 0.7, ease: EASE });
+        gsap.to(`${detActive} .title-1`,        { y: 0, delay: 0.15, duration: 0.7, ease: EASE });
+        gsap.to(`${detActive} .title-2`,        { y: 0, delay: 0.15, duration: 0.7, ease: EASE });
+        gsap.to(`${detActive} .desc`,           { y: 0, delay: 0.30, duration: 0.4, ease: EASE });
+        gsap.to(`${detActive} .features-row`,   { y: 0, opacity: 1, delay: 0.33, duration: 0.4, ease: EASE });
+        gsap.to(`${detActive} .cta`, {
+          y: 0, delay: 0.38, duration: 0.4, ease: EASE,
+          onComplete: () => resolve(),
+        });
+
+        set(detInactive, { zIndex: 12 });
+
+        const [active, ...rest] = order;
+        const prv = rest[rest.length - 1];
+
+        set(getCard(prv), { zIndex: 10 });
+        set(getCard(active), { zIndex: 20 });
+        gsap.to(getCard(prv), { scale: 1.5, ease: EASE });
+
+        gsap.to(getContent(active), { opacity: 0, duration: 0.3, ease: EASE });
+        gsap.to(getNum(active),     { x: 0,          ease: EASE });
+        gsap.to(getNum(prv),        { x: -NUM_SZ,    ease: EASE });
+        gsap.to(".progress-sub-foreground", {
+          width: 240 * (1 / order.length) * (active + 1), ease: EASE,
+        });
+
+        gsap.to(getCard(active), {
+          x: 0,
+          y: 0,
+          ease: EASE,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          borderRadius: 0,
+          onComplete: () => {
+            const xNew = offsetLeft + (rest.length - 1) * (CARD_W + GAP);
+
+            set(getCard(prv), {
+              x: xNew, y: offsetTop,
+              width: CARD_W, height: CARD_H,
+              zIndex: 30, borderRadius: 14, scale: 1,
+            });
+            set(getContent(prv), {
+              x: xNew, y: offsetTop,
+              width: CARD_W, height: CARD_H,
+              opacity: 1, zIndex: 40,
+            });
+            set(getNum(prv), { x: rest.length * NUM_SZ });
+
+            set(detInactive,                        { opacity: 0 });
+            set(`${detInactive} .text`,             { y: 100 });
+            set(`${detInactive} .title-1`,          { y: 100 });
+            set(`${detInactive} .title-2`,          { y: 100 });
+            set(`${detInactive} .desc`,             { y: 50  });
+            set(`${detInactive} .features-row`,     { y: 40, opacity: 0 });
+            set(`${detInactive} .cta`,              { y: 60  });
+          },
+        });
+
+        rest.forEach((i, idx) => {
+          if (i === prv) return;
+          const xNew = offsetLeft + idx * (CARD_W + GAP);
+          set(getCard(i), { zIndex: 30 });
+          gsap.to(getCard(i), {
+            x: xNew, y: offsetTop, width: CARD_W, height: CARD_H,
+            ease: EASE, delay: 0.1 * (idx + 1),
+          });
+          gsap.to(getContent(i), {
+            x: xNew, y: offsetTop, width: CARD_W, height: CARD_H,
+            opacity: 1, zIndex: 40, ease: EASE, delay: 0.1 * (idx + 1),
+          });
+          gsap.to(getNum(i), { x: (idx + 1) * NUM_SZ, ease: EASE });
+        });
+      });
+    }
+
+    async function loop() {
+      await animate(".indicator", 2, { x: 0 });
+      await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+      set(".indicator", { x: -window.innerWidth });
+      await step();
+      if (!isCancelled) loop();
+    }
+
+    const handleNext = () => { step(); };
+    const handlePrev = () => {
+      order.unshift(order.pop() as number);
+      detailsEven = !detailsEven;
+      step();
+    };
+
+    const arrowR = document.querySelector(".arrow-right");
+    const arrowL = document.querySelector(".arrow-left");
+    arrowR?.addEventListener("click", handleNext);
+    arrowL?.addEventListener("click", handlePrev);
+
+    const loadImg = (src: string) =>
+      new Promise<void>((res) => {
+        const img = new Image();
+        img.onload = () => res();
+        img.onerror = () => res();
+        img.src = src;
+      });
+
+    Promise.all(data.map(({ image }) => loadImg(image))).then(() => {
+      if (!isCancelled) init();
+    });
+
+    return () => {
+      isCancelled = true;
+      arrowR?.removeEventListener("click", handleNext);
+      arrowL?.removeEventListener("click", handlePrev);
+      gsap.killTweensOf("*");
+    };
+  }, []);
+
+  const DetailsPanel = ({ id, slide }: { id: string; slide: ProductSlide }) => (
+    <div
+      id={id}
+      className="details absolute z-[22] pointer-events-none"
+      style={{ left: 52, top: "calc(var(--hh) + 60px)", maxWidth: 520 }}
+    >
+      <div className="place-box relative overflow-hidden mb-1" style={{ height: 44 }}>
+        <div
+          className="text relative text-white/90 font-medium"
+          style={{ paddingTop: 16, paddingLeft: 36, fontSize: 16, letterSpacing: "0.04em" }}
+        >
+          <span
+            style={{
+              position: "absolute", left: 0, top: 19,
+              width: 24, height: 3, borderRadius: 99,
+              background: "#ecad29", display: "block",
+            }}
+          />
+          {slide.place}
+        </div>
+      </div>
+      <div className="title-box-1 overflow-hidden" style={{ height: 96, marginTop: 0 }}>
+        <div
+          className="title-1 font-bold text-white leading-none break-words"
+          style={{ fontFamily: "'Oswald',sans-serif", fontSize: "clamp(32px,10vw,60px)" }}
+        >
+          {slide.title}
+        </div>
+      </div>
+
+      <div className="title-box-2 overflow-hidden" style={{ height: 96, marginTop: 2 }}>
+        <div
+          className="title-2 font-bold text-white leading-none break-words"
+          style={{ fontFamily: "'Oswald',sans-serif", fontSize: "clamp(32px,10vw,60px)" }}
+        >
+          {slide.title2}
+        </div>
+      </div>
+      <div
+        className="desc leading-relaxed"
+        style={{
+          marginTop: 14,
+          fontSize: "clamp(12px,2.6vw,13.5px)",
+          maxWidth: "min(420px, 92vw)",
+          color: "#00d9ff",
+          fontWeight: 500,
+          letterSpacing: "0.3px",
+          textShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
+        }}
+      >
+        {slide.description}
+      </div>
+      <div
+        className="features-row flex flex-wrap gap-2"
+        style={{ marginTop: 14, maxWidth: "min(440px, 94vw)" }}
+      >
+        {slide.features.map((f) => (
+          <span
+            key={f}
+            style={{
+              display: "inline-flex", alignItems: "center",
+              background: "linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%)",
+              border: "1.5px solid rgba(0, 217, 255, 0.6)",
+              color: "#00d9ff",
+              fontSize: 9.5, fontWeight: 700,
+              textTransform: "uppercase", letterSpacing: "0.1em",
+              padding: "6px 12px", borderRadius: 99,
+              whiteSpace: "nowrap",
+              boxShadow: "0 0 12px rgba(0, 217, 255, 0.2)",
+            }}
+          >
+            {f}
+          </span>
+        ))}
+      </div>
+      <div
+        className="cta flex items-center gap-3 pointer-events-auto"
+        style={{ marginTop: 20 }}
+      >
+        <span
+          className="category-pill"
+          style={{
+            fontSize: 10, fontWeight: 600,
+            textTransform: "uppercase", letterSpacing: "0.1em",
+            background: "rgba(255,255,255,0.10)",
+            border: "1px solid rgba(255,255,255,0.22)",
+            color: "rgba(255,255,255,0.85)",
+            padding: "5px 14px", borderRadius: 99,
+            whiteSpace: "nowrap",
+          }}
+        >
+          {slide.category}
+        </span>
+
+        <a
+          href={slide.url}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: "inline-flex", alignItems: "center", gap: 7,
+            height: 38, borderRadius: 99,
+            padding: "0 22px",
+            background: "#ecad29", color: "#1a1a1a",
+            fontSize: 11, fontWeight: 700,
+            textTransform: "uppercase", letterSpacing: "0.15em",
+            textDecoration: "none", whiteSpace: "nowrap",
+            transition: "background 0.2s, color 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.background = "#fff";
+            el.style.color = "#1a1a1a";
+          }}
+          onMouseLeave={(e) => {
+            const el = e.currentTarget as HTMLAnchorElement;
+            el.style.background = "#ecad29";
+            el.style.color = "#1a1a1a";
+          }}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width={13} height={13}>
+            <path fillRule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clipRule="evenodd" />
+            <path fillRule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clipRule="evenodd" />
+          </svg>
+          View Product
+        </a>
+      </div>
+    </div>
+  );
+
   return (
     <PageLoader>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap');
+
+        /* expose header height so detail panel top is always below the nav */
+        :root { --hh: 80px; }
+
+        /* arrows clickable */
+        .arrow-left, .arrow-right { cursor: pointer; }
+        .arrow-left:hover  { border-color: rgba(255,255,255,0.7) !important; }
+        .arrow-right:hover { border-color: rgba(255,255,255,0.7) !important; }
+
+        /* details panel – pointer-events off by default, re-enabled on .cta */
+        .details { pointer-events: none; }
+        .details .cta { pointer-events: auto; }
+      `}</style>
+
       <Header />
 
-      {/* Hero Section */}
-      <section className="relative w-full pt-32 pb-20 bg-background">
-        <div className="mx-auto max-w-6xl px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+      <main
+        ref={mainRef}
+        className="relative bg-[#111] text-white overflow-hidden"
+        style={{ height: "100dvh" }}
+      >
+        <div
+          className="indicator fixed left-0 right-0 top-0 z-[60]"
+          style={{ height: 4, background: "#ecad29", transform: "translateX(-100vw)" }}
+        />
+
+        <section className="absolute inset-0">
+          <div id="demo" className="absolute inset-0" />
+
+          <DetailsPanel id="details-even" slide={slides[0]} />
+          <DetailsPanel id="details-odd"  slide={slides[1]} />
+
+          <div
+            id="pagination"
+            className="absolute inline-flex items-center"
+            style={{ gap: 0, zIndex: 60 }}
           >
-            <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
-              Our Products
-            </h1>
-            <p className="text-muted-foreground text-lg md:text-xl max-w-3xl mx-auto">
-              Powerful tools and platforms designed to accelerate your business growth
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Products Section - Each wrapped in GlowCard */}
-      <section className="relative w-full py-12 bg-background">
-        <div className="mx-auto max-w-7xl px-4">
-          <div className="space-y-24">
-            {products.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-              >
-                <GlowCard
-                  glowColor={product.glowColor}
-                  customSize={true}
-                  className="w-full h-auto"
-                >
-                  <div
-                    className={`flex flex-col ${
-                      index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                    } gap-12 items-center p-6 lg:p-8`}
-                  >
-                    {/* Icon & Title Side */}
-                    <div className="flex-1 space-y-6">
-                      <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
-                        <Icon
-                          icon={product.icon}
-                          className="w-12 h-12 text-violet-600 dark:text-violet-400"
-                        />
-                      </div>
-                      <div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-                          {product.title}
-                        </h2>
-                        <p className="text-xl text-violet-600 dark:text-violet-400 mb-4">
-                          {product.shortDesc}
-                        </p>
-                        <p className="text-muted-foreground text-lg leading-relaxed">
-                          {product.description}
-                        </p>
-                      </div>
-
-                      {/* Technologies */}
-                      <div>
-                        <h4 className="text-sm font-semibold text-foreground/60 mb-3 uppercase tracking-wide flex items-center gap-2">
-                          <Icon icon="line-md:cog-loop" className="w-4 h-4" />
-                          Built With
-                        </h4>
-                        <div className="flex flex-wrap gap-2">
-                          {product.technologies.map((tech) => (
-                            <span
-                              key={tech.name}
-                              className="px-3 py-1.5 rounded-full text-sm bg-violet-500/10 text-violet-600 dark:text-violet-400 border border-violet-500/20 flex items-center gap-2"
-                            >
-                              <Icon icon={tech.icon} className="w-4 h-4" />
-                              {tech.name}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Features & Benefits Side */}
-                    <div className="flex-1 space-y-8">
-                      {/* Features */}
-                      <div className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-violet-200/30 dark:border-violet-700/30">
-                        <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                          <Icon icon="line-md:check-list-3-twotone" className="w-6 h-6 text-violet-600" />
-                          Key Features
-                        </h3>
-                        <ul className="space-y-3">
-                          {product.features.map((feature) => (
-                            <li key={feature.text} className="flex items-start gap-3">
-                              <Icon
-                                icon={feature.icon}
-                                className="w-5 h-5 text-violet-600 dark:text-violet-400 mt-0.5 shrink-0"
-                              />
-                              <span className="text-muted-foreground">{feature.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {/* Benefits */}
-                      <div className="bg-gradient-to-br from-violet-500/10 to-purple-600/10 rounded-2xl p-8 border border-violet-500/20">
-                        <h3 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
-                          <Icon icon="line-md:star-pulsating-twotone-loop" className="w-6 h-6 text-violet-600" />
-                          Why Choose This
-                        </h3>
-                        <ul className="space-y-3">
-                          {product.benefits.map((benefit) => (
-                            <li key={benefit.text} className="flex items-start gap-3">
-                              <Icon
-                                icon={benefit.icon}
-                                className="w-5 h-5 text-violet-600 dark:text-violet-400 mt-0.5 shrink-0"
-                              />
-                              <span className="text-muted-foreground">{benefit.text}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </div>
-                </GlowCard>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="relative w-full py-20 bg-background">
-        <div className="mx-auto max-w-4xl px-4 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-gradient-to-r from-violet-500 to-purple-600 rounded-3xl p-12 text-white"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              Ready to Get Started?
-            </h2>
-            <p className="text-white/90 text-lg mb-8 max-w-2xl mx-auto">
-              Explore our products and see how they can transform your business operations.
-            </p>
-            <button className="px-8 py-4 bg-white text-violet-600 rounded-xl font-semibold hover:bg-violet-50 transition-all duration-300 shadow-lg hover:shadow-xl">
-              Schedule a Demo
+            <button
+              className="arrow-left grid place-items-center rounded-full transition-colors"
+              style={{
+                width: 42, height: 42, flexShrink: 0,
+                border: "1.5px solid rgba(255,255,255,0.28)",
+                background: "transparent", color: "rgba(255,255,255,0.7)",
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" width={18} height={18} strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
             </button>
-          </motion.div>
-        </div>
-      </section>
+            <button
+              className="arrow-right grid place-items-center rounded-full transition-colors"
+              style={{
+                width: 42, height: 42, flexShrink: 0, marginLeft: 8,
+                border: "1.5px solid rgba(255,255,255,0.28)",
+                background: "transparent", color: "rgba(255,255,255,0.7)",
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" width={18} height={18} strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+            <div
+              className="progress-sub-container flex items-center"
+              style={{ marginLeft: 16, width: 240, height: 42, flexShrink: 0 }}
+            >
+              <div
+                className="progress-sub-background overflow-hidden"
+                style={{ width: 240, height: 2, background: "rgba(255,255,255,0.18)" }}
+              >
+                <div
+                  className="progress-sub-foreground"
+                  style={{ height: 2, background: "#ecad29", width: 0 }}
+                />
+              </div>
+            </div>
+
+            <div
+              id="slide-numbers"
+              className="relative overflow-hidden"
+              style={{ width: 44, height: 44, marginLeft: 6, flexShrink: 0 }}
+            />
+          </div>
+        </section>
+        <div
+          className="cover absolute inset-0 z-[100]"
+          style={{ background: "#fff" }}
+        />
+      </main>
     </PageLoader>
   );
 }
