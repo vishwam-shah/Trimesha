@@ -22,7 +22,7 @@ const slides: ProductSlide[] = [
     title: "RESTAURANT",
     title2: "ERP DASHBOARD",
     description:
-      "Centralises every operational touchpoint of a food service business — from order management and table tracking to inventory, staff scheduling, and financial analytics.",
+      "Supercharge your restaurant with AI-powered operations. Manage orders, tables, inventory, and staff in real-time. Boost efficiency by 40% and watch your profitability soar.",
     image: "/products/product1.jpg",
     url: "https://restauranterpdashboardruchi.vercel.app",
     category: "F&B / ERP",
@@ -33,7 +33,7 @@ const slides: ProductSlide[] = [
     title: "HOSPITAL",
     title2: "MANAGEMENT",
     description:
-      "Connects every department of a hospital — from OPD registration and appointment booking to IPD, pharmacy, labs, and billing — for faster, safer patient care.",
+      "Transform healthcare delivery with seamless patient workflows. Reduce wait times, enhance care coordination, and elevate patient satisfaction with integrated hospital operations.",
     image: "/products/product2.jpg",
     url: "https://hms-khaki-eta.vercel.app",
     category: "Healthcare",
@@ -44,7 +44,7 @@ const slides: ProductSlide[] = [
     title: "AI WHATSAPP",
     title2: "PLATFORM",
     description:
-      "Build, deploy, and manage intelligent chatbot experiences on WhatsApp — combining AI-driven flows, broadcast campaigns, contact management, and analytics.",
+      "Unleash AI-powered conversations on WhatsApp. Automate customer support, drive sales, and reach millions instantly. Scale your business without scaling your team.",
     image: "/products/product3.jpg",
     url: "https://ai-whatsapp-platform.vercel.app",
     category: "AI / Comms",
@@ -55,7 +55,7 @@ const slides: ProductSlide[] = [
     title: "Pack &",
     title2: "Move",
     description:
-      "High-fidelity UI/UX showcase for real-world mobile apps — a reference library of best-in-class patterns, interaction models, and component systems.",
+      "Your ultimate design blueprint. Every pixel perfected. Every interaction intuitive. Steal the best UX patterns and ship beautiful apps faster than ever.",
     image: "/products/product4.jpg",
     url: "https://mobileapplicationdesign.vercel.app",
     category: "Utility",
@@ -66,7 +66,7 @@ const slides: ProductSlide[] = [
     title: "VEHICLE",
     title2: "CRM DASHBOARD",
     description:
-      "Specialised trading and CRM platform for dealerships — 360° view of inventory, leads, pipelines, customer profiles, and deals with automotive-specific workflows.",
+      "Rev up your dealership sales. Track every lead, close deals faster, and maximize customer lifetime value. The competitive edge every dealer needs.",
     image: "/products/product6.jpg",
     url: "https://vehiclecrmdashboard.vercel.app",
     category: "Auto / CRM",
@@ -77,7 +77,7 @@ const slides: ProductSlide[] = [
     title: "PIPELINE",
     title2: "BUILDER",
     description:
-      "Visual, node-based workflow automation — design, connect, and deploy complex data or logic pipelines on an infinite drag-and-drop canvas without writing code.",
+      "No-code automation for everyone. Build complex workflows visually. No coding needed. Integrate anything. Deploy instantly. Watch repetitive tasks disappear.",
     image: "/products/product7.jpg",
     url: "https://pipeline-builder-gold.vercel.app",
     category: "Automation",
@@ -88,7 +88,7 @@ const slides: ProductSlide[] = [
     title: "VINYL",
     title2: "MUSIC PLAYER",
     description:
-      "A premium web music player that unifies local files, YouTube, and JioSaavn into a single, beautiful listening experience with playlists and a vinyl-inspired UI.",
+      "Experience music like never before. Local files, YouTube, JioSaavn — all in one stunning player. Nostalgia meets modern tech. Pure audio bliss.",
     image: "/products/product5.jpg",
     url: "https://music-player-ecru-six.vercel.app",
     category: "Media",
@@ -99,7 +99,7 @@ const slides: ProductSlide[] = [
     title: "FACE",
     title2: "RECOGNITION",
     description:
-      "A real‑time face recognition system for secure access control, attendance tracking, and visitor analytics across offices, campuses, and retail environments.",
+      "Next-gen security at your fingertips. Real-time face recognition for access control and attendance. See who matters in seconds. Security reimagined.",
     image: "/products/product8.jpg",
     url: "",
     category: "AI / Security",
@@ -110,7 +110,7 @@ const slides: ProductSlide[] = [
     title: "INTRADAY",
     title2: "TRADING DESK",
     description:
-      "A high‑frequency intraday trading dashboard that unifies live market feeds, watchlists, P&L, and risk metrics for active traders and desks.",
+      "Trade like a pro. Real-time feeds, instant execution, risk control. Every second counts. This dashboard puts you ahead of the market.",
     image: "/products/product9.jpg",
     url: "",
     category: "FinTech",
@@ -121,7 +121,7 @@ const slides: ProductSlide[] = [
     title: "ONLINE",
     title2: "GROCERY STORE",
     description:
-      "An end‑to‑end e‑commerce grocery experience with smart recommendations, quick re‑order lists, and delivery slot selection for everyday essentials.",
+      "Grocery shopping, perfected. Smart recommendations. Fast checkout. Same-day delivery. Your pantry, always full. Your life, always easier.",
     image: "/products/product10.jpg",
     url: "",
     category: "E‑commerce",
@@ -132,7 +132,7 @@ const slides: ProductSlide[] = [
     title: "HR",
     title2: "INSIGHTS DESK",
     description:
-      "A human resources analytics dashboard focusing on headcount, engagement, performance cycles, and hiring funnels in a single unified view.",
+      "Unlock your people's potential. See performance at a glance. Make data-driven hiring decisions. Build the team you've always wanted.",
     image: "/products/product11.jpg",
     url: "",
     category: "HR / People",
@@ -336,9 +336,11 @@ export default function ProductsPage() {
         if (catEl)   catEl.textContent   = d.category;
         if (featEl)  featEl.innerHTML    = d.features.map(f =>
           `<span style="display:inline-flex;align-items:center;
-            background:rgba(236,173,41,0.15);border:1px solid rgba(236,173,41,0.45);
-            color:#ecad29;font-size:9.5px;font-weight:600;text-transform:uppercase;
-            letter-spacing:0.1em;padding:4px 10px;border-radius:99px;white-space:nowrap;">
+            background:linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%);
+            border:1.5px solid rgba(0, 217, 255, 0.6);
+            color:#00d9ff;font-size:9.5px;font-weight:700;text-transform:uppercase;
+            letter-spacing:0.1em;padding:6px 12px;border-radius:99px;white-space:nowrap;
+            box-shadow:0 0 12px rgba(0, 217, 255, 0.2);">
             ${f}
           </span>`).join("");
 
@@ -503,7 +505,10 @@ export default function ProductsPage() {
           marginTop: 14,
           fontSize: "clamp(12px,2.6vw,13.5px)",
           maxWidth: "min(420px, 92vw)",
-          color: "rgba(255,255,255,0.86)",
+          color: "#00d9ff",
+          fontWeight: 500,
+          letterSpacing: "0.3px",
+          textShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
         }}
       >
         {slide.description}
@@ -517,13 +522,14 @@ export default function ProductsPage() {
             key={f}
             style={{
               display: "inline-flex", alignItems: "center",
-              background: "rgba(236,173,41,0.15)",
-              border: "1px solid rgba(236,173,41,0.45)",
-              color: "#ecad29",
-              fontSize: 9.5, fontWeight: 600,
+              background: "linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%)",
+              border: "1.5px solid rgba(0, 217, 255, 0.6)",
+              color: "#00d9ff",
+              fontSize: 9.5, fontWeight: 700,
               textTransform: "uppercase", letterSpacing: "0.1em",
-              padding: "4px 10px", borderRadius: 99,
+              padding: "6px 12px", borderRadius: 99,
               whiteSpace: "nowrap",
+              boxShadow: "0 0 12px rgba(0, 217, 255, 0.2)",
             }}
           >
             {f}
