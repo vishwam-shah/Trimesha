@@ -1,167 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { Header } from "@/components/layout/header";
 import { PageLoader } from "@/components/common/page-loader";
 import { Spotlight } from "@/components/ui/spotlight";
-
-type ProductSlide = {
-  place: string;
-  title: string;
-  title2: string;
-  description: string;
-  image: string;
-  url: string;
-  category: string;
-  features: string[];
-};
-
-const slides: ProductSlide[] = [
-  {
-    place: "Product 01 · F&B / ERP",
-    title: "RESTAURANT",
-    title2: "ERP DASHBOARD",
-    description:
-      "Supercharge your restaurant with AI-powered operations. Manage orders, tables, inventory, and staff in real-time. Boost efficiency by 40% and watch your profitability soar.",
-    image: "/products/product1.jpg",
-    url: "https://restauranterpdashboardruchi.vercel.app",
-    category: "F&B / ERP",
-    features: ["Live Order Mgmt", "Table Planning", "Inventory Control", "Sales Analytics"],
-  },
-  {
-    place: "Product 02 · Healthcare",
-    title: "HOSPITAL",
-    title2: "MANAGEMENT",
-    description:
-      "Transform healthcare delivery with seamless patient workflows. Reduce wait times, enhance care coordination, and elevate patient satisfaction with integrated hospital operations.",
-    image: "/products/product2.jpg",
-    url: "https://hms-khaki-eta.vercel.app",
-    category: "Healthcare",
-    features: ["Patient Registration", "Appointment Slots", "EHR Records", "Pharmacy Module"],
-  },
-  {
-    place: "Product 03 · AI / Communication",
-    title: "AI WHATSAPP",
-    title2: "PLATFORM",
-    description:
-      "Unleash AI-powered conversations on WhatsApp. Automate customer support, drive sales, and reach millions instantly. Scale your business without scaling your team.",
-    image: "/products/product3.jpg",
-    url: "https://ai-whatsapp-platform.vercel.app",
-    category: "AI / Comms",
-    features: ["AI Chatbot Builder", "Broadcasts", "Unified Inbox", "WA Commerce"],
-  },
-  {
-    place: "Product 04 · Design / UI-UX",
-    title: "Pack &",
-    title2: "Move",
-    description:
-      "Your ultimate design blueprint. Every pixel perfected. Every interaction intuitive. Steal the best UX patterns and ship beautiful apps faster than ever.",
-    image: "/products/product4.jpg",
-    url: "https://mobileapplicationdesign.vercel.app",
-    category: "Utility",
-    features: ["Pixel-Perfect UI", "Dark & Light Mode", "Component Library", "Prototypes"],
-  },
-  {
-    place: "Product 05 · Automotive / CRM",
-    title: "VEHICLE",
-    title2: "CRM DASHBOARD",
-    description:
-      "Rev up your dealership sales. Track every lead, close deals faster, and maximize customer lifetime value. The competitive edge every dealer needs.",
-    image: "/products/product6.jpg",
-    url: "https://vehiclecrmdashboard.vercel.app",
-    category: "Auto / CRM",
-    features: ["Vehicle Inventory", "Lead Pipeline", "Deal Tracking", "Finance Calc"],
-  },
-  {
-    place: "Product 06 · Automation / DevTools",
-    title: "PIPELINE",
-    title2: "BUILDER",
-    description:
-      "No-code automation for everyone. Build complex workflows visually. No coding needed. Integrate anything. Deploy instantly. Watch repetitive tasks disappear.",
-    image: "/products/product7.jpg",
-    url: "https://pipeline-builder-gold.vercel.app",
-    category: "Automation",
-    features: ["Visual Canvas", "Conditional Logic", "API Connectors", "1-click Deploy"],
-  },
-  {
-    place: "Product 07 · Entertainment / Media",
-    title: "VINYL",
-    title2: "MUSIC PLAYER",
-    description:
-      "Experience music like never before. Local files, YouTube, JioSaavn — all in one stunning player. Nostalgia meets modern tech. Pure audio bliss.",
-    image: "/products/product5.jpg",
-    url: "https://music-player-ecru-six.vercel.app",
-    category: "Media",
-    features: ["Local Playback", "YouTube & JioSaavn", "Playlists", "Favourites"],
-  },
-  {
-    place: "Product 08 · Computer Vision",
-    title: "FACE",
-    title2: "RECOGNITION",
-    description:
-      "Next-gen security at your fingertips. Real-time face recognition for access control and attendance. See who matters in seconds. Security reimagined.",
-    image: "/products/product8.jpg",
-    url: "",
-    category: "AI / Security",
-    features: ["Live Detection", "Access Control", "Attendance Logs", "Alerts & Reports"],
-  },
-  {
-    place: "Product 09 · Trading & Finance",
-    title: "INTRADAY",
-    title2: "TRADING DESK",
-    description:
-      "Trade like a pro. Real-time feeds, instant execution, risk control. Every second counts. This dashboard puts you ahead of the market.",
-    image: "/products/product9.jpg",
-    url: "",
-    category: "FinTech",
-    features: ["Live Tickers", "Watchlists", "P&L Overview", "Risk Heatmaps"],
-  },
-  {
-    place: "Product 10 · E‑commerce",
-    title: "ONLINE",
-    title2: "GROCERY STORE",
-    description:
-      "Grocery shopping, perfected. Smart recommendations. Fast checkout. Same-day delivery. Your pantry, always full. Your life, always easier.",
-    image: "/products/product10.jpg",
-    url: "",
-    category: "E‑commerce",
-    features: ["Smart Cart", "Repeat Orders", "Slot Booking", "Offers & Coupons"],
-  },
-  {
-    place: "Product 11 · People Ops",
-    title: "HR",
-    title2: "INSIGHTS DESK",
-    description:
-      "Unlock your people's potential. See performance at a glance. Make data-driven hiring decisions. Build the team you've always wanted.",
-    image: "/products/product11.jpg",
-    url: "",
-    category: "HR / People",
-    features: ["Headcount View", "Attrition Trends", "Hiring Funnel", "Engagement Metrics"],
-  },
-  {
-    place: "Product 12 · Dairy Supply",
-    title: "DAIRYFLOW",
-    title2: "SUPPLY CHAIN",
-    description:
-      "A dairy supply management console to track milk collection, chilling centers, logistics, quality checks, and retailer deliveries in real time.",
-    image: "/products/product12.jpg",
-    url: "https://replicatedesignfromfile.vercel.app/",
-    category: "Supply Chain",
-    features: ["Milk Collection", "Route Tracking", "Quality Logs", "Outlet Orders"],
-  },
-  {
-    place: "Product 13 · Secure Storage",
-    title: "VAULT",
-    title2: "",
-    description: "",
-    image: "/products/product13.jpg",
-    url: "",
-    category: "",
-    features: [],
-  },
-];
+import type { ProductSlide } from "@/types/product";
 
 function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide }) {
   return (
@@ -315,6 +160,28 @@ function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide })
 
 export default function ProductsPage() {
   const mainRef = useRef<HTMLElement>(null);
+  const [slides, setSlides] = useState<ProductSlide[] | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/products");
+        if (!r.ok) throw new Error("bad response");
+        const data = (await r.json()) as ProductSlide[];
+        if (!cancelled) setSlides(data);
+      } catch {
+        if (!cancelled) {
+          setLoadError("Could not load products.");
+          setSlides([]);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     for (const id of ["details-even", "details-odd"] as const) {
@@ -331,7 +198,10 @@ export default function ProductsPage() {
   }, []);
 
   useEffect(() => {
+    if (!slides || slides.length === 0) return;
+
     let isCancelled = false;
+    let introDelayTween: gsap.core.Tween | undefined;
     const data = slides;
     const CARD_W = 320;
     const CARD_H = 440;
@@ -354,7 +224,17 @@ export default function ProductsPage() {
     let order      = data.map((_, i) => i);
     let detailsEven = true;
 
-    const { set } = gsap;
+    const set = (target: gsap.TweenTarget, vars: gsap.TweenVars) => {
+      if (isCancelled) return;
+      if (gsap.utils.toArray(target).length === 0) return;
+      gsap.set(target, vars);
+    };
+
+    const tweenTo = (target: gsap.TweenTarget, vars: gsap.TweenVars) => {
+      if (isCancelled) return;
+      if (gsap.utils.toArray(target).length === 0) return;
+      gsap.to(target, vars);
+    };
     const getCard    = (i: number) => `#card${i}`;
     const getContent = (i: number) => `#card-content-${i}`;
     const getNum     = (i: number) => `#slide-item-${i}`;
@@ -414,9 +294,13 @@ export default function ProductsPage() {
     if (!demoEl || !slideNums) return;
 
     function animate(target: gsap.TweenTarget, duration: number, props: gsap.TweenVars) {
-      return new Promise<void>((res) =>
-        gsap.to(target, { ...props, duration, onComplete: () => res() })
-      );
+      return new Promise<void>((res) => {
+        if (isCancelled || gsap.utils.toArray(target).length === 0) {
+          res();
+          return;
+        }
+        tweenTo(target, { ...props, duration, onComplete: () => res() });
+      });
     }
 
     function layoutOffsets() {
@@ -456,42 +340,42 @@ export default function ProductsPage() {
     ) {
       const D = 0.52;
       const S = 0.055;
-      gsap.to(`${panelSel} .text`, {
+      tweenTo(`${panelSel} .text`, {
         y: 0,
         opacity: 1,
         duration: D,
         delay: baseDelay,
         ease,
       });
-      gsap.to(`${panelSel} .title-1`, {
+      tweenTo(`${panelSel} .title-1`, {
         y: 0,
         opacity: 1,
         duration: D + 0.04,
         delay: baseDelay + S * 1,
         ease,
       });
-      gsap.to(`${panelSel} .title-2`, {
+      tweenTo(`${panelSel} .title-2`, {
         y: 0,
         opacity: 1,
         duration: D + 0.04,
         delay: baseDelay + S * 2,
         ease,
       });
-      gsap.to(`${panelSel} .desc`, {
+      tweenTo(`${panelSel} .desc`, {
         y: 0,
         opacity: 1,
         duration: D,
         delay: baseDelay + S * 3,
         ease,
       });
-      gsap.to(`${panelSel} .features-row`, {
+      tweenTo(`${panelSel} .features-row`, {
         y: 0,
         opacity: 1,
         duration: 0.42,
         delay: baseDelay + S * 4,
         ease,
       });
-      gsap.to(`${panelSel} .cta`, {
+      tweenTo(`${panelSel} .cta`, {
         y: 0,
         opacity: 1,
         duration: 0.42,
@@ -502,6 +386,7 @@ export default function ProductsPage() {
     }
 
     function init() {
+      if (isCancelled) return;
       layoutOffsets();
       set("#demo", { autoAlpha: 1 });
       const detActive   = detailsEven ? "#details-even" : "#details-odd";
@@ -553,13 +438,15 @@ export default function ProductsPage() {
         INTRO_DELAY + INTRO_STAGGER * (order.length - 1) + INTRO_DUR,
         textRevealDone,
       ) + 0.45;
-      gsap.delayedCall(introDone, () => {
+      introDelayTween?.kill();
+      introDelayTween = gsap.delayedCall(introDone, () => {
+        introDelayTween = undefined;
         if (!isCancelled) loop();
       });
 
       order.forEach((i, idx) => {
         const stagger = INTRO_DELAY + INTRO_STAGGER * idx;
-        gsap.to(getCard(i), {
+        tweenTo(getCard(i), {
           x: offsetLeft + idx * (CARD_W + GAP),
           y: offsetTop,
           opacity: 1,
@@ -568,7 +455,7 @@ export default function ProductsPage() {
           delay: stagger,
           ease: INTRO_EASE,
         });
-        gsap.to(getContent(i), {
+        tweenTo(getContent(i), {
           x: offsetLeft + idx * (CARD_W + GAP),
           y: offsetTop + CARD_H - CARD_LABEL_H,
           width: CARD_W,
@@ -581,14 +468,14 @@ export default function ProductsPage() {
         });
       });
 
-      gsap.to("#pagination", {
+      tweenTo("#pagination", {
         y: 0,
         autoAlpha: 1,
         duration: INTRO_DUR * 0.92,
         delay: INTRO_DELAY + 0.16,
         ease: INTRO_EASE,
       });
-      gsap.to(detActive, {
+      tweenTo(detActive, {
         x: 0,
         duration: INTRO_DUR,
         delay: INTRO_DELAY + 0.22,
@@ -625,34 +512,6 @@ export default function ProductsPage() {
             background:rgba(236,173,41,0.15);border:1px solid rgba(236,173,41,0.45);
             color:#ecad29;font-size:9.5px;font-weight:600;text-transform:uppercase;
             letter-spacing:0.1em;padding:4px 10px;border-radius:99px;white-space:nowrap;">
-        const detActive   = detailsEven ? "#details-even" : "#details-odd";
-        const detInactive = detailsEven ? "#details-odd"  : "#details-even";
-        const d = data[order[0]];
-
-        const q = <T extends Element>(sel: string) =>
-          document.querySelector<T>(`${detActive} ${sel}`);
-
-        const placeEl    = q<HTMLElement>(".place-box .text");
-        const t1El       = q<HTMLElement>(".title-1");
-        const t2El       = q<HTMLElement>(".title-2");
-        const descEl     = q<HTMLElement>(".desc");
-        const featEl     = q<HTMLElement>(".features-row");
-        const linkEl     = q<HTMLAnchorElement>(".cta a");
-        const catEl      = q<HTMLElement>(".category-pill");
-
-        if (placeEl) placeEl.textContent = d.place;
-        if (t1El)    t1El.textContent    = d.title;
-        if (t2El)    t2El.textContent    = d.title2;
-        if (descEl)  descEl.textContent  = d.description;
-        if (linkEl)  linkEl.href         = d.url;
-        if (catEl)   catEl.textContent   = d.category;
-        if (featEl)  featEl.innerHTML    = d.features.map(f =>
-          `<span style="display:inline-flex;align-items:center;
-            background:linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%);
-            border:1.5px solid rgba(0, 217, 255, 0.6);
-            color:#00d9ff;font-size:9.5px;font-weight:700;text-transform:uppercase;
-            letter-spacing:0.1em;padding:6px 12px;border-radius:99px;white-space:nowrap;
-            box-shadow:0 0 12px rgba(0, 217, 255, 0.2);">
             ${f}
           </span>`
           )
@@ -677,16 +536,16 @@ export default function ProductsPage() {
 
       set(getCard(prv), { zIndex: 10 });
       set(getCard(active), { zIndex: 25 });
-      gsap.to(getCard(prv), { scale: 1.08, ease: EASE });
+      tweenTo(getCard(prv), { scale: 1.08, ease: EASE });
 
-      gsap.to(getNum(active), { x: 0, ease: EASE });
-      gsap.to(getNum(prv), { x: -NUM_SZ, ease: EASE });
-      gsap.to(".progress-sub-foreground", {
+      tweenTo(getNum(active), { x: 0, ease: EASE });
+      tweenTo(getNum(prv), { x: -NUM_SZ, ease: EASE });
+      tweenTo(".progress-sub-foreground", {
         width: PROGRESS_W * (1 / data.length) * (leadId + 1),
         ease: EASE,
       });
 
-      gsap.to(getCard(active), {
+      tweenTo(getCard(active), {
         x: offsetLeft,
         y: offsetTop,
         width: CARD_W,
@@ -717,7 +576,7 @@ export default function ProductsPage() {
         },
       });
 
-      gsap.to(getContent(active), {
+      tweenTo(getContent(active), {
         x: offsetLeft,
         y: offsetTop + CARD_H - CARD_LABEL_H,
         width: CARD_W,
@@ -732,7 +591,7 @@ export default function ProductsPage() {
         const slotIdx = idx + 1;
         const xNew = offsetLeft + slotIdx * (CARD_W + GAP);
         set(getCard(i), { zIndex: 30 });
-        gsap.to(getCard(i), {
+        tweenTo(getCard(i), {
           x: xNew,
           y: offsetTop,
           width: CARD_W,
@@ -740,7 +599,7 @@ export default function ProductsPage() {
           ease: EASE,
           delay: 0.1 * slotIdx,
         });
-        gsap.to(getContent(i), {
+        tweenTo(getContent(i), {
           x: xNew,
           y: offsetTop + CARD_H - CARD_LABEL_H,
           width: CARD_W,
@@ -750,7 +609,7 @@ export default function ProductsPage() {
           ease: EASE,
           delay: 0.1 * slotIdx,
         });
-        gsap.to(getNum(i), { x: slotIdx * NUM_SZ, ease: EASE });
+        tweenTo(getNum(i), { x: slotIdx * NUM_SZ, ease: EASE });
       });
     }
 
@@ -771,9 +630,13 @@ export default function ProductsPage() {
     }
 
     async function loop() {
+      if (isCancelled) return;
       await animate(".indicator", 2, { x: 0 });
+      if (isCancelled) return;
       await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+      if (isCancelled) return;
       set(".indicator", { x: -window.innerWidth });
+      if (isCancelled) return;
       await step();
       if (!isCancelled) loop();
     }
@@ -832,140 +695,40 @@ export default function ProductsPage() {
 
     return () => {
       isCancelled = true;
+      introDelayTween?.kill();
+      introDelayTween = undefined;
       arrowR?.removeEventListener("click", handleNext);
       arrowL?.removeEventListener("click", handlePrev);
       gsap.killTweensOf("*");
     };
-  }, []);
+  }, [slides]);
 
-  const DetailsPanel = ({ id, slide }: { id: string; slide: ProductSlide }) => (
-    <div
-      id={id}
-      className="details absolute z-[22] pointer-events-none"
-      style={{ left: 52, top: "calc(var(--hh) + 60px)", maxWidth: 520 }}
-    >
-      <div className="place-box relative overflow-hidden mb-1" style={{ height: 44 }}>
-        <div
-          className="text relative text-white/90 font-medium"
-          style={{ paddingTop: 16, paddingLeft: 36, fontSize: 16, letterSpacing: "0.04em" }}
-        >
-          <span
-            style={{
-              position: "absolute", left: 0, top: 19,
-              width: 24, height: 3, borderRadius: 99,
-              background: "#ecad29", display: "block",
-            }}
-          />
-          {slide.place}
-        </div>
-      </div>
-      <div className="title-box-1 overflow-hidden" style={{ height: 96, marginTop: 0 }}>
-        <div
-          className="title-1 font-bold text-white leading-none break-words"
-          style={{ fontFamily: "'Oswald',sans-serif", fontSize: "clamp(32px,10vw,60px)" }}
-        >
-          {slide.title}
-        </div>
-      </div>
+  if (slides === null) {
+    return (
+      <PageLoader>
+        <Header />
+        <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
+          <p className="text-muted-foreground">Loading products…</p>
+        </main>
+      </PageLoader>
+    );
+  }
 
-      <div className="title-box-2 overflow-hidden" style={{ height: 96, marginTop: 2 }}>
-        <div
-          className="title-2 font-bold text-white leading-none break-words"
-          style={{ fontFamily: "'Oswald',sans-serif", fontSize: "clamp(32px,10vw,60px)" }}
-        >
-          {slide.title2}
-        </div>
-      </div>
-      <div
-        className="desc leading-relaxed"
-        style={{
-          marginTop: 14,
-          fontSize: "clamp(12px,2.6vw,13.5px)",
-          maxWidth: "min(420px, 92vw)",
-          color: "#00d9ff",
-          fontWeight: 500,
-          letterSpacing: "0.3px",
-          textShadow: "0 0 20px rgba(0, 217, 255, 0.3)",
-        }}
-      >
-        {slide.description}
-      </div>
-      <div
-        className="features-row flex flex-wrap gap-2"
-        style={{ marginTop: 14, maxWidth: "min(440px, 94vw)" }}
-      >
-        {slide.features.map((f) => (
-          <span
-            key={f}
-            style={{
-              display: "inline-flex", alignItems: "center",
-              background: "linear-gradient(135deg, rgba(0, 217, 255, 0.15) 0%, rgba(0, 217, 255, 0.08) 100%)",
-              border: "1.5px solid rgba(0, 217, 255, 0.6)",
-              color: "#00d9ff",
-              fontSize: 9.5, fontWeight: 700,
-              textTransform: "uppercase", letterSpacing: "0.1em",
-              padding: "6px 12px", borderRadius: 99,
-              whiteSpace: "nowrap",
-              boxShadow: "0 0 12px rgba(0, 217, 255, 0.2)",
-            }}
-          >
-            {f}
-          </span>
-        ))}
-      </div>
-      <div
-        className="cta flex items-center gap-3 pointer-events-auto"
-        style={{ marginTop: 20 }}
-      >
-        <span
-          className="category-pill"
-          style={{
-            fontSize: 10, fontWeight: 600,
-            textTransform: "uppercase", letterSpacing: "0.1em",
-            background: "rgba(255,255,255,0.10)",
-            border: "1px solid rgba(255,255,255,0.22)",
-            color: "rgba(255,255,255,0.85)",
-            padding: "5px 14px", borderRadius: 99,
-            whiteSpace: "nowrap",
-          }}
-        >
-          {slide.category}
-        </span>
+  if (slides.length === 0) {
+    return (
+      <PageLoader>
+        <Header />
+        <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center text-foreground">
+          <p className="text-muted-foreground">
+            {loadError ?? "No products to show."}
+          </p>
+        </main>
+      </PageLoader>
+    );
+  }
 
-        <a
-          href={slide.url}
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            display: "inline-flex", alignItems: "center", gap: 7,
-            height: 38, borderRadius: 99,
-            padding: "0 22px",
-            background: "#ecad29", color: "#1a1a1a",
-            fontSize: 11, fontWeight: 700,
-            textTransform: "uppercase", letterSpacing: "0.15em",
-            textDecoration: "none", whiteSpace: "nowrap",
-            transition: "background 0.2s, color 0.2s",
-          }}
-          onMouseEnter={(e) => {
-            const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = "#fff";
-            el.style.color = "#1a1a1a";
-          }}
-          onMouseLeave={(e) => {
-            const el = e.currentTarget as HTMLAnchorElement;
-            el.style.background = "#ecad29";
-            el.style.color = "#1a1a1a";
-          }}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width={13} height={13}>
-            <path fillRule="evenodd" d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z" clipRule="evenodd" />
-            <path fillRule="evenodd" d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z" clipRule="evenodd" />
-          </svg>
-          View Product
-        </a>
-      </div>
-    </div>
-  );
+  const slideA = slides[0];
+  const slideB = slides[1] ?? slides[0];
 
   return (
     <PageLoader>
@@ -1026,8 +789,8 @@ export default function ProductsPage() {
         <section className="relative z-[1] min-h-screen">
           <div id="demo" className="absolute inset-0 min-h-screen" aria-hidden />
 
-          <ProductDetailsPanel id="details-even" slide={slides[0]} />
-          <ProductDetailsPanel id="details-odd" slide={slides[1]} />
+          <ProductDetailsPanel id="details-even" slide={slideA} />
+          <ProductDetailsPanel id="details-odd" slide={slideB} />
 
           <div
             id="pagination"

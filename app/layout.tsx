@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Footer } from "@/components/layout/footer";
+import { ConditionalFooter } from "@/components/layout/conditional-footer";
 import { ModalProvider } from "@/components/ui/animated-modal";
-import ModalRoot from "@/components/ui/modal-root";
-import { ChatbotWidget } from "@/components/ui/chatbot-widget";
+import { ConditionalModalAndChat } from "@/components/layout/conditional-modal-and-chat";
+import { AuthProvider } from "@/components/providers/auth-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -29,12 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} antialiased overflow-x-hidden`}>
-        <ModalProvider>
-          {children}
-          <Footer />
-          <ModalRoot />
-          <ChatbotWidget />
-        </ModalProvider>
+        <AuthProvider>
+          <ModalProvider>
+            {children}
+            <ConditionalFooter />
+            <ConditionalModalAndChat />
+          </ModalProvider>
+        </AuthProvider>
       </body>
     </html>
   );
