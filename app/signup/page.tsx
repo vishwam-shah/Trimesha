@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { UserPlus } from "lucide-react";
-import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { AuthRouteDarkTheme } from "@/components/auth/auth-route-dark-theme";
 import { CareersStyleAuthBackground } from "@/components/auth/careers-style-auth-background";
 
 export default function SignupPage() {
@@ -60,9 +60,8 @@ export default function SignupPage() {
   }
 
   return (
-    <>
-      <Header />
-      <main className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-background px-4 pb-20 pt-24 text-foreground sm:min-h-[calc(100vh-6rem)] sm:pt-32">
+    <AuthRouteDarkTheme>
+    <main className="relative min-h-screen overflow-hidden bg-background px-4 pb-20 pt-24 text-foreground sm:pt-32">
         <CareersStyleAuthBackground />
         <div className="relative z-10 mx-auto w-full max-w-md">
           <Card className="border-border/80 shadow-xl shadow-black/5 ring-1 ring-black/[0.03] dark:shadow-black/20 dark:ring-white/[0.06]">
@@ -161,7 +160,7 @@ export default function SignupPage() {
             </CardFooter>
           </Card>
         </div>
-      </main>
-    </>
+    </main>
+    </AuthRouteDarkTheme>
   );
 }

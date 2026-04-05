@@ -3,8 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { ConditionalFooter } from "@/components/layout/conditional-footer";
 import { ModalProvider } from "@/components/ui/animated-modal";
-import ModalRoot from "@/components/ui/modal-root";
-import { ChatbotWidget } from "@/components/ui/chatbot-widget";
+import { ConditionalModalAndChat } from "@/components/layout/conditional-modal-and-chat";
 import { AuthProvider } from "@/components/providers/auth-provider";
 
 const inter = Inter({
@@ -34,8 +33,7 @@ export default function RootLayout({
           <ModalProvider>
             {children}
             <ConditionalFooter />
-            <ModalRoot />
-            <ChatbotWidget />
+            <ConditionalModalAndChat />
           </ModalProvider>
         </AuthProvider>
       </body>

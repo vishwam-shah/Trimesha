@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getSession, signIn } from "next-auth/react";
 import { LogIn } from "lucide-react";
-import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -63,9 +62,7 @@ export function LoginForm() {
   }
 
   return (
-    <>
-      <Header />
-      <main className="relative min-h-[calc(100vh-5rem)] overflow-hidden bg-background px-4 pb-20 pt-24 text-foreground sm:min-h-[calc(100vh-6rem)] sm:pt-32">
+    <main className="relative min-h-screen overflow-hidden bg-background px-4 pb-20 pt-24 text-foreground sm:pt-32">
         <CareersStyleAuthBackground />
         <div className="relative z-10 mx-auto w-full max-w-md">
           <Card className="border-border/80 shadow-xl shadow-black/5 ring-1 ring-black/[0.03] dark:shadow-black/20 dark:ring-white/[0.06]">
@@ -147,7 +144,6 @@ export function LoginForm() {
             </CardFooter>
           </Card>
         </div>
-      </main>
-    </>
+    </main>
   );
 }

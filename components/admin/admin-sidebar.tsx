@@ -21,12 +21,6 @@ export function AdminSidebar() {
         <AdminNavLinks className="py-2" />
       </ScrollArea>
       <Separator className="bg-sidebar-border" />
-      <p className="px-4 py-3 text-xs text-sidebar-foreground/60">
-        Add routes in{" "}
-        <code className="rounded bg-sidebar-accent px-1 py-0.5 text-[10px]">
-          lib/admin-nav.ts
-        </code>
-      </p>
     </aside>
   )
 }
