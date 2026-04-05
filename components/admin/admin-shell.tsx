@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react"
 import { AdminHeader } from "@/components/admin/admin-header"
 import { AdminSidebar } from "@/components/admin/admin-sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { isStaffRole } from "@/lib/staff-role"
 
 type AdminShellProps = {
   children: React.ReactNode
@@ -39,15 +40,22 @@ export function AdminShell({ children }: AdminShellProps) {
       router.replace(`/login?callbackUrl=${q}`)
       return
     }
-    if (session.user.role !== "superadmin") {
+    if (!isStaffRole(session.user.role)) {
       router.replace("/")
+      return
+    }
+    if (
+      session.user.role === "admin" &&
+      pathname?.startsWith("/dashboard/users")
+    ) {
+      router.replace("/dashboard/products")
     }
   }, [session, status, router, pathname])
 
   if (
     status === "loading" ||
     !session?.user ||
-    session.user.role !== "superadmin"
+    !isStaffRole(session.user.role)
   ) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-foreground">

@@ -49,10 +49,9 @@ export function LoginForm() {
         callback?.startsWith("/") && !callback.startsWith("//")
           ? callback
           : null;
-      const next =
-        session?.user?.role === "superadmin"
-          ? "/dashboard"
-          : safeCallback ?? "/";
+      const role = session?.user?.role;
+      const toDashboard = role === "superadmin" || role === "admin";
+      const next = toDashboard ? "/dashboard" : safeCallback ?? "/";
       router.push(next);
       router.refresh();
     } catch {

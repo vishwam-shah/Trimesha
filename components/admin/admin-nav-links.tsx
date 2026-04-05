@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { ADMIN_NAV_ITEMS } from "@/lib/admin-nav"
@@ -13,10 +14,16 @@ type AdminNavLinksProps = {
 
 export function AdminNavLinks({ onNavigate, className }: AdminNavLinksProps) {
   const pathname = usePathname()
+  const { data: session } = useSession()
+  const role = session?.user?.role
+
+  const items = ADMIN_NAV_ITEMS.filter(
+    (item) => !item.superadminOnly || role === "superadmin",
+  )
 
   return (
     <nav className={cn("flex flex-col gap-1 p-3", className)} aria-label="Admin">
-      {ADMIN_NAV_ITEMS.map((item) => {
+      {items.map((item) => {
         const Icon = item.icon
         const active =
           pathname === item.href ||

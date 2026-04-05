@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
 import { connect } from "@/dbconfig/dbconnect";
 import Product from "@/models/Product";
-import { requireSuperAdmin } from "@/lib/admin-auth";
+import { requireAdminAccess } from "@/lib/admin-auth";
 
 export async function POST(req: Request) {
-  const session = await requireSuperAdmin();
+  const session = await requireAdminAccess();
   if (!session) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

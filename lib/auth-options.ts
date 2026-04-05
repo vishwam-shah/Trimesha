@@ -36,8 +36,9 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
-        const role: UserRole =
-          user.role === "superadmin" ? "superadmin" : "user";
+        let role: UserRole = "user";
+        if (user.role === "superadmin") role = "superadmin";
+        else if (user.role === "admin") role = "admin";
 
         return {
           id: user._id.toString(),

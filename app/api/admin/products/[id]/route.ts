@@ -2,12 +2,12 @@ import { NextResponse } from "next/server";
 import mongoose from "mongoose";
 import { connect } from "@/dbconfig/dbconnect";
 import Product from "@/models/Product";
-import { requireSuperAdmin } from "@/lib/admin-auth";
+import { requireAdminAccess } from "@/lib/admin-auth";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 export async function PATCH(req: Request, ctx: Ctx) {
-  const session = await requireSuperAdmin();
+  const session = await requireAdminAccess();
   if (!session) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
@@ -54,7 +54,7 @@ export async function PATCH(req: Request, ctx: Ctx) {
 }
 
 export async function DELETE(_req: Request, ctx: Ctx) {
-  const session = await requireSuperAdmin();
+  const session = await requireAdminAccess();
   if (!session) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }

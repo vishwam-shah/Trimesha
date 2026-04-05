@@ -18,8 +18,17 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(login);
   }
 
-  if (token.role !== "superadmin") {
+  const role = token.role as string | undefined;
+  const isStaff = role === "admin" || role === "superadmin";
+  if (!isStaff) {
     return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (
+    req.nextUrl.pathname.startsWith("/dashboard/users") &&
+    role !== "superadmin"
+  ) {
+    return NextResponse.redirect(new URL("/dashboard/products", req.url));
   }
 
   return NextResponse.next();

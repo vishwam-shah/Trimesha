@@ -1,11 +1,13 @@
 import type { LucideIcon } from "lucide-react"
-import { LayoutDashboard, Package } from "lucide-react"
+import { LayoutDashboard, Package, Users } from "lucide-react"
 
 export type AdminNavItem = {
   href: string
   label: string
   description?: string
   icon: LucideIcon
+  /** Only superadmin can see this link (e.g. user accounts) */
+  superadminOnly?: boolean
 }
 
 export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
@@ -20,6 +22,13 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     label: "Products",
     description: "Carousel items on the public products page",
     icon: Package,
+  },
+  {
+    href: "/dashboard/users",
+    label: "Users",
+    description: "Accounts, roles, and passwords",
+    icon: Users,
+    superadminOnly: true,
   },
 ]
 
