@@ -1,167 +1,12 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useRef } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { Header } from "@/components/layout/header";
 import { PageLoader } from "@/components/common/page-loader";
 import { Spotlight } from "@/components/ui/spotlight";
-
-type ProductSlide = {
-  place: string;
-  title: string;
-  title2: string;
-  description: string;
-  image: string;
-  url: string;
-  category: string;
-  features: string[];
-};
-
-const slides: ProductSlide[] = [
-  {
-    place: "Product 01 · F&B / ERP",
-    title: "RESTAURANT",
-    title2: "ERP DASHBOARD",
-    description:
-      "Centralises every operational touchpoint of a food service business — from order management and table tracking to inventory, staff scheduling, and financial analytics.",
-    image: "/products/product1.jpg",
-    url: "https://restauranterpdashboardruchi.vercel.app",
-    category: "F&B / ERP",
-    features: ["Live Order Mgmt", "Table Planning", "Inventory Control", "Sales Analytics"],
-  },
-  {
-    place: "Product 02 · Healthcare",
-    title: "HOSPITAL",
-    title2: "MANAGEMENT",
-    description:
-      "Connects every department of a hospital — from OPD registration and appointment booking to IPD, pharmacy, labs, and billing — for faster, safer patient care.",
-    image: "/products/product2.jpg",
-    url: "https://hms-khaki-eta.vercel.app",
-    category: "Healthcare",
-    features: ["Patient Registration", "Appointment Slots", "EHR Records", "Pharmacy Module"],
-  },
-  {
-    place: "Product 03 · AI / Communication",
-    title: "AI WHATSAPP",
-    title2: "PLATFORM",
-    description:
-      "Build, deploy, and manage intelligent chatbot experiences on WhatsApp — combining AI-driven flows, broadcast campaigns, contact management, and analytics.",
-    image: "/products/product3.jpg",
-    url: "https://ai-whatsapp-platform.vercel.app",
-    category: "AI / Comms",
-    features: ["AI Chatbot Builder", "Broadcasts", "Unified Inbox", "WA Commerce"],
-  },
-  {
-    place: "Product 04 · Design / UI-UX",
-    title: "Pack &",
-    title2: "Move",
-    description:
-      "High-fidelity UI/UX showcase for real-world mobile apps — a reference library of best-in-class patterns, interaction models, and component systems.",
-    image: "/products/product4.jpg",
-    url: "https://mobileapplicationdesign.vercel.app",
-    category: "Utility",
-    features: ["Pixel-Perfect UI", "Dark & Light Mode", "Component Library", "Prototypes"],
-  },
-  {
-    place: "Product 05 · Automotive / CRM",
-    title: "VEHICLE",
-    title2: "CRM DASHBOARD",
-    description:
-      "Specialised trading and CRM platform for dealerships — 360° view of inventory, leads, pipelines, customer profiles, and deals with automotive-specific workflows.",
-    image: "/products/product6.jpg",
-    url: "https://vehiclecrmdashboard.vercel.app",
-    category: "Auto / CRM",
-    features: ["Vehicle Inventory", "Lead Pipeline", "Deal Tracking", "Finance Calc"],
-  },
-  {
-    place: "Product 06 · Automation / DevTools",
-    title: "PIPELINE",
-    title2: "BUILDER",
-    description:
-      "Visual, node-based workflow automation — design, connect, and deploy complex data or logic pipelines on an infinite drag-and-drop canvas without writing code.",
-    image: "/products/product7.jpg",
-    url: "https://pipeline-builder-gold.vercel.app",
-    category: "Automation",
-    features: ["Visual Canvas", "Conditional Logic", "API Connectors", "1-click Deploy"],
-  },
-  {
-    place: "Product 07 · Entertainment / Media",
-    title: "VINYL",
-    title2: "MUSIC PLAYER",
-    description:
-      "A premium web music player that unifies local files, YouTube, and JioSaavn into a single, beautiful listening experience with playlists and a vinyl-inspired UI.",
-    image: "/products/product5.jpg",
-    url: "https://music-player-ecru-six.vercel.app",
-    category: "Media",
-    features: ["Local Playback", "YouTube & JioSaavn", "Playlists", "Favourites"],
-  },
-  {
-    place: "Product 08 · Computer Vision",
-    title: "FACE",
-    title2: "RECOGNITION",
-    description:
-      "A real‑time face recognition system for secure access control, attendance tracking, and visitor analytics across offices, campuses, and retail environments.",
-    image: "/products/product8.jpg",
-    url: "",
-    category: "AI / Security",
-    features: ["Live Detection", "Access Control", "Attendance Logs", "Alerts & Reports"],
-  },
-  {
-    place: "Product 09 · Trading & Finance",
-    title: "INTRADAY",
-    title2: "TRADING DESK",
-    description:
-      "A high‑frequency intraday trading dashboard that unifies live market feeds, watchlists, P&L, and risk metrics for active traders and desks.",
-    image: "/products/product9.jpg",
-    url: "",
-    category: "FinTech",
-    features: ["Live Tickers", "Watchlists", "P&L Overview", "Risk Heatmaps"],
-  },
-  {
-    place: "Product 10 · E‑commerce",
-    title: "ONLINE",
-    title2: "GROCERY STORE",
-    description:
-      "An end‑to‑end e‑commerce grocery experience with smart recommendations, quick re‑order lists, and delivery slot selection for everyday essentials.",
-    image: "/products/product10.jpg",
-    url: "",
-    category: "E‑commerce",
-    features: ["Smart Cart", "Repeat Orders", "Slot Booking", "Offers & Coupons"],
-  },
-  {
-    place: "Product 11 · People Ops",
-    title: "HR",
-    title2: "INSIGHTS DESK",
-    description:
-      "A human resources analytics dashboard focusing on headcount, engagement, performance cycles, and hiring funnels in a single unified view.",
-    image: "/products/product11.jpg",
-    url: "",
-    category: "HR / People",
-    features: ["Headcount View", "Attrition Trends", "Hiring Funnel", "Engagement Metrics"],
-  },
-  {
-    place: "Product 12 · Dairy Supply",
-    title: "DAIRYFLOW",
-    title2: "SUPPLY CHAIN",
-    description:
-      "A dairy supply management console to track milk collection, chilling centers, logistics, quality checks, and retailer deliveries in real time.",
-    image: "/products/product12.jpg",
-    url: "https://replicatedesignfromfile.vercel.app/",
-    category: "Supply Chain",
-    features: ["Milk Collection", "Route Tracking", "Quality Logs", "Outlet Orders"],
-  },
-  {
-    place: "Product 13 · Secure Storage",
-    title: "VAULT",
-    title2: "",
-    description: "",
-    image: "/products/product13.jpg",
-    url: "",
-    category: "",
-    features: [],
-  },
-];
+import type { ProductSlide } from "@/types/product";
 
 function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide }) {
   return (
@@ -315,6 +160,28 @@ function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide })
 
 export default function ProductsPage() {
   const mainRef = useRef<HTMLElement>(null);
+  const [slides, setSlides] = useState<ProductSlide[] | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const r = await fetch("/api/products");
+        if (!r.ok) throw new Error("bad response");
+        const data = (await r.json()) as ProductSlide[];
+        if (!cancelled) setSlides(data);
+      } catch {
+        if (!cancelled) {
+          setLoadError("Could not load products.");
+          setSlides([]);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   useLayoutEffect(() => {
     for (const id of ["details-even", "details-odd"] as const) {
@@ -331,7 +198,10 @@ export default function ProductsPage() {
   }, []);
 
   useEffect(() => {
+    if (!slides || slides.length === 0) return;
+
     let isCancelled = false;
+    let introDelayTween: gsap.core.Tween | undefined;
     const data = slides;
     const CARD_W = 320;
     const CARD_H = 440;
@@ -354,7 +224,17 @@ export default function ProductsPage() {
     let order      = data.map((_, i) => i);
     let detailsEven = true;
 
-    const { set } = gsap;
+    const set = (target: gsap.TweenTarget, vars: gsap.TweenVars) => {
+      if (isCancelled) return;
+      if (gsap.utils.toArray(target).length === 0) return;
+      gsap.set(target, vars);
+    };
+
+    const tweenTo = (target: gsap.TweenTarget, vars: gsap.TweenVars) => {
+      if (isCancelled) return;
+      if (gsap.utils.toArray(target).length === 0) return;
+      gsap.to(target, vars);
+    };
     const getCard    = (i: number) => `#card${i}`;
     const getContent = (i: number) => `#card-content-${i}`;
     const getNum     = (i: number) => `#slide-item-${i}`;
@@ -414,9 +294,13 @@ export default function ProductsPage() {
     if (!demoEl || !slideNums) return;
 
     function animate(target: gsap.TweenTarget, duration: number, props: gsap.TweenVars) {
-      return new Promise<void>((res) =>
-        gsap.to(target, { ...props, duration, onComplete: () => res() })
-      );
+      return new Promise<void>((res) => {
+        if (isCancelled || gsap.utils.toArray(target).length === 0) {
+          res();
+          return;
+        }
+        tweenTo(target, { ...props, duration, onComplete: () => res() });
+      });
     }
 
     function layoutOffsets() {
@@ -456,42 +340,42 @@ export default function ProductsPage() {
     ) {
       const D = 0.52;
       const S = 0.055;
-      gsap.to(`${panelSel} .text`, {
+      tweenTo(`${panelSel} .text`, {
         y: 0,
         opacity: 1,
         duration: D,
         delay: baseDelay,
         ease,
       });
-      gsap.to(`${panelSel} .title-1`, {
+      tweenTo(`${panelSel} .title-1`, {
         y: 0,
         opacity: 1,
         duration: D + 0.04,
         delay: baseDelay + S * 1,
         ease,
       });
-      gsap.to(`${panelSel} .title-2`, {
+      tweenTo(`${panelSel} .title-2`, {
         y: 0,
         opacity: 1,
         duration: D + 0.04,
         delay: baseDelay + S * 2,
         ease,
       });
-      gsap.to(`${panelSel} .desc`, {
+      tweenTo(`${panelSel} .desc`, {
         y: 0,
         opacity: 1,
         duration: D,
         delay: baseDelay + S * 3,
         ease,
       });
-      gsap.to(`${panelSel} .features-row`, {
+      tweenTo(`${panelSel} .features-row`, {
         y: 0,
         opacity: 1,
         duration: 0.42,
         delay: baseDelay + S * 4,
         ease,
       });
-      gsap.to(`${panelSel} .cta`, {
+      tweenTo(`${panelSel} .cta`, {
         y: 0,
         opacity: 1,
         duration: 0.42,
@@ -502,6 +386,7 @@ export default function ProductsPage() {
     }
 
     function init() {
+      if (isCancelled) return;
       layoutOffsets();
       set("#demo", { autoAlpha: 1 });
       const detActive   = detailsEven ? "#details-even" : "#details-odd";
@@ -553,13 +438,15 @@ export default function ProductsPage() {
         INTRO_DELAY + INTRO_STAGGER * (order.length - 1) + INTRO_DUR,
         textRevealDone,
       ) + 0.45;
-      gsap.delayedCall(introDone, () => {
+      introDelayTween?.kill();
+      introDelayTween = gsap.delayedCall(introDone, () => {
+        introDelayTween = undefined;
         if (!isCancelled) loop();
       });
 
       order.forEach((i, idx) => {
         const stagger = INTRO_DELAY + INTRO_STAGGER * idx;
-        gsap.to(getCard(i), {
+        tweenTo(getCard(i), {
           x: offsetLeft + idx * (CARD_W + GAP),
           y: offsetTop,
           opacity: 1,
@@ -568,7 +455,7 @@ export default function ProductsPage() {
           delay: stagger,
           ease: INTRO_EASE,
         });
-        gsap.to(getContent(i), {
+        tweenTo(getContent(i), {
           x: offsetLeft + idx * (CARD_W + GAP),
           y: offsetTop + CARD_H - CARD_LABEL_H,
           width: CARD_W,
@@ -581,14 +468,14 @@ export default function ProductsPage() {
         });
       });
 
-      gsap.to("#pagination", {
+      tweenTo("#pagination", {
         y: 0,
         autoAlpha: 1,
         duration: INTRO_DUR * 0.92,
         delay: INTRO_DELAY + 0.16,
         ease: INTRO_EASE,
       });
-      gsap.to(detActive, {
+      tweenTo(detActive, {
         x: 0,
         duration: INTRO_DUR,
         delay: INTRO_DELAY + 0.22,
@@ -649,16 +536,16 @@ export default function ProductsPage() {
 
       set(getCard(prv), { zIndex: 10 });
       set(getCard(active), { zIndex: 25 });
-      gsap.to(getCard(prv), { scale: 1.08, ease: EASE });
+      tweenTo(getCard(prv), { scale: 1.08, ease: EASE });
 
-      gsap.to(getNum(active), { x: 0, ease: EASE });
-      gsap.to(getNum(prv), { x: -NUM_SZ, ease: EASE });
-      gsap.to(".progress-sub-foreground", {
+      tweenTo(getNum(active), { x: 0, ease: EASE });
+      tweenTo(getNum(prv), { x: -NUM_SZ, ease: EASE });
+      tweenTo(".progress-sub-foreground", {
         width: PROGRESS_W * (1 / data.length) * (leadId + 1),
         ease: EASE,
       });
 
-      gsap.to(getCard(active), {
+      tweenTo(getCard(active), {
         x: offsetLeft,
         y: offsetTop,
         width: CARD_W,
@@ -689,7 +576,7 @@ export default function ProductsPage() {
         },
       });
 
-      gsap.to(getContent(active), {
+      tweenTo(getContent(active), {
         x: offsetLeft,
         y: offsetTop + CARD_H - CARD_LABEL_H,
         width: CARD_W,
@@ -704,7 +591,7 @@ export default function ProductsPage() {
         const slotIdx = idx + 1;
         const xNew = offsetLeft + slotIdx * (CARD_W + GAP);
         set(getCard(i), { zIndex: 30 });
-        gsap.to(getCard(i), {
+        tweenTo(getCard(i), {
           x: xNew,
           y: offsetTop,
           width: CARD_W,
@@ -712,7 +599,7 @@ export default function ProductsPage() {
           ease: EASE,
           delay: 0.1 * slotIdx,
         });
-        gsap.to(getContent(i), {
+        tweenTo(getContent(i), {
           x: xNew,
           y: offsetTop + CARD_H - CARD_LABEL_H,
           width: CARD_W,
@@ -722,7 +609,7 @@ export default function ProductsPage() {
           ease: EASE,
           delay: 0.1 * slotIdx,
         });
-        gsap.to(getNum(i), { x: slotIdx * NUM_SZ, ease: EASE });
+        tweenTo(getNum(i), { x: slotIdx * NUM_SZ, ease: EASE });
       });
     }
 
@@ -743,9 +630,13 @@ export default function ProductsPage() {
     }
 
     async function loop() {
+      if (isCancelled) return;
       await animate(".indicator", 2, { x: 0 });
+      if (isCancelled) return;
       await animate(".indicator", 0.8, { x: window.innerWidth, delay: 0.3 });
+      if (isCancelled) return;
       set(".indicator", { x: -window.innerWidth });
+      if (isCancelled) return;
       await step();
       if (!isCancelled) loop();
     }
@@ -804,11 +695,40 @@ export default function ProductsPage() {
 
     return () => {
       isCancelled = true;
+      introDelayTween?.kill();
+      introDelayTween = undefined;
       arrowR?.removeEventListener("click", handleNext);
       arrowL?.removeEventListener("click", handlePrev);
       gsap.killTweensOf("*");
     };
-  }, []);
+  }, [slides]);
+
+  if (slides === null) {
+    return (
+      <PageLoader>
+        <Header />
+        <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
+          <p className="text-muted-foreground">Loading products…</p>
+        </main>
+      </PageLoader>
+    );
+  }
+
+  if (slides.length === 0) {
+    return (
+      <PageLoader>
+        <Header />
+        <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center text-foreground">
+          <p className="text-muted-foreground">
+            {loadError ?? "No products to show."}
+          </p>
+        </main>
+      </PageLoader>
+    );
+  }
+
+  const slideA = slides[0];
+  const slideB = slides[1] ?? slides[0];
 
   return (
     <PageLoader>
@@ -869,8 +789,8 @@ export default function ProductsPage() {
         <section className="relative z-[1] min-h-screen">
           <div id="demo" className="absolute inset-0 min-h-screen" aria-hidden />
 
-          <ProductDetailsPanel id="details-even" slide={slides[0]} />
-          <ProductDetailsPanel id="details-odd" slide={slides[1]} />
+          <ProductDetailsPanel id="details-even" slide={slideA} />
+          <ProductDetailsPanel id="details-odd" slide={slideB} />
 
           <div
             id="pagination"
