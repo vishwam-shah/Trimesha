@@ -1,7 +1,6 @@
 "use client";
 
 import { Header } from "@/components/layout/header";
-import { PageLoader } from "@/components/common/page-loader";
 import { GlowCard } from "@/components/ui/spotlight-card";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
@@ -126,7 +125,7 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <PageLoader>
+    <>
       <Header />
 
       {/* Hero Section */}
@@ -279,6 +278,6 @@ export default function ServicesPage() {
           </motion.div>
         </div>
       </section>
-    </PageLoader>
+    </>
   );
 }

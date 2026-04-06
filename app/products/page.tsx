@@ -4,7 +4,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { motion } from "motion/react";
 import gsap from "gsap";
 import { Header } from "@/components/layout/header";
-import { PageLoader } from "@/components/common/page-loader";
 import { Spotlight } from "@/components/ui/spotlight";
 import type { ProductSlide } from "@/types/product";
 
@@ -705,25 +704,25 @@ export default function ProductsPage() {
 
   if (slides === null) {
     return (
-      <PageLoader>
+      <>
         <Header />
         <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
           <p className="text-muted-foreground">Loading products…</p>
         </main>
-      </PageLoader>
+      </>
     );
   }
 
   if (slides.length === 0) {
     return (
-      <PageLoader>
+      <>
         <Header />
         <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center text-foreground">
           <p className="text-muted-foreground">
             {loadError ?? "No products to show."}
           </p>
         </main>
-      </PageLoader>
+      </>
     );
   }
 
@@ -731,7 +730,7 @@ export default function ProductsPage() {
   const slideB = slides[1] ?? slides[0];
 
   return (
-    <PageLoader>
+    <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap');
 
@@ -830,6 +829,6 @@ export default function ProductsPage() {
           </div>
         </section>
       </main>
-    </PageLoader>
+    </>
   );
 }
