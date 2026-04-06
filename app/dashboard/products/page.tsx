@@ -28,7 +28,7 @@ export default function DashboardProductsPage() {
   const [saving, setSaving] = useState(false)
 
   async function load() {
-    const r = await fetch("/api/products")
+    const r = await fetch("/api/v1/products")
     if (!r.ok) {
       setErr("Could not load products.")
       setLoading(false)
@@ -88,7 +88,7 @@ export default function DashboardProductsPage() {
       }
 
       if (form.id) {
-        const r = await fetch(`/api/admin/products/${form.id}`, {
+        const r = await fetch(`/api/v1/admin/products/${form.id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -101,7 +101,7 @@ export default function DashboardProductsPage() {
         }
         setMsg("Product updated.")
       } else {
-        const r = await fetch("/api/admin/products", {
+        const r = await fetch("/api/v1/admin/products", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
@@ -124,7 +124,7 @@ export default function DashboardProductsPage() {
   async function remove(id: string) {
     if (!confirm("Delete this product?")) return
     setErr(null)
-    const r = await fetch(`/api/admin/products/${id}`, { method: "DELETE" })
+    const r = await fetch(`/api/v1/admin/products/${id}`, { method: "DELETE" })
     if (!r.ok) {
       setErr("Delete failed.")
       return

@@ -48,7 +48,7 @@ export async function PATCH(req: Request, ctx: Ctx) {
     }
     return NextResponse.json({ ok: true });
   } catch (e) {
-    console.error("PATCH /api/admin/products/[id]", e);
+    console.error("PATCH /api/v1/admin/products/[id]", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }
@@ -72,7 +72,7 @@ export async function DELETE(_req: Request, ctx: Ctx) {
     }
     return NextResponse.json({ ok: true });
   } catch (e) {
-    console.error("DELETE /api/admin/products/[id]", e);
+    console.error("DELETE /api/v1/admin/products/[id]", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ id: String(doc._id) }, { status: 201 });
   } catch (e) {
-    console.error("POST /api/admin/products", e);
+    console.error("POST /api/v1/admin/products", e);
     return NextResponse.json({ error: "Server error" }, { status: 500 });
   }
 }

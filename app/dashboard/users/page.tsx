@@ -41,7 +41,7 @@ export default function DashboardUsersPage() {
 
   async function load() {
     setErr(null)
-    const r = await fetch("/api/admin/users")
+    const r = await fetch("/api/v1/admin/users")
     if (!r.ok) {
       setErr("Could not load users.")
       setLoading(false)
@@ -89,7 +89,7 @@ export default function DashboardUsersPage() {
       if (password.trim()) {
         body.password = password
       }
-      const r = await fetch(`/api/admin/users/${editId}`, {
+      const r = await fetch(`/api/v1/admin/users/${editId}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -116,7 +116,7 @@ export default function DashboardUsersPage() {
       return
     }
     if (!confirm(`Delete user ${u.email}? This cannot be undone.`)) return
-    const r = await fetch(`/api/admin/users/${u.id}`, { method: "DELETE" })
+    const r = await fetch(`/api/v1/admin/users/${u.id}`, { method: "DELETE" })
     const j = await r.json().catch(() => ({}))
     if (!r.ok) {
       setErr(typeof j.error === "string" ? j.error : "Delete failed")

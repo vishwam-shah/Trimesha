@@ -46,7 +46,7 @@ export async function GET() {
     const products: ProductSlideWithId[] = list.map((d) => serialize(d));
     return NextResponse.json(products);
   } catch (e) {
-    console.error("GET /api/products", e);
+    console.error("GET /api/v1/products", e);
     return NextResponse.json(
       { error: "Failed to load products" },
       { status: 500 },
