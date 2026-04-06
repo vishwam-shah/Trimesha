@@ -166,7 +166,7 @@ export default function ProductsPage() {
     let cancelled = false;
     (async () => {
       try {
-        const r = await fetch("/api/products");
+        const r = await fetch("/api/v1/products");
         if (!r.ok) throw new Error("bad response");
         const data = (await r.json()) as ProductSlide[];
         if (!cancelled) setSlides(data);
