@@ -5,6 +5,7 @@ import { ConditionalFooter } from "@/components/layout/conditional-footer";
 import { ModalProvider } from "@/components/ui/animated-modal";
 import { ConditionalModalAndChat } from "@/components/layout/conditional-modal-and-chat";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { PageTransitionProvider } from "@/components/providers/page-transition-provider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -31,7 +32,9 @@ export default function RootLayout({
       <body className={`${inter.variable} antialiased overflow-x-hidden`}>
         <AuthProvider>
           <ModalProvider>
-            {children}
+            <PageTransitionProvider variant="fadeBlur">
+              {children}
+            </PageTransitionProvider>
             <ConditionalFooter />
             <ConditionalModalAndChat />
           </ModalProvider>
