@@ -19,16 +19,6 @@ const menuItems = [
     ],
   },
   {
-    title: "Products",
-    icon: "line-md:document-code",
-    items: [
-      { name: "Analytics Platform", href: "/products#analytics-platform" },
-      { name: "AI Assistant", href: "/products#ai-assistant" },
-      { name: "Cloud Storage", href: "/products#cloud-storage" },
-      { name: "API Services", href: "/products#api-services" }
-    ],
-  },
-  {
     title: "Pricing",
     icon: "line-md:text-box",
     items: ["Free", "Pro", "Team", "Enterprise"],
@@ -76,14 +66,14 @@ export function Navbar({ className }: { className?: string }) {
                 <HoveredLink href="/services#branding">Branding</HoveredLink>
               </div>
             </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Products" href="/products">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/products#analytics-platform">Analytics Platform</HoveredLink>
-                <HoveredLink href="/products#ai-assistant">AI Assistant</HoveredLink>
-                <HoveredLink href="/products#cloud-storage">Cloud Storage</HoveredLink>
-                <HoveredLink href="/products#api-services">API Services</HoveredLink>
-              </div>
-            </MenuItem>
+            <div className="flex items-center">
+              <Link
+                href="/products"
+                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
+              >
+                Products
+              </Link>
+            </div>
             <MenuItem setActive={setActive} active={active} item="Pricing">
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="#">Free</HoveredLink>
@@ -179,6 +169,22 @@ export function Navbar({ className }: { className?: string }) {
 
               {/* Menu Items */}
               <nav className="p-6 space-y-3 overflow-y-auto max-h-[calc(100vh-180px)]">
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.08 }}
+                >
+                  <Link
+                    href="/products"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                      <Icon icon="line-md:document-code" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    </div>
+                    Products
+                  </Link>
+                </motion.div>
                 {menuItems.map((menu, index) => (
                   <motion.div
                     key={menu.title}
