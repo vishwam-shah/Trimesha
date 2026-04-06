@@ -1,30 +1,22 @@
 import { NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 export async function POST(req: Request) {
     try {
         const body = await req.json();
         const { name, email, phone, experience, resumeLink, jobTitle } = body;
 
-        // In a real scenario, you would use real credentials from process.env
-        // For this task, I'll set up a transporter. 
-        // If SMTP credentials aren't provided, it will log the request and return success.
+        if (!process.env.RESEND_API_KEY) {
+            console.warn("⚠️ RESEND_API_KEY not configured — application received but email not sent.");
+            console.log("Application details:", { name, email, jobTitle });
+            return NextResponse.json({ message: "Application submitted successfully" }, { status: 200 });
+        }
 
-        const smtpPort = parseInt(process.env.SMTP_PORT || "587");
-        const transporter = nodemailer.createTransport({
-            host: process.env.SMTP_HOST,
-            port: smtpPort,
-            secure: smtpPort === 465, // true for port 465, false for others
-            auth: {
-                user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASS,
-            },
-            logger: true,
-            debug: true,
-        });
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const from = process.env.RESEND_FROM_EMAIL ?? "careers@notifications.trimesha.com";
 
-        const mailOptions = {
-            from: `"Trimesha Careers" <${process.env.SMTP_USER || "careers@trimesha.com"}>`,
+        await resend.emails.send({
+            from,
             to: "admin@trimesha.com",
             subject: `New Job Application: ${jobTitle} - ${name}`,
             html: `
@@ -41,19 +33,8 @@ export async function POST(req: Request) {
                     <p style="font-size: 12px; color: #666; text-align: center;">This application was submitted via Trimesha Careers Portal.</p>
                 </div>
             `,
-        };
+        });
 
-        // Check if SMTP is configured
-        if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
-            console.warn("⚠️ SMTP NOT CONFIGURED: Application received but email not sent.");
-            console.log("Details:", { name, email, jobTitle });
-            return NextResponse.json({
-                message: "Application received! (Note: Email sending is not yet configured on the server. Please check your .env.local file.)",
-                mock: true
-            }, { status: 200 });
-        }
-
-        await transporter.sendMail(mailOptions);
         return NextResponse.json({ message: "Application submitted successfully" }, { status: 200 });
     } catch (error) {
         console.error("API Error:", error);
