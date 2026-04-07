@@ -6,6 +6,8 @@ import { HoveredLink, Menu, MenuItem } from "@/components/ui/navbar-menu";
 import { cn } from "@/lib/utils";
 import { BookCallButton } from "@/components/ui/animated-button";
 import { Icon } from "@iconify/react";
+import { useModal } from "@/components/ui/animated-modal";
+import { prepareBookingModalTheme } from "@/lib/booking-cta";
 
 const menuItems = [
   {
@@ -17,11 +19,6 @@ const menuItems = [
       { name: "Search Engine Optimization", href: "/services#seo" },
       { name: "Branding", href: "/services#branding" }
     ],
-  },
-  {
-    title: "Pricing",
-    icon: "line-md:text-box",
-    items: ["Free", "Pro", "Team", "Enterprise"],
   },
   {
     title: "About",
@@ -41,9 +38,16 @@ const menuItems = [
 ];
 
 export function Navbar({ className }: { className?: string }) {
+  const { setOpen: setBookingOpen } = useModal();
   const [active, setActive] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+
+  function openBookingFromMobileMenu() {
+    prepareBookingModalTheme();
+    setBookingOpen(true);
+    setMobileOpen(false);
+  }
 
   return (
     <div className={cn("fixed top-4 sm:top-6 lg:top-6 left-0 right-0 z-50 px-3 sm:px-4 lg:px-8 overflow-visible", className)}>
@@ -74,14 +78,14 @@ export function Navbar({ className }: { className?: string }) {
                 Products
               </Link>
             </div>
-            <MenuItem setActive={setActive} active={active} item="Pricing">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="#">Free</HoveredLink>
-                <HoveredLink href="#">Pro</HoveredLink>
-                <HoveredLink href="#">Team</HoveredLink>
-                <HoveredLink href="#">Enterprise</HoveredLink>
-              </div>
-            </MenuItem>
+            <div className="flex items-center">
+              <Link
+                href="/pricing"
+                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
+              >
+                Pricing
+              </Link>
+            </div>
             <MenuItem setActive={setActive} active={active} item="About" href="/about">
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="/about">Our Story</HoveredLink>
@@ -185,6 +189,22 @@ export function Navbar({ className }: { className?: string }) {
                     Products
                   </Link>
                 </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                >
+                  <Link
+                    href="/pricing"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                      <Icon icon="line-md:text-box" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    </div>
+                    Pricing
+                  </Link>
+                </motion.div>
                 {menuItems.map((menu, index) => (
                   <motion.div
                     key={menu.title}
@@ -259,7 +279,11 @@ export function Navbar({ className }: { className?: string }) {
               >
                 <div className="p-4 rounded-2xl bg-gradient-to-r from-violet-500 to-purple-600 text-center">
                   <p className="text-white/80 text-sm mb-2">Ready to get started?</p>
-                  <button className="w-full py-3 rounded-xl bg-white text-violet-600 font-semibold hover:bg-violet-50 transition-colors">
+                  <button
+                    type="button"
+                    onClick={openBookingFromMobileMenu}
+                    className="w-full py-3 rounded-xl bg-white text-violet-600 font-semibold hover:bg-violet-50 transition-colors"
+                  >
                     Book a Call
                   </button>
                 </div>

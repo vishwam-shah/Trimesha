@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react"
-import { LayoutDashboard, Package, Users } from "lucide-react"
+import { BadgeDollarSign, LayoutDashboard, Package, Users } from "lucide-react"
 
 export type AdminNavItem = {
   href: string
@@ -22,6 +22,12 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     label: "Products",
     description: "Carousel items on the public products page",
     icon: Package,
+  },
+  {
+    href: "/dashboard/pricing",
+    label: "Pricing",
+    description: "Packages on the public pricing page",
+    icon: BadgeDollarSign,
   },
   {
     href: "/dashboard/users",

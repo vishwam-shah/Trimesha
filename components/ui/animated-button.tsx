@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/components/ui/animated-modal";
+import { prepareBookingModalTheme } from "@/lib/booking-cta";
 
 export const BookCallButton = () => {
   const text = "BOOK A CALL • BOOK A CALL •";
@@ -11,10 +12,8 @@ export const BookCallButton = () => {
     <div className="hidden sm:block border-2 p-1 rounded-full border-dotted border-purple-600 dark:border-purple-400 cursor-pointer">
       <Button
         onClick={() => {
-          if (!document.documentElement.classList.contains("dark")) {
-            document.documentElement.classList.add("dark")
-          }
-          setOpen(true)
+          prepareBookingModalTheme();
+          setOpen(true);
         }}
         aria-label="Book a call"
         className="relative w-25 h-25 rounded-full overflow-hidden p-0 grid place-content-center bg-purple-600 hover:bg-purple-700 text-white dark:bg-purple-600 dark:hover:bg-purple-700 cursor-pointer"
