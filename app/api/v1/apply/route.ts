@@ -7,7 +7,7 @@ export async function POST(req: Request) {
         const { name, email, phone, experience, resumeLink, jobTitle } = body;
 
         if (!process.env.RESEND_API_KEY) {
-            console.warn("⚠️ RESEND_API_KEY not configured — application received but email not sent.");
+            console.warn("RESEND_API_KEY not configured. Application received but email not sent.");
             console.log("Application details:", { name, email, jobTitle });
             return NextResponse.json({ message: "Application submitted successfully" }, { status: 200 });
         }

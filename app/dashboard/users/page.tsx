@@ -169,7 +169,7 @@ export default function DashboardUsersPage() {
                       {u.email}
                     </td>
                     <td className="py-3 pr-4 align-middle text-muted-foreground">
-                      {u.name || "—"}
+                      {u.name || ""}
                     </td>
                     <td className="py-3 pr-4 align-middle">
                       <Badge

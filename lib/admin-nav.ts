@@ -4,6 +4,7 @@ import {
   Briefcase,
   LayoutDashboard,
   Package,
+  Wrench,
   Users,
 } from "lucide-react"
 
@@ -40,6 +41,12 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     label: "Careers",
     description: "Job listings on the public careers page",
     icon: Briefcase,
+  },
+  {
+    href: "/dashboard/services",
+    label: "Services",
+    description: "Service cards and Learn more content",
+    icon: Wrench,
   },
   {
     href: "/dashboard/users",

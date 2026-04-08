@@ -31,7 +31,7 @@ export function AboutValues() {
         },
         {
             title: "Agile Mindset",
-            description: "Flexible, adaptive, and responsive to change—delivering value in iterative cycles.",
+            description: "Flexible, adaptive, and responsive to change, delivering value in iterative cycles.",
             icon: "mdi:rocket",
             pattern: "squares",
         },

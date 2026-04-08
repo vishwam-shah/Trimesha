@@ -198,7 +198,7 @@ export default function DashboardPricingPage() {
           </div>
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="nameSecondary">
-              Alternate name (e.g. Velocity AI — shows as “or …”)
+              Alternate name (example: Velocity AI, shown as “or …”)
             </Label>
             <Input
               id="nameSecondary"
