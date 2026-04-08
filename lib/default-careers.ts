@@ -1,6 +1,6 @@
 import type { CareerJob } from "@/types/career-job";
 
-/** Initial listings — same content as the original hardcoded `job-listings.tsx`. */
+/** Initial listings. Same content as the original hardcoded `job-listings.tsx`. */
 export const DEFAULT_CAREER_JOBS: Omit<CareerJob, "sortOrder">[] = [
   {
     title: "Full Stack Developer",
@@ -9,7 +9,7 @@ export const DEFAULT_CAREER_JOBS: Omit<CareerJob, "sortOrder">[] = [
     compensation:
       "Month 1: Fixed Probation Stipend · Month 2+: Performance-Based Pay",
     description:
-      "We are looking for a passionate Full Stack Developer to join the Trimesha core team. You will work on real-world client projects — building scalable web apps, REST APIs, and intuitive UIs using modern tech stacks like Next.js, Node.js, and PostgreSQL. The first month is a paid probation period to help you settle in; from month two onwards, your compensation grows with your performance and contribution.",
+      "We are looking for a passionate Full Stack Developer to join the Trimesha core team. You will work on real-world client projects, building scalable web apps, REST APIs, and intuitive UIs using modern tech stacks like Next.js, Node.js, and PostgreSQL. The first month is a paid probation period to help you settle in. From month two onwards, your compensation grows with your performance and contribution.",
     benefits: [
       "Paid Probation Period (Month 1)",
       "Performance-Based Salary (Month 2+)",

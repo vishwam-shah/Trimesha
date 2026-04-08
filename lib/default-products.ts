@@ -7,7 +7,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "RESTAURANT",
     title2: "ERP DASHBOARD",
     description:
-      "Centralises every operational touchpoint of a food service business — from order management and table tracking to inventory, staff scheduling, and financial analytics.",
+      "Centralises every operational touchpoint of a food service business. This includes order management, table tracking, inventory, staff scheduling, and financial analytics.",
     image: "/products/product1.jpg",
     url: "https://restauranterpdashboardruchi.vercel.app",
     category: "F&B / ERP",
@@ -18,7 +18,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "HOSPITAL",
     title2: "MANAGEMENT",
     description:
-      "Connects every department of a hospital — from OPD registration and appointment booking to IPD, pharmacy, labs, and billing — for faster, safer patient care.",
+      "Connects every department of a hospital. It covers OPD registration, appointment booking, IPD, pharmacy, labs, and billing for faster, safer patient care.",
     image: "/products/product2.jpg",
     url: "https://hms-khaki-eta.vercel.app",
     category: "Healthcare",
@@ -29,7 +29,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "AI WHATSAPP",
     title2: "PLATFORM",
     description:
-      "Build, deploy, and manage intelligent chatbot experiences on WhatsApp — combining AI-driven flows, broadcast campaigns, contact management, and analytics.",
+      "Build, deploy, and manage intelligent chatbot experiences on WhatsApp. Combine guided flows, broadcast campaigns, contact management, and analytics.",
     image: "/products/product3.jpg",
     url: "https://ai-whatsapp-platform.vercel.app",
     category: "AI / Comms",
@@ -40,7 +40,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "Pack &",
     title2: "Move",
     description:
-      "High-fidelity UI/UX showcase for real-world mobile apps — a reference library of best-in-class patterns, interaction models, and component systems.",
+      "High-fidelity UI and UX showcase for real-world mobile apps. A reference library of best-in-class patterns, interaction models, and component systems.",
     image: "/products/product4.jpg",
     url: "https://mobileapplicationdesign.vercel.app",
     category: "Utility",
@@ -51,7 +51,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "VEHICLE",
     title2: "CRM DASHBOARD",
     description:
-      "Specialised trading and CRM platform for dealerships — 360° view of inventory, leads, pipelines, customer profiles, and deals with automotive-specific workflows.",
+      "Specialised trading and CRM platform for dealerships. Get a 360 degree view of inventory, leads, pipelines, customer profiles, and deals with automotive-specific workflows.",
     image: "/products/product6.jpg",
     url: "https://vehiclecrmdashboard.vercel.app",
     category: "Auto / CRM",
@@ -62,7 +62,7 @@ export const DEFAULT_PRODUCT_SLIDES: ProductSlide[] = [
     title: "PIPELINE",
     title2: "BUILDER",
     description:
-      "Visual, node-based workflow automation — design, connect, and deploy complex data or logic pipelines on an infinite drag-and-drop canvas without writing code.",
+      "Visual, node-based workflow automation. Design, connect, and deploy complex data or logic pipelines on an infinite drag-and-drop canvas without writing code.",
     image: "/products/product7.jpg",
     url: "https://pipeline-builder-gold.vercel.app",
     category: "Automation",

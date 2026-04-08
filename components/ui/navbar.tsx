@@ -11,28 +11,11 @@ import { prepareBookingModalTheme } from "@/lib/booking-cta";
 
 const menuItems = [
   {
-    title: "Services",
-    icon: "line-md:cog-loop",
-    items: [
-      { name: "Web Development", href: "/services#web-development" },
-      { name: "Interface Design", href: "/services#interface-design" },
-      { name: "Search Engine Optimization", href: "/services#seo" },
-      { name: "Branding", href: "/services#branding" }
-    ],
-  },
-  {
     title: "About",
     icon: "line-md:account",
     items: [
       { name: "Our Story", href: "/about" },
       { name: "Team", href: "/about#team" }
-    ],
-  },
-  {
-    title: "Careers",
-    icon: "line-md:briefcase-twotone",
-    items: [
-      { name: "Open Positions", href: "/careers" }
     ],
   },
 ];
@@ -62,14 +45,14 @@ export function Navbar({ className }: { className?: string }) {
         {/* Desktop menu - centered */}
         <div className="hidden lg:flex flex-1 justify-center">
           <Menu setActive={setActive}>
-            <MenuItem setActive={setActive} active={active} item="Services" href="/services">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/services#web-development">Web Development</HoveredLink>
-                <HoveredLink href="/services#interface-design">Interface Design</HoveredLink>
-                <HoveredLink href="/services#seo">Search Engine Optimization</HoveredLink>
-                <HoveredLink href="/services#branding">Branding</HoveredLink>
-              </div>
-            </MenuItem>
+            <div className="flex items-center">
+              <Link
+                href="/services"
+                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
+              >
+                Services
+              </Link>
+            </div>
             <div className="flex items-center">
               <Link
                 href="/products"
@@ -92,11 +75,14 @@ export function Navbar({ className }: { className?: string }) {
                 <HoveredLink href="/about#team">Team</HoveredLink>
               </div>
             </MenuItem>
-            <MenuItem setActive={setActive} active={active} item="Careers" href="/careers">
-              <div className="flex flex-col space-y-4 text-sm">
-                <HoveredLink href="/careers">Open Positions</HoveredLink>
-              </div>
-            </MenuItem>
+            <div className="flex items-center">
+              <Link
+                href="/careers"
+                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
+              >
+                Careers
+              </Link>
+            </div>
           </Menu>
         </div>
 
@@ -176,6 +162,22 @@ export function Navbar({ className }: { className?: string }) {
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.06 }}
+                >
+                  <Link
+                    href="/services"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                      <Icon icon="line-md:cog-loop" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    </div>
+                    Services
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.08 }}
                 >
                   <Link
@@ -203,6 +205,22 @@ export function Navbar({ className }: { className?: string }) {
                       <Icon icon="line-md:text-box" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
                     </div>
                     Pricing
+                  </Link>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.12 }}
+                >
+                  <Link
+                    href="/careers"
+                    onClick={() => setMobileOpen(false)}
+                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  >
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                      <Icon icon="line-md:briefcase-twotone" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    </div>
+                    Careers
                   </Link>
                 </motion.div>
                 {menuItems.map((menu, index) => (

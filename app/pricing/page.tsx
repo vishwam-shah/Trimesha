@@ -4,7 +4,7 @@ import { PricingTiers } from "@/components/sections/pricing/pricing-tiers";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing | Trimesha — LaunchPad, Catalyst & Supreme AI",
+  title: "Pricing | Trimesha | LaunchPad, Catalyst and Supreme AI",
   description:
     "Compare LaunchPad AI (The Pilot), Catalyst / Velocity AI (The Scale), and Supreme AI (The Pinnacle). Catalyst is our most popular tier.",
 };

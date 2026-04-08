@@ -222,7 +222,7 @@ export default function ProductsPage() {
     let CARDS_BOTTOM_MARGIN = 100;
     let PAGINATION_BELOW_CARDS = 24;
 
-    /** Width available for the card strip — uses the stage (#demo), not the window. */
+    /** Width available for the card strip. Uses the stage (#demo), not the window. */
     function getStageWidth(): number {
       const demo = document.getElementById("demo");
       const w = demo?.clientWidth ?? 0;
@@ -474,7 +474,7 @@ export default function ProductsPage() {
 
       // Match title→CTA height; slightly taller cards (lower aspect ratio) read as bigger on screen.
       const aspect = 1.28;
-      // Use full measured span — do not cap low; tall viewports get full-height cards.
+      // Use full measured span. Do not cap low. Tall viewports get full-height cards.
       let nextH = Math.max(300, Math.min(spanH, 1200));
       let nextW = Math.round(nextH / aspect);
 
@@ -483,7 +483,7 @@ export default function ProductsPage() {
       const padX = padXForWidth(W);
       const availableW = Math.max(0, W - padX * 2);
 
-      // Shrink gaps only — never shrink card width/height to fit the row (that made tiny cards).
+      // Shrink gaps only. Never shrink card width/height to fit the row (that made tiny cards).
       // Extra strip width scrolls horizontally on the carousel rail (lg+).
       let gap = GAP;
       let stripW = n * nextW + Math.max(0, n - 1) * gap;
