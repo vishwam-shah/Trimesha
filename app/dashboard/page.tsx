@@ -29,8 +29,8 @@ export default function DashboardHomePage() {
       <div>
         <p className="text-sm text-muted-foreground">
           {role === "superadmin"
-            ? "Signed-in superadmin — full access including user accounts."
-            : "Signed-in admin — manage products and content. User accounts are restricted to superadmin."}
+            ? "Signed-in superadmin — full access"
+            : "Signed-in admin — manage products, pricing, and careers."}
         </p>
       </div>
       <div className="grid gap-4 sm:grid-cols-2">

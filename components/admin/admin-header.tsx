@@ -16,7 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
-import { Sheet, SheetContent } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { AdminNavLinks } from "@/components/admin/admin-nav-links"
 
 type AdminHeaderProps = {
@@ -107,6 +107,7 @@ export function AdminHeader({
 
       <Sheet open={mobileOpen} onOpenChange={onMobileOpenChange}>
         <SheetContent side="left" className="w-[min(100%,18rem)] p-0">
+          <SheetTitle className="sr-only">Admin navigation</SheetTitle>
           <div className="flex h-14 items-center border-b border-sidebar-border px-4">
             <span className="text-sm font-semibold">Trimesha Admin</span>
           </div>

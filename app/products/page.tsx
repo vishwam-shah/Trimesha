@@ -17,7 +17,7 @@ function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide })
   return (
     <div
       id={id}
-      className="details pointer-events-none absolute left-2 right-2 z-[22] sm:left-[52px] sm:right-auto"
+      className="details pointer-events-none absolute left-2 right-2 z-[40] sm:left-[52px] sm:right-auto lg:max-w-[min(520px,100%)]"
       style={{
         top: "max(4.5rem, calc(var(--hh) + 16px))",
         maxWidth: "min(520px, calc(100vw - 16px))",
@@ -157,6 +157,8 @@ function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide })
   );
 }
 
+const RESIZE_DEBOUNCE_MS = 120;
+
 export default function ProductsPage() {
   const mainRef = useRef<HTMLElement>(null);
   const [slides, setSlides] = useState<ProductSlide[] | null>(null);
@@ -214,45 +216,105 @@ export default function ProductsPage() {
     const INTRO_DELAY = 0.38;
     const INTRO_STAGGER = 0.06;
     let CARD_ENTRANCE_X = 56;
+    let LABEL_TITLE_FS = 16;
+    let LABEL_PLACE_FS = 10;
 
     let CARDS_BOTTOM_MARGIN = 100;
     let PAGINATION_BELOW_CARDS = 24;
 
+    /** Width available for the card strip — uses the stage (#demo), not the window. */
+    function getStageWidth(): number {
+      const demo = document.getElementById("demo");
+      const w = demo?.clientWidth ?? 0;
+      return w > 0 ? w : Math.max(0, window.innerWidth);
+    }
+
+    /** Visible height for layout (address bar / dynamic viewport). */
+    function getViewportHeight(): number {
+      const vv = window.visualViewport;
+      return Math.max(window.innerHeight, vv?.height ?? window.innerHeight);
+    }
+
+    function padXForWidth(W: number) {
+      return W < 400 ? 8 : W < 480 ? 10 : W < 640 ? 12 : W < 1024 ? 16 : W < 1280 ? 24 : 40;
+    }
+
     function refreshMetrics() {
-      const W = window.innerWidth;
+      const W = getStageWidth();
+      const bw =
+        typeof window !== "undefined" ? window.innerWidth : W;
       const n = Math.max(1, order.length);
-      const padX = W < 480 ? 8 : W < 1024 ? 12 : 24;
+      const padX = padXForWidth(W);
       const availableW = Math.max(0, W - padX * 2);
 
-      if (W < 1024) {
-        GAP = W < 480 ? 6 : W < 640 ? 8 : 12;
-        const raw =
-          n <= 1
-            ? Math.floor(availableW)
-            : Math.floor((availableW - (n - 1) * GAP) / n);
-        CARD_W = Math.max(104, Math.min(raw, W < 480 ? 240 : 300));
-        CARD_H = Math.round(CARD_W * 1.35);
-        CARD_LABEL_H = Math.min(110, Math.max(68, Math.round(CARD_H * 0.22)));
-        CARD_ENTRANCE_X = W < 480 ? 10 : 18;
-        NUM_SZ = Math.min(46, Math.max(26, Math.round(CARD_W * 0.17)));
-        PROGRESS_W = Math.min(
-          420,
-          Math.max(120, availableW - Math.min(140, W * 0.28)),
-        );
-        // ← increased bottom margins so cards never overlap the copy panel
-        CARDS_BOTTOM_MARGIN = W < 480 ? 60 : 72;
-        PAGINATION_BELOW_CARDS = W < 480 ? 14 : 18;
+      if (bw < 1024) {
+        GAP = bw < 400 ? 4 : bw < 480 ? 6 : bw < 640 ? 8 : 12;
       } else {
-        CARD_W = 320;
-        CARD_H = 440;
-        CARD_LABEL_H = 110;
-        GAP = 40;
-        CARD_ENTRANCE_X = 56;
-        PROGRESS_W = 500;
-        NUM_SZ = 50;
-        CARDS_BOTTOM_MARGIN = 100;
-        PAGINATION_BELOW_CARDS = 24;
+        // Tighter gaps on desktop so each card can be wider.
+        GAP = bw < 1280 ? 16 : bw < 1536 ? 22 : 28;
       }
+
+      let raw =
+        n <= 1
+          ? Math.floor(availableW)
+          : Math.floor((availableW - (n - 1) * GAP) / n);
+
+      if (bw < 1024) {
+        const cap = bw < 480 ? 232 : bw >= 800 ? 320 : 296;
+        CARD_W = Math.min(raw, cap);
+        CARD_W = Math.max(64, CARD_W);
+      } else {
+        const maxCard =
+          bw >= 1920 ? 560 : bw >= 1536 ? 540 : bw >= 1280 ? 520 : 480;
+        const minDesktopCard =
+          bw >= 1920 ? 340 : bw >= 1536 ? 320 : bw >= 1280 ? 300 : 280;
+        CARD_W = Math.min(maxCard, Math.max(minDesktopCard, raw));
+        if (raw > 0) {
+          CARD_W = Math.min(CARD_W, raw);
+        }
+      }
+
+      let stripW = n * CARD_W + (n - 1) * GAP;
+      while (stripW > availableW && CARD_W > 56) {
+        CARD_W -= 2;
+        stripW = n * CARD_W + (n - 1) * GAP;
+      }
+      while (stripW > availableW && GAP > 1 && n > 1) {
+        GAP -= 1;
+        stripW = n * CARD_W + (n - 1) * GAP;
+      }
+      if (n === 1 && CARD_W > availableW) {
+        CARD_W = availableW;
+      }
+
+      CARD_H = Math.round(CARD_W * (bw < 1024 ? 1.35 : 1.375));
+      CARD_LABEL_H = Math.min(110, Math.max(56, Math.round(CARD_H * 0.22)));
+      CARD_ENTRANCE_X = bw < 480 ? 10 : bw < 1024 ? 18 : 40;
+
+      NUM_SZ = Math.min(50, Math.max(22, Math.round(CARD_W * 0.17)));
+
+      PROGRESS_W = Math.min(
+        520,
+        Math.max(
+          100,
+          Math.min(
+            500,
+            availableW - (bw < 640 ? 148 : bw < 1024 ? 176 : 220),
+          ),
+        ),
+      );
+
+      if (bw < 1024) {
+        CARDS_BOTTOM_MARGIN = bw < 480 ? 52 : 64;
+        PAGINATION_BELOW_CARDS = bw < 480 ? 12 : 16;
+      } else {
+        CARDS_BOTTOM_MARGIN = bw < 1280 ? 88 : 100;
+        // Extra gap so arrows / progress sit clearly below the card strip (desktop).
+        PAGINATION_BELOW_CARDS = bw < 1280 ? 48 : 56;
+      }
+
+      LABEL_TITLE_FS = Math.min(16, Math.max(11, Math.round(CARD_W * 0.052)));
+      LABEL_PLACE_FS = Math.min(10, Math.max(8, Math.round(CARD_W * 0.036)));
     }
 
     let offsetTop  = 0;
@@ -297,17 +359,17 @@ export default function ProductsPage() {
           display:flex;flex-direction:column;justify-content:flex-end;gap:3px;
           height:${CARD_LABEL_H}px;">
           <div style="width:22px;height:4px;border-radius:99px;background:#ecad29;flex-shrink:0;"></div>
-          <div style="font-size:10px;font-weight:600;text-transform:uppercase;
+          <div style="font-size:${LABEL_PLACE_FS}px;font-weight:600;text-transform:uppercase;
             letter-spacing:0.12em;opacity:0.9;line-height:1.25;
             white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;">
             ${item.place}
           </div>
-          <div style="font-weight:700;font-size:16px;font-family:'Oswald',sans-serif;
+          <div style="font-weight:700;font-size:${LABEL_TITLE_FS}px;font-family:'Oswald',sans-serif;
             line-height:1.2;
             white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;">
             ${item.title}
           </div>
-          <div style="font-weight:700;font-size:16px;font-family:'Oswald',sans-serif;
+          <div style="font-weight:700;font-size:${LABEL_TITLE_FS}px;font-family:'Oswald',sans-serif;
             line-height:1.2;
             white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;">
             ${item.title2}
@@ -341,44 +403,166 @@ export default function ProductsPage() {
       });
     }
 
-    function layoutOffsets() {
-      refreshMetrics();
-      const W = window.innerWidth;
-      const vv = window.visualViewport;
-      const H = Math.max(
-        window.innerHeight,
-        vv?.height ?? window.innerHeight,
-      );
-      const stripW =
-        order.length * CARD_W + Math.max(0, order.length - 1) * GAP;
-      if (W < 1024) {
-        offsetLeft = Math.max(4, (W - stripW) / 2);
-      } else {
-        offsetLeft = Math.max(80, W - 900);
+    function updateDetailsColumnHeight() {
+      const col = document.getElementById("details-column");
+      if (!col) return;
+      if (typeof window !== "undefined" && window.innerWidth >= 1024) {
+        col.style.removeProperty("min-height");
+        return;
+      }
+      const id = detailsEven ? "details-even" : "details-odd";
+      const panel = document.getElementById(id);
+      if (!panel) return;
+      const bottomPad = 12;
+      const h = Math.ceil(panel.offsetTop + panel.offsetHeight + bottomPad);
+      col.style.minHeight = `${Math.max(h, 0)}px`;
+    }
+
+    function updateStageMinHeight() {
+      const section = document.getElementById("products-stage");
+      if (!section) return;
+      const W = getStageWidth();
+      const bw =
+        typeof window !== "undefined" ? window.innerWidth : W;
+      const pagBand = bw < 640 ? 118 : bw < 1024 ? 96 : 88;
+      const bottom =
+        offsetTop + CARD_H + PAGINATION_BELOW_CARDS + pagBand + 24;
+      const H = getViewportHeight();
+      section.style.minHeight = `${Math.max(H, bottom)}px`;
+    }
+
+    function isSplitDesktopLayout() {
+      return typeof window !== "undefined" && window.innerWidth >= 1024;
+    }
+
+    /** Full-width desktop: card height matches title → View Product; position from measured DOM. */
+    function applySplitDesktopLayoutFromDOM() {
+      const demo = document.getElementById("demo");
+      const id = detailsEven ? "details-even" : "details-odd";
+      const panel = document.getElementById(id);
+      if (!demo || !panel) {
+        offsetTop = 120;
+        demo?.style.removeProperty("min-width");
+        return;
       }
 
-      const naturalTop = H - CARD_H - CARDS_BOTTOM_MARGIN;
-      if (W < 640) {
-        // ← deeper reserve so copy panel + features + CTA never get covered
-        const reserveForCopy = Math.min(380, Math.max(200, H * 0.42));
-        offsetTop = Math.max(reserveForCopy, naturalTop);
-        if (offsetTop + CARD_H > H - 16) {
-          offsetTop = Math.max(16, H - CARD_H - 20);
-        }
-      } else if (W < 1024) {
-        const reserveForCopy = Math.min(300, H * 0.32);
-        offsetTop = Math.max(reserveForCopy, naturalTop);
-        if (offsetTop + CARD_H > H - 12) {
-          offsetTop = Math.max(12, H - CARD_H - 20);
-        }
+      const titleEl1 = panel.querySelector<HTMLElement>(".title-box-1");
+      const titleEl2 = panel.querySelector<HTMLElement>(".title-box-2");
+      const ctaEl = panel.querySelector<HTMLElement>(".cta");
+      if (!titleEl1 || !ctaEl) {
+        offsetTop = 120;
+        demo.style.removeProperty("min-width");
+        return;
+      }
+
+      const demoRect = demo.getBoundingClientRect();
+      const r1 = titleEl1.getBoundingClientRect();
+      const r2 = titleEl2?.getBoundingClientRect();
+      const ctaRect = ctaEl.getBoundingClientRect();
+
+      const titleTop = Math.min(r1.top, r2?.top ?? r1.top);
+      const spanH = Math.round(ctaRect.bottom - titleTop);
+      if (spanH < 80) {
+        offsetTop = 120;
+        demo.style.removeProperty("min-width");
+        return;
+      }
+
+      // Vertical position of card strip + pagination (negative nudge = shift whole block up).
+      const lowerNudgePx = -10;
+      offsetTop = Math.max(12, Math.round(titleTop - demoRect.top + lowerNudgePx));
+
+      // Match title→CTA height; slightly taller cards (lower aspect ratio) read as bigger on screen.
+      const aspect = 1.28;
+      // Use full measured span — do not cap low; tall viewports get full-height cards.
+      let nextH = Math.max(300, Math.min(spanH, 1200));
+      let nextW = Math.round(nextH / aspect);
+
+      const n = Math.max(1, order.length);
+      const W = getStageWidth();
+      const padX = padXForWidth(W);
+      const availableW = Math.max(0, W - padX * 2);
+
+      // Shrink gaps only — never shrink card width/height to fit the row (that made tiny cards).
+      // Extra strip width scrolls horizontally on the carousel rail (lg+).
+      let gap = GAP;
+      let stripW = n * nextW + Math.max(0, n - 1) * gap;
+      while (stripW > availableW && gap > 8 && n > 1) {
+        gap -= 1;
+        stripW = n * nextW + (n - 1) * gap;
+      }
+      GAP = gap;
+
+      CARD_W = nextW;
+      CARD_H = nextH;
+
+      const stripWFinal = n * CARD_W + (n - 1) * GAP;
+      const contentMinW = Math.ceil(2 * padX + stripWFinal);
+      const railEl = document.getElementById("carousel-rail");
+      const railW = railEl?.clientWidth ?? availableW;
+      if (contentMinW > railW) {
+        demo.style.minWidth = `${contentMinW}px`;
       } else {
-        offsetTop = naturalTop;
+        demo.style.removeProperty("min-width");
+      }
+
+      CARD_LABEL_H = Math.min(110, Math.max(56, Math.round(CARD_H * 0.22)));
+      NUM_SZ = Math.min(50, Math.max(22, Math.round(CARD_W * 0.17)));
+      PROGRESS_W = Math.min(
+        520,
+        Math.max(
+          100,
+          Math.min(500, availableW - 220),
+        ),
+      );
+      LABEL_TITLE_FS = Math.min(16, Math.max(11, Math.round(CARD_W * 0.052)));
+      LABEL_PLACE_FS = Math.min(10, Math.max(8, Math.round(CARD_W * 0.036)));
+      CARD_ENTRANCE_X = 40;
+    }
+
+    function layoutOffsets() {
+      refreshMetrics();
+      const W = getStageWidth();
+      const stripW =
+        order.length * CARD_W + Math.max(0, order.length - 1) * GAP;
+      const padX = padXForWidth(W);
+      const split = isSplitDesktopLayout();
+
+      if (split) {
+        applySplitDesktopLayoutFromDOM();
+        offsetLeft = padX;
+      } else {
+        const centered = Math.max(padX, (W - stripW) / 2);
+        const maxLeft = W - stripW - padX;
+        if (W >= 768) {
+          const minAfterCopy = Math.min(580, Math.max(280, W * 0.46));
+          const rightAligned = Math.max(padX, maxLeft);
+          offsetLeft =
+            rightAligned >= minAfterCopy
+              ? rightAligned
+              : Math.max(
+                  padX,
+                  Math.min(maxLeft, Math.max(centered, minAfterCopy)),
+                );
+        } else if (W >= 640) {
+          const minAfterCopy = Math.min(560, Math.max(260, W * 0.45));
+          offsetLeft = Math.max(
+            padX,
+            Math.min(maxLeft, Math.max(centered, minAfterCopy)),
+          );
+        } else {
+          offsetLeft = Math.max(padX, Math.min(centered, maxLeft));
+        }
+        offsetTop = 18;
+        document.getElementById("demo")?.style.removeProperty("min-width");
       }
 
       set("#pagination", {
         top: offsetTop + CARD_H + PAGINATION_BELOW_CARDS,
         left: offsetLeft,
       });
+
+      updateStageMinHeight();
     }
 
     function syncLayoutAfterResize() {
@@ -410,18 +594,26 @@ export default function ProductsPage() {
       set(".progress-sub-foreground", {
         width: PROGRESS_W * (1 / data.length) * (order[0] + 1),
       });
-      const rw = window.innerWidth;
       const detActive = detailsEven ? "#details-even" : "#details-odd";
-      set(detActive, { x: rw < 640 ? 0 : -28 });
+      set(detActive, { x: window.innerWidth < 1024 ? 0 : -28 });
       data.forEach((_, idx) => {
         const el = document.getElementById(`card-content-${idx}`);
-        if (el) el.style.height = `${CARD_LABEL_H}px`;
+        if (el) {
+          el.style.height = `${CARD_LABEL_H}px`;
+          const divs = el.querySelectorAll<HTMLElement>("div");
+          if (divs[1]) divs[1].style.fontSize = `${LABEL_PLACE_FS}px`;
+          if (divs[2]) divs[2].style.fontSize = `${LABEL_TITLE_FS}px`;
+          if (divs[3]) divs[3].style.fontSize = `${LABEL_TITLE_FS}px`;
+        }
         const sn = document.getElementById(`slide-item-${idx}`);
         if (sn) {
           sn.style.width = `${NUM_SZ}px`;
           sn.style.height = `${NUM_SZ}px`;
           sn.style.fontSize = `${Math.min(26, Math.max(14, Math.round(NUM_SZ * 0.52)))}px`;
         }
+      });
+      requestAnimationFrame(() => {
+        updateDetailsColumnHeight();
       });
     }
 
@@ -503,6 +695,7 @@ export default function ProductsPage() {
       const detActive   = detailsEven ? "#details-even" : "#details-odd";
       const detInactive = detailsEven ? "#details-odd"  : "#details-even";
       const W = window.innerWidth;
+      const narrowStage = window.innerWidth < 1024;
 
       set("#pagination", {
         y: 36,
@@ -538,8 +731,11 @@ export default function ProductsPage() {
 
       hideInactivePanel(detInactive);
 
-      set(detActive, { autoAlpha: 1, zIndex: 22, x: W < 640 ? 0 : -28 });
+      set(detActive, { autoAlpha: 1, zIndex: 40, x: narrowStage ? 0 : -28 });
       prepDetailLines(detActive);
+      requestAnimationFrame(() => {
+        updateDetailsColumnHeight();
+      });
 
       set(".indicator", { x: -W });
 
@@ -592,7 +788,9 @@ export default function ProductsPage() {
         delay: INTRO_DELAY + 0.22,
         ease: INTRO_EASE,
       });
-      revealDetailLines(detActive, INTRO_DELAY + 0.28, INTRO_EASE);
+      revealDetailLines(detActive, INTRO_DELAY + 0.28, INTRO_EASE, () => {
+        updateDetailsColumnHeight();
+      });
     }
 
     function applySlideContent() {
@@ -630,17 +828,21 @@ export default function ProductsPage() {
     }
 
     function animateRowAfterOrderChange(resolve: () => void) {
-      layoutOffsets();
       const detActive = detailsEven ? "#details-even" : "#details-odd";
       const detInactive = detailsEven ? "#details-odd" : "#details-even";
       const leadId = order[0];
 
       hideInactivePanel(detInactive);
       applySlideContent();
+      // Measure title → CTA after copy updates (split desktop uses DOM rects).
+      layoutOffsets();
 
-      set(detActive, { zIndex: 22, autoAlpha: 1, x: 0 });
+      set(detActive, { zIndex: 40, autoAlpha: 1, x: 0 });
       prepDetailLines(detActive);
-      revealDetailLines(detActive, 0.06, INTRO_EASE, resolve);
+      revealDetailLines(detActive, 0.06, INTRO_EASE, () => {
+        updateDetailsColumnHeight();
+        resolve();
+      });
 
       const [active, ...rest] = order;
       const prv = rest[rest.length - 1];
@@ -797,14 +999,22 @@ export default function ProductsPage() {
     });
 
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
-    const onResize = () => {
+    const scheduleLayout = () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
         syncLayoutAfterResize();
-      }, 120);
+      }, RESIZE_DEBOUNCE_MS);
     };
-    window.addEventListener("resize", onResize);
-    window.visualViewport?.addEventListener("resize", onResize);
+    window.addEventListener("resize", scheduleLayout);
+    window.addEventListener("orientationchange", scheduleLayout);
+    window.visualViewport?.addEventListener("resize", scheduleLayout);
+
+    const stageEl = document.getElementById("products-stage");
+    const ro =
+      typeof ResizeObserver !== "undefined" && stageEl
+        ? new ResizeObserver(() => scheduleLayout())
+        : null;
+    if (ro && stageEl) ro.observe(stageEl);
 
     Promise.all(data.map(({ image }) => loadImg(image))).then(() => {
       if (isCancelled) return;
@@ -818,13 +1028,18 @@ export default function ProductsPage() {
     return () => {
       isCancelled = true;
       clearTimeout(resizeTimer);
-      window.removeEventListener("resize", onResize);
-      window.visualViewport?.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", scheduleLayout);
+      window.removeEventListener("orientationchange", scheduleLayout);
+      window.visualViewport?.removeEventListener("resize", scheduleLayout);
+      ro?.disconnect();
       introDelayTween?.kill();
       introDelayTween = undefined;
       arrowR?.removeEventListener("click", handleNext);
       arrowL?.removeEventListener("click", handlePrev);
       gsap.killTweensOf("*");
+      document.getElementById("products-stage")?.style.removeProperty("min-height");
+      document.getElementById("details-column")?.style.removeProperty("min-height");
+      document.getElementById("demo")?.style.removeProperty("min-width");
     };
   }, [slides]);
 
@@ -882,10 +1097,19 @@ export default function ProductsPage() {
         .details { pointer-events: none; }
         .details .cta { pointer-events: auto; }
 
-        /* Ensure the page scrolls on very small/short screens */
-        @media (max-width: 639px) {
-          #pagination {
-            position: absolute;
+        /* Hide native horizontal scrollbar; arrows + track still scroll the rail. */
+        #carousel-rail {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        #carousel-rail::-webkit-scrollbar {
+          display: none;
+        }
+
+        @media (min-width: 1024px) {
+          #details-even,
+          #details-odd {
+            top: max(6.75rem, calc(var(--hh) + 44px)) !important;
           }
         }
       `}</style>
@@ -920,11 +1144,23 @@ export default function ProductsPage() {
           style={{ height: 5, background: "#ecad29", transform: "translateX(-100vw)" }}
         />
 
-        <section className="relative z-[1] min-h-[100dvh] pb-36 sm:min-h-screen sm:pb-0">
-          <div id="demo" className="absolute inset-0 min-h-[100dvh] sm:min-h-screen" aria-hidden />
+        <section
+          id="products-stage"
+          className="relative z-[1] grid min-h-[100dvh] grid-cols-1 gap-4 pb-36 pt-4 sm:min-h-screen sm:pb-0 sm:pt-6 lg:grid-cols-[minmax(280px,min(560px,42vw))_minmax(0,1fr)] lg:items-stretch lg:gap-10 lg:px-8 lg:pt-10"
+        >
+          <div
+            id="details-column"
+            className="relative z-40 min-h-0 w-full lg:min-h-[min(100vh,900px)] lg:shrink-0"
+          >
+            <ProductDetailsPanel id="details-even" slide={slideA} />
+            <ProductDetailsPanel id="details-odd" slide={slideB} />
+          </div>
 
-          <ProductDetailsPanel id="details-even" slide={slideA} />
-          <ProductDetailsPanel id="details-odd" slide={slideB} />
+          <div
+            id="carousel-rail"
+            className="relative z-20 min-h-[min(50vh,440px)] w-full min-w-0 lg:min-h-[min(92vh,960px)] lg:overflow-x-auto lg:overflow-y-visible"
+          >
+            <div id="demo" className="absolute inset-0 z-20 min-h-full min-w-0" aria-hidden />
 
           <div
             id="pagination"
@@ -958,6 +1194,7 @@ export default function ProductsPage() {
                 <div className="progress-sub-foreground h-[4px] rounded-full bg-[#ecad29] sm:h-[3px]" style={{ width: 0 }} />
               </div>
             </div>
+          </div>
           </div>
         </section>
       </main>

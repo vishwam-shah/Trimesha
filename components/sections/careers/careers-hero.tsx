@@ -5,7 +5,7 @@ import { Spotlight } from "@/components/ui/spotlight";
 
 export function CareersHero() {
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden bg-background">
+        <section className="relative flex min-h-[90vh] items-center justify-center overflow-hidden bg-background pt-24 sm:pt-28 lg:pt-32">
             {/* Spotlight Effects */}
             <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" fill="rgb(139, 92, 246)" />
             <Spotlight className="top-10 left-full md:left-80 md:top-20" fill="rgb(59, 130, 246)" />
