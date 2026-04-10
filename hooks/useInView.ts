@@ -5,13 +5,14 @@ export function useInView(threshold = 0.15) {
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
+    if (!ref.current) return;
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setInView(true);
       },
       { threshold }
     );
-    if (ref.current) obs.observe(ref.current);
+    obs.observe(ref.current);
     return () => obs.disconnect();
   }, [threshold]);
 
