@@ -28,6 +28,16 @@ function formatWhen(dateIso: string, timeLabel: string): string {
 const adminEmail =
   process.env.BOOKING_ADMIN_EMAIL?.trim() || "admin@trimesha.com";
 
+/** Always CC on booking mail unless it would duplicate the primary recipient. */
+const BOOKING_CC = "admin@trimesha.com";
+
+function ccForRecipient(primaryTo: string): string[] | undefined {
+  if (primaryTo.trim().toLowerCase() === BOOKING_CC.toLowerCase()) {
+    return undefined;
+  }
+  return [BOOKING_CC];
+}
+
 export async function POST(req: Request) {
   try {
     const body = (await req.json()) as Record<string, unknown>;
@@ -110,10 +120,14 @@ export async function POST(req: Request) {
       </div>
     `;
 
+    const adminCc = ccForRecipient(adminEmail);
+    const guestCc = ccForRecipient(email);
+
     const [adminOut, guestOut] = await Promise.all([
       resend.emails.send({
         from,
         to: adminEmail,
+        ...(adminCc ? { cc: adminCc } : {}),
         replyTo: email,
         subject: `[Trimesha] New booking: ${packageTitle} from ${name || email}`,
         html: adminHtml,
@@ -121,6 +135,7 @@ export async function POST(req: Request) {
       resend.emails.send({
         from,
         to: email,
+        ...(guestCc ? { cc: guestCc } : {}),
         subject: `Your Trimesha call: ${packageTitle} on ${whenLine}`,
         html: guestHtml,
       }),
