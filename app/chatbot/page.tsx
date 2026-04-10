@@ -17,7 +17,7 @@ export default function ChatbotPage() {
 
         <div className="flex min-h-0 flex-1 flex-col">
           <Chatbot
-            className="mx-auto min-h-[min(520px,70dvh)] w-full max-w-4xl flex-1"
+            className="mx-auto min-h-[min(520px,70dvh)] w-full max-w-4xl flex-1 shadow-2xl"
             botName="Trimesha AI"
             welcomeMessage="Hello! I'm Trimesha AI. Ask about our services, pricing, careers, or how to reach us at admin@trimesha.com."
             placeholder="Ask about Trimesha..."

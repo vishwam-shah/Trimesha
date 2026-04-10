@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Sparkles } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
 import { cn } from '@/lib/utils';
@@ -66,7 +66,7 @@ export function Chatbot({
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, isTyping]);
 
   const handleSend = async () => {
     if (!inputValue.trim()) return;
@@ -116,7 +116,7 @@ export function Chatbot({
     }
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
@@ -126,126 +126,164 @@ export function Chatbot({
   return (
     <div
       className={cn(
-        'flex flex-col h-full w-full max-w-4xl mx-auto bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden',
+        'flex h-full w-full max-w-4xl flex-col overflow-hidden rounded-2xl border border-violet-200/60 bg-card shadow-[0_25px_50px_-12px_rgba(91,33,182,0.18)] dark:border-violet-800/40 dark:shadow-[0_25px_50px_-12px_rgba(0,0,0,0.45)]',
         className
       )}
     >
       {/* Header */}
-      <div className="bg-linear-to-r from-purple-600 to-violet-600 text-white p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-          <Bot className="w-6 h-6" />
-        </div>
-        <div>
-          <h2 className="font-semibold text-lg">{botName}</h2>
-          <p className="text-sm text-white/80">Online</p>
+      <div className="relative shrink-0 overflow-hidden border-b border-violet-200/30 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 px-4 py-4 text-white dark:border-violet-500/20">
+        <div
+          className="pointer-events-none absolute -right-8 -top-12 h-32 w-32 rounded-full bg-white/10 blur-2xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-8 left-1/4 h-24 w-24 rounded-full bg-violet-300/20 blur-xl"
+          aria-hidden
+        />
+        <div className="relative flex items-center gap-3">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/15 shadow-inner ring-2 ring-white/25 backdrop-blur-sm">
+            <Bot className="h-6 w-6 text-white" strokeWidth={2} />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h2 className="truncate text-lg font-semibold tracking-tight">
+                {botName}
+              </h2>
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-100 ring-1 ring-emerald-300/30">
+                <span className="size-1.5 animate-pulse rounded-full bg-emerald-300" />
+                Online
+              </span>
+            </div>
+            <p className="mt-0.5 flex items-center gap-1.5 text-xs text-violet-100/90">
+              <Sparkles className="size-3.5 shrink-0 opacity-90" />
+              Ask about services, pricing, or careers
+            </p>
+          </div>
         </div>
       </div>
 
-      {/* Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-800">
-        <AnimatePresence initial={false}>
-          {messages.map((message) => (
-            <motion.div
-              key={message.id}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.3 }}
-              className={cn(
-                'flex gap-3',
-                message.sender === 'user' ? 'justify-end' : 'justify-start'
-              )}
-            >
-              {message.sender === 'bot' && (
-                <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-600 to-violet-600 flex items-center justify-center flex-linear-0">
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-              )}
-
-              <div
+      {/* Messages */}
+      <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain bg-gradient-to-b from-muted/40 via-background to-muted/30 dark:from-gray-950/80 dark:via-gray-900/90 dark:to-gray-950">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.35] dark:opacity-[0.12]"
+          aria-hidden
+          style={{
+            backgroundImage: `linear-gradient(to right, rgb(139 92 246 / 0.07) 1px, transparent 1px),
+              linear-gradient(to bottom, rgb(139 92 246 / 0.07) 1px, transparent 1px)`,
+            backgroundSize: '24px 24px',
+          }}
+        />
+        <div className="relative space-y-4 p-4 sm:p-5">
+          <AnimatePresence initial={false}>
+            {messages.map((message) => (
+              <motion.div
+                key={message.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.22, ease: [0.25, 0.46, 0.45, 0.94] }}
                 className={cn(
-                  'max-w-[70%] rounded-2xl px-4 py-2 shadow-sm',
-                  message.sender === 'user'
-                    ? 'bg-linear-to-r from-purple-600 to-violet-600 text-white rounded-br-sm'
-                    : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-100 rounded-bl-sm'
+                  'flex gap-2 sm:gap-3',
+                  message.sender === 'user' ? 'justify-end' : 'justify-start'
                 )}
               >
-                <p className="text-sm leading-relaxed">{message.content}</p>
-                <p
+                {message.sender === 'bot' && (
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 shadow-md shadow-violet-500/25 ring-2 ring-white dark:ring-gray-800">
+                    <Bot className="h-4 w-4 text-white" strokeWidth={2} />
+                  </div>
+                )}
+
+                <div
                   className={cn(
-                    'text-xs mt-1',
+                    'max-w-[min(85%,28rem)] rounded-2xl px-4 py-2.5 shadow-sm',
                     message.sender === 'user'
-                      ? 'text-white/70'
-                      : 'text-gray-500 dark:text-gray-400'
+                      ? 'rounded-br-md bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-violet-500/20'
+                      : 'rounded-bl-md border border-border/60 bg-card/95 text-card-foreground backdrop-blur-sm dark:border-violet-900/40 dark:bg-gray-800/95'
                   )}
                 >
-                  {message.timestamp.toLocaleTimeString([], {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                  })}
-                </p>
-              </div>
-
-              {message.sender === 'user' && (
-                <div className="w-8 h-8 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center shrink-0">
-                  <User className="w-5 h-5 text-gray-700 dark:text-gray-200" />
+                  <p className="whitespace-pre-wrap text-sm leading-relaxed">
+                    {message.content}
+                  </p>
+                  <p
+                    className={cn(
+                      'mt-1.5 text-[11px] tabular-nums',
+                      message.sender === 'user'
+                        ? 'text-white/65'
+                        : 'text-muted-foreground'
+                    )}
+                  >
+                    {message.timestamp.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+                  </p>
                 </div>
-              )}
-            </motion.div>
-          ))}
-        </AnimatePresence>
 
-        {/* Typing Indicator */}
-        {isTyping && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="flex gap-3"
-          >
-            <div className="w-8 h-8 rounded-full bg-linear-to-r from-purple-600 to-violet-600 flex items-center justify-center shrink-0">
-              <Bot className="w-5 h-5 text-white" />
-            </div>
-            <div className="bg-white dark:bg-gray-700 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
-              <div className="flex gap-1">
-                <motion.div
-                  className="w-2 h-2 bg-gray-400 rounded-full"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0 }}
-                />
-                <motion.div
-                  className="w-2 h-2 bg-gray-400 rounded-full"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                />
-                <motion.div
-                  className="w-2 h-2 bg-gray-400 rounded-full"
-                  animate={{ scale: [1, 1.2, 1] }}
-                  transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                />
+                {message.sender === 'user' && (
+                  <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-border/80 bg-muted ring-2 ring-background dark:bg-gray-700 dark:ring-gray-900">
+                    <User
+                      className="h-4 w-4 text-muted-foreground dark:text-gray-200"
+                      strokeWidth={2}
+                    />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+
+          {isTyping && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-2 sm:gap-3"
+            >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 shadow-md ring-2 ring-white dark:ring-gray-800">
+                <Bot className="h-4 w-4 text-white" />
               </div>
-            </div>
-          </motion.div>
-        )}
+              <div className="rounded-2xl rounded-bl-md border border-border/60 bg-card/95 px-4 py-3 shadow-sm dark:border-violet-900/40 dark:bg-gray-800/95">
+                <div className="flex items-center gap-1.5">
+                  {[0, 1, 2].map((i) => (
+                    <motion.span
+                      key={i}
+                      className="h-2 w-2 rounded-full bg-violet-500 dark:bg-violet-400"
+                      animate={{ opacity: [0.35, 1, 0.35], y: [0, -3, 0] }}
+                      transition={{
+                        duration: 0.9,
+                        repeat: Infinity,
+                        delay: i * 0.15,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
 
-        <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} className="h-px shrink-0" aria-hidden />
+        </div>
       </div>
 
-      {/* Input Area */}
-      <div className="p-4 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-        <div className="flex gap-2">
+      {/* Composer */}
+      <div className="shrink-0 border-t border-violet-200/40 bg-card/80 p-3 backdrop-blur-md dark:border-violet-900/35 dark:bg-gray-900/90 sm:p-4">
+        <div className="flex gap-2 sm:gap-3">
           <Input
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             placeholder={placeholder}
-            className="flex-1"
+            className="min-h-11 flex-1 rounded-xl border-violet-200/50 bg-background/90 shadow-inner focus-visible:border-violet-400 focus-visible:ring-violet-500/25 dark:border-violet-800/50 dark:bg-gray-950/80"
+            aria-label="Message"
           />
           <Button
+            type="button"
             onClick={handleSend}
             disabled={!inputValue.trim()}
-            className="bg-linear-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-white"
+            size="icon"
+            className="h-11 w-11 shrink-0 rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-lg shadow-violet-500/25 transition hover:from-violet-500 hover:to-purple-500 disabled:opacity-40"
+            aria-label="Send message"
           >
-            <Send className="w-4 h-4" />
+            <Send className="h-4 w-4" />
           </Button>
         </div>
       </div>

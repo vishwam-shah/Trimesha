@@ -17,6 +17,7 @@ import {
   MessageSquare,
   HelpCircle,
   FileText,
+  Sparkles,
 } from 'lucide-react';
 import { Button } from './button';
 import { Input } from './input';
@@ -83,7 +84,7 @@ export function ChatbotWidget({
 
   useEffect(() => {
     if (isOpen) scrollToBottom();
-  }, [messages, isOpen, scrollToBottom]);
+  }, [messages, isOpen, isTyping, scrollToBottom]);
 
   const sendMessage = useCallback(async () => {
     if (!input.trim()) return;
@@ -109,7 +110,7 @@ export function ChatbotWidget({
         reply = await fetchDefaultReply(transcript);
       }
 
-      await new Promise((r) => setTimeout(r, 400));
+      await new Promise((r) => setTimeout(r, 350));
 
       setMessages((prev) => [
         ...prev,
@@ -144,125 +145,283 @@ export function ChatbotWidget({
   };
 
   const tabs = useMemo(
-    () => [
-      { id: 'conversation', label: 'Conversation', icon: MessageSquare },
-      { id: 'faqs', label: 'FAQs', icon: HelpCircle },
-      { id: 'articles', label: 'Articles', icon: FileText },
-    ],
+    () =>
+      [
+        { id: 'conversation' as const, label: 'Chat', icon: MessageSquare },
+        { id: 'faqs' as const, label: 'FAQs', icon: HelpCircle },
+        { id: 'articles' as const, label: 'Guides', icon: FileText },
+      ] as const,
     []
   );
 
   return (
     <>
-      {/* Floating Button */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.button
+            type="button"
+            aria-label="Dismiss overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/25 backdrop-blur-[2px] sm:bg-black/20"
+            onClick={() => setIsOpen(false)}
+          />
+        )}
+      </AnimatePresence>
+
       {!isOpen && (
         <motion.button
           aria-label="Open chat"
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-5 right-5 z-50 w-14 h-14 rounded-full bg-linear-to-r from-purple-600 to-violet-600 flex items-center justify-center shadow-lg"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          className="fixed z-50 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-[0_12px_40px_-8px_rgba(109,40,217,0.55)] ring-2 ring-white/20 transition hover:shadow-[0_16px_48px_-8px_rgba(109,40,217,0.65)] dark:ring-violet-400/20 sm:h-[3.75rem] sm:w-[3.75rem]"
+          style={{
+            bottom: "max(1.25rem, env(safe-area-inset-bottom, 0px))",
+            right: "max(1.25rem, env(safe-area-inset-right, 0px))",
+          }}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.96 }}
         >
-          <MessageCircle className="text-white" />
+          <MessageCircle className="size-7" strokeWidth={2} />
         </motion.button>
       )}
 
-      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Chat with Trimesha"
+            initial={{ opacity: 0, y: 24, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-5 right-5 z-50 w-[95vw] max-w-md h-[85vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            exit={{ opacity: 0, y: 20, scale: 0.96 }}
+            transition={{ type: 'spring', damping: 26, stiffness: 320 }}
+            className="fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-50 flex h-[min(640px,calc(100dvh-5.5rem))] w-[min(100vw-1.5rem,420px)] flex-col overflow-hidden rounded-2xl border border-violet-200/50 bg-card shadow-[0_25px_50px_-12px_rgba(91,33,182,0.22)] dark:border-violet-800/45 dark:bg-gray-950 dark:shadow-black/50"
+            onClick={(e) => e.stopPropagation()}
           >
-            {/* Header */}
-            <header className="flex items-center justify-between px-4 py-3 bg-linear-to-r from-purple-600 to-violet-600 text-white">
-              <div className="flex items-center gap-2">
-                <Bot />
-                <div>
-                  <h2 className="font-semibold">{botName}</h2>
-                  <span className="text-xs opacity-80">Online</span>
+            <header className="relative shrink-0 overflow-hidden border-b border-violet-200/35 bg-gradient-to-br from-violet-600 via-purple-600 to-indigo-700 px-3 py-3.5 text-white dark:border-violet-500/25">
+              <div
+                className="pointer-events-none absolute -right-6 -top-10 h-24 w-24 rounded-full bg-white/10 blur-2xl"
+                aria-hidden
+              />
+              <div className="relative flex items-center justify-between gap-2">
+                <div className="flex min-w-0 flex-1 items-center gap-2.5">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/15 ring-2 ring-white/25">
+                    <Bot className="size-5" strokeWidth={2} />
+                  </div>
+                  <div className="min-w-0">
+                    <h2 className="truncate text-sm font-semibold sm:text-base">
+                      {botName}
+                    </h2>
+                    <p className="flex items-center gap-1 text-[11px] text-violet-100/90">
+                      <Sparkles className="size-3 shrink-0" />
+                      <span className="inline-flex items-center gap-1">
+                        <span className="size-1.5 animate-pulse rounded-full bg-emerald-300" />
+                        Online
+                      </span>
+                    </p>
+                  </div>
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  aria-label="Close chat"
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10 text-white transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/50"
+                >
+                  <X className="size-5" strokeWidth={2} />
+                </button>
               </div>
-              <button onClick={() => setIsOpen(false)} aria-label="Close chat">
-                <X />
-              </button>
             </header>
 
-            {/* Tabs */}
-            <nav className="flex border-b border-gray-200 dark:border-gray-700">
+            <nav className="flex shrink-0 gap-1 border-b border-border/60 bg-muted/30 p-1.5 dark:bg-gray-900/80">
               {tabs.map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
-                  onClick={() => setActiveTab(id as TabType)}
+                  type="button"
+                  onClick={() => setActiveTab(id)}
                   className={cn(
-                    'flex-1 py-2 text-sm flex items-center justify-center gap-1',
+                    'flex flex-1 items-center justify-center gap-1.5 rounded-lg py-2 text-xs font-medium transition sm:text-[13px]',
                     activeTab === id
-                      ? 'text-purple-600 border-b-2 border-purple-600'
-                      : 'text-gray-500'
+                      ? 'bg-card text-violet-700 shadow-sm dark:bg-gray-800 dark:text-violet-300'
+                      : 'text-muted-foreground hover:bg-background/80 hover:text-foreground'
                   )}
                 >
-                  <Icon size={16} />
+                  <Icon className="size-3.5 shrink-0 sm:size-4" strokeWidth={2} />
                   {label}
                 </button>
               ))}
             </nav>
 
-            {/* Content */}
             {activeTab === 'conversation' && (
               <>
-                <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50 dark:bg-gray-800">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={cn(
-                        'flex gap-2',
-                        msg.sender === 'user'
-                          ? 'justify-end'
-                          : 'justify-start'
-                      )}
-                    >
-                      {msg.sender === 'bot' && <Bot size={18} />}
-                      <div
-                        className={cn(
-                          'rounded-xl px-3 py-2 text-sm max-w-[75%]',
-                          msg.sender === 'user'
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-white dark:bg-gray-700'
-                        )}
+                <div className="relative min-h-0 flex-1 overflow-y-auto overscroll-contain">
+                  <div
+                    className="pointer-events-none absolute inset-0 opacity-[0.3] dark:opacity-[0.08]"
+                    aria-hidden
+                    style={{
+                      backgroundImage: `linear-gradient(to right, rgb(139 92 246 / 0.06) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgb(139 92 246 / 0.06) 1px, transparent 1px)`,
+                      backgroundSize: '20px 20px',
+                    }}
+                  />
+                  <div className="relative space-y-3 p-3 sm:p-4">
+                    <AnimatePresence initial={false}>
+                      {messages.map((msg) => (
+                        <motion.div
+                          key={msg.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className={cn(
+                            'flex gap-2',
+                            msg.sender === 'user'
+                              ? 'justify-end'
+                              : 'justify-start'
+                          )}
+                        >
+                          {msg.sender === 'bot' && (
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-purple-600 shadow-md ring-2 ring-background dark:ring-gray-950">
+                              <Bot className="size-3.5 text-white" />
+                            </div>
+                          )}
+                          <div
+                            className={cn(
+                              'max-w-[82%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed shadow-sm',
+                              msg.sender === 'user'
+                                ? 'rounded-br-md bg-gradient-to-br from-violet-600 to-purple-600 text-white'
+                                : 'rounded-bl-md border border-border/60 bg-card/95 backdrop-blur-sm dark:border-violet-900/40 dark:bg-gray-800/95'
+                            )}
+                          >
+                            <p className="whitespace-pre-wrap">{msg.content}</p>
+                            <p
+                              className={cn(
+                                'mt-1 text-[10px] tabular-nums',
+                                msg.sender === 'user'
+                                  ? 'text-white/65'
+                                  : 'text-muted-foreground'
+                              )}
+                            >
+                              {msg.timestamp.toLocaleTimeString([], {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                              })}
+                            </p>
+                          </div>
+                          {msg.sender === 'user' && (
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-border bg-muted ring-2 ring-background dark:bg-gray-700 dark:ring-gray-950">
+                              <User className="size-3.5 text-muted-foreground dark:text-gray-200" />
+                            </div>
+                          )}
+                        </motion.div>
+                      ))}
+                    </AnimatePresence>
+
+                    {isTyping && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        className="flex gap-2"
                       >
-                        {msg.content}
-                      </div>
-                      {msg.sender === 'user' && <User size={18} />}
-                    </div>
-                  ))}
-                  {isTyping && (
-                    <div className="text-sm text-gray-400">
-                      {botName} is typing…
-                    </div>
-                  )}
-                  <div ref={messagesEndRef} />
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-violet-600 to-purple-600">
+                          <Bot className="size-3.5 text-white" />
+                        </div>
+                        <div className="rounded-2xl rounded-bl-md border border-border/60 bg-card/95 px-3 py-2.5 dark:border-violet-900/40 dark:bg-gray-800/95">
+                          <div className="flex gap-1">
+                            {[0, 1, 2].map((i) => (
+                              <motion.span
+                                key={i}
+                                className="h-1.5 w-1.5 rounded-full bg-violet-500"
+                                animate={{
+                                  opacity: [0.35, 1, 0.35],
+                                  y: [0, -2, 0],
+                                }}
+                                transition={{
+                                  duration: 0.85,
+                                  repeat: Infinity,
+                                  delay: i * 0.12,
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
+                    <div ref={messagesEndRef} className="h-px" aria-hidden />
+                  </div>
                 </div>
 
-                {/* Input */}
-                <div className="p-3 border-t flex gap-2">
-                  <Input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    placeholder="Type a message…"
-                  />
-                  <Button onClick={sendMessage} disabled={!input.trim()}>
-                    <Send size={16} />
-                  </Button>
+                <div className="shrink-0 border-t border-border/60 bg-card/90 p-2.5 backdrop-blur-md dark:bg-gray-900/95">
+                  <div className="flex gap-2">
+                    <Input
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      placeholder="Message…"
+                      className="min-h-10 flex-1 rounded-xl border-violet-200/45 bg-background text-sm dark:border-violet-800/45 dark:bg-gray-950/90"
+                      aria-label="Type a message"
+                    />
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={sendMessage}
+                      disabled={!input.trim()}
+                      className="h-10 w-10 shrink-0 rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 text-white shadow-md shadow-violet-500/20 disabled:opacity-40"
+                      aria-label="Send"
+                    >
+                      <Send className="size-4" />
+                    </Button>
+                  </div>
                 </div>
               </>
             )}
 
-            {activeTab !== 'conversation' && (
-              <div className="flex-1 flex items-center justify-center text-gray-500">
-                Coming soon
+            {activeTab === 'faqs' && (
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto p-4">
+                <p className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Quick answers
+                </p>
+                <ul className="space-y-2">
+                  {[
+                    {
+                      q: 'What does Trimesha build?',
+                      a: 'Web, mobile, and AI-powered products—see Services on the site.',
+                    },
+                    {
+                      q: 'How do I get pricing?',
+                      a: 'Open the Pricing page or ask me here for tier summaries.',
+                    },
+                    {
+                      q: 'Careers?',
+                      a: 'Visit Careers for open roles and how to apply.',
+                    },
+                  ].map((item) => (
+                    <li
+                      key={item.q}
+                      className="rounded-xl border border-violet-200/40 bg-muted/30 p-3 text-sm dark:border-violet-900/35 dark:bg-gray-900/60"
+                    >
+                      <p className="font-semibold text-foreground">{item.q}</p>
+                      <p className="mt-1 text-muted-foreground">{item.a}</p>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-4 text-center text-xs text-muted-foreground">
+                  Switch to <strong>Chat</strong> for a tailored reply.
+                </p>
+              </div>
+            )}
+
+            {activeTab === 'articles' && (
+              <div className="flex min-h-0 flex-1 flex-col items-center justify-center p-6 text-center">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-violet-500/15 text-violet-600 dark:text-violet-400">
+                  <FileText className="size-6" strokeWidth={2} />
+                </div>
+                <p className="text-sm font-semibold text-foreground">
+                  Guides coming soon
+                </p>
+                <p className="mt-2 max-w-[240px] text-xs text-muted-foreground">
+                  We&apos;re preparing articles on our process and stack. Use{' '}
+                  <strong>Chat</strong> if you need something now.
+                </p>
               </div>
             )}
           </motion.div>
