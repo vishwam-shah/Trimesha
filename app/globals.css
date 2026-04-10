@@ -264,3 +264,26 @@ body {
     color: rgb(255 255 255) !important;
   }
 }
+
+@layer utilities {
+  .nav-dropdown-scroll {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .nav-dropdown-scroll::-webkit-scrollbar {
+    display: none;
+  }
+
+  details[open] summary .faq-chevron {
+    transform: rotate(180deg);
+  }
+
+  @keyframes trimesha-book-ring {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .animate-trimesha-book-ring {
+    animation: trimesha-book-ring 5.5s linear infinite;
+  }
+}

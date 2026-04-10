@@ -136,7 +136,7 @@ export function AboutValues() {
                 />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6">
+            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
                 <motion.div
                     className="text-center mb-16"
                     initial={{ opacity: 0, y: 20 }}

@@ -35,7 +35,7 @@ export function FeaturesSection() {
             <Card
               key={`service_${i}`}
               i={i}
-              url={service.image}
+              slug={service.id}
               title={service.title}
               color={service.color}
               description={service.description}

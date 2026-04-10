@@ -16,7 +16,7 @@ const empty = {
   priceDisplay: "",
   description: "",
   featuresStr: "",
-  ctaLabel: "Get started",
+  ctaLabel: "Get a Quote",
   ctaUrl: "/",
   highlighted: false,
   sortOrder: 0 as number | "",
@@ -258,6 +258,7 @@ export default function DashboardPricingPage() {
               onChange={(e) =>
                 setForm((f) => ({ ...f, ctaLabel: e.target.value }))
               }
+              placeholder="Get a Quote"
             />
           </div>
           <div className="space-y-2">

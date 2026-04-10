@@ -35,7 +35,8 @@ interface Message {
 interface ChatbotWidgetProps {
   botName?: string;
   welcomeMessage?: string;
-  onSendMessage?: (message: string) => Promise<string | void>;
+  /** If omitted, messages are sent to `/api/v1/chat` (Gemini + `GEMINI_API_KEY`). */
+  onSendMessage?: (messages: Message[]) => Promise<string | void>;
 }
 
 export function ChatbotWidget({
@@ -58,6 +59,24 @@ export function ChatbotWidget({
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const fetchDefaultReply = useCallback(async (msgs: Message[]) => {
+    const res = await fetch('/api/v1/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: msgs.map((m) => ({
+          role: m.sender === 'user' ? 'user' : 'bot',
+          content: m.content,
+        })),
+      }),
+    });
+    const data = (await res.json()) as { reply?: string; error?: string };
+    if (!res.ok) {
+      throw new Error(data.error || 'Request failed');
+    }
+    return data.reply?.trim() || 'Sorry, I could not generate a reply.';
+  }, []);
+
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
@@ -76,19 +95,21 @@ export function ChatbotWidget({
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const transcript = [...messages, userMessage];
+    setMessages(transcript);
     setInput('');
     setIsTyping(true);
 
     try {
-      let reply = 'Thanks for your message!';
-
+      let reply: string;
       if (onSendMessage) {
-        const res = await onSendMessage(userMessage.content);
-        reply = res || reply;
+        const res = await onSendMessage(transcript);
+        reply = (res && res.trim()) || 'Thanks for your message!';
+      } else {
+        reply = await fetchDefaultReply(transcript);
       }
 
-      await new Promise((r) => setTimeout(r, 500));
+      await new Promise((r) => setTimeout(r, 400));
 
       setMessages((prev) => [
         ...prev,
@@ -104,7 +125,8 @@ export function ChatbotWidget({
         ...prev,
         {
           id: crypto.randomUUID(),
-          content: 'Something went wrong. Please try again.',
+          content:
+            'Something went wrong. Please try again, or email admin@trimesha.com.',
           sender: 'bot',
           timestamp: new Date(),
         },
@@ -112,7 +134,7 @@ export function ChatbotWidget({
     } finally {
       setIsTyping(false);
     }
-  }, [input, onSendMessage]);
+  }, [input, messages, onSendMessage, fetchDefaultReply]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {

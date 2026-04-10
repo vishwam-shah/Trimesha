@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Bot, User } from 'lucide-react';
 import { Button } from './button';
@@ -15,7 +15,8 @@ interface Message {
 }
 
 interface ChatbotProps {
-  onSendMessage?: (message: string) => void | Promise<void>;
+  /** If omitted, uses `/api/v1/chat` (Gemini + `GEMINI_API_KEY`). */
+  onSendMessage?: (messages: Message[]) => Promise<string | void>;
   className?: string;
   placeholder?: string;
   botName?: string;
@@ -41,6 +42,24 @@ export function Chatbot({
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const fetchDefaultReply = useCallback(async (msgs: Message[]) => {
+    const res = await fetch('/api/v1/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        messages: msgs.map((m) => ({
+          role: m.sender === 'user' ? 'user' : 'bot',
+          content: m.content,
+        })),
+      }),
+    });
+    const data = (await res.json()) as { reply?: string; error?: string };
+    if (!res.ok) {
+      throw new Error(data.error || 'Request failed');
+    }
+    return data.reply?.trim() || 'Sorry, I could not generate a reply.';
+  }, []);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -54,29 +73,46 @@ export function Chatbot({
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      content: inputValue,
+      content: inputValue.trim(),
       sender: 'user',
       timestamp: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const transcript = [...messages, userMessage];
+    setMessages(transcript);
     setInputValue('');
     setIsTyping(true);
 
-    if (onSendMessage) {
-      await onSendMessage(inputValue);
-    } else {
-      // Simulate bot response
-      setTimeout(() => {
-        const botMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          content: `You said: "${inputValue}". This is a demo response.`,
+    try {
+      let reply: string;
+      if (onSendMessage) {
+        const custom = await onSendMessage(transcript);
+        reply =
+          (custom && custom.trim()) ||
+          'Thanks for your message! How else can I help?';
+      } else {
+        reply = await fetchDefaultReply(transcript);
+      }
+      const botMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        content: reply,
+        sender: 'bot',
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, botMessage]);
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 2).toString(),
+          content:
+            'Something went wrong. Please try again, or email admin@trimesha.com.',
           sender: 'bot',
           timestamp: new Date(),
-        };
-        setMessages((prev) => [...prev, botMessage]);
-        setIsTyping(false);
-      }, 1000);
+        },
+      ]);
+    } finally {
+      setIsTyping(false);
     }
   };
 

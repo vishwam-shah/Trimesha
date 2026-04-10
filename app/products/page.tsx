@@ -28,131 +28,131 @@ function ProductDetailsPanel({ id, slide }: { id: string; slide: ProductSlide })
       <div
         className="max-sm:rounded-2xl max-sm:border max-sm:border-border/50 max-sm:bg-background/70 max-sm:p-4 max-sm:pb-6 max-sm:shadow-[0_12px_40px_-8px_rgba(0,0,0,0.25)] max-sm:backdrop-blur-xl dark:max-sm:border-border/30 dark:max-sm:bg-background/60 sm:p-0"
       >
-        <div className="place-box relative mb-0 min-h-0 h-10 overflow-hidden sm:mb-1 sm:h-11">
-          <div className="text relative pl-8 pt-3 text-[15px] font-medium tracking-[0.06em] text-muted-foreground sm:pl-9 sm:pt-4">
-            <span className="absolute left-0 top-[15px] block h-[2.5px] w-5 rounded-full bg-[#ecad29] sm:top-[17px] sm:h-[3px] sm:w-6" />
-            {slide.place}
+          <div className="place-box relative mb-0 min-h-0 h-10 overflow-hidden sm:mb-1 sm:h-11">
+            <div className="text relative pl-8 pt-3 text-[15px] font-medium tracking-[0.06em] text-muted-foreground sm:pl-9 sm:pt-4">
+              <span className="absolute left-0 top-[15px] block h-[2.5px] w-5 rounded-full bg-[#ecad29] sm:top-[17px] sm:h-[3px] sm:w-6" />
+              {slide.place}
+            </div>
           </div>
-        </div>
-        <div
-          className="title-box-1 mt-0 min-h-[44px] overflow-hidden sm:min-h-[96px]"
-          style={{ marginTop: 2 }}
-        >
           <div
-            className="title-1 text-balance font-bold break-words leading-[0.92] tracking-tight text-foreground max-sm:line-clamp-2"
-            style={{
-              fontFamily: "'Oswald',sans-serif",
-              fontSize: "clamp(22px, 6.5vw, 60px)",
-            }}
+            className="title-box-1 mt-0 min-h-[44px] overflow-hidden sm:min-h-[96px]"
+            style={{ marginTop: 2 }}
           >
-            {slide.title}
-          </div>
-        </div>
-
-        <div
-          className="title-box-2 mt-0.5 min-h-[44px] overflow-hidden sm:mt-0 sm:min-h-[96px]"
-          style={{ marginTop: 4 }}
-        >
-          <div
-            className="title-2 text-balance font-bold break-words leading-[0.92] tracking-tight text-foreground max-sm:line-clamp-2"
-            style={{
-              fontFamily: "'Oswald',sans-serif",
-              fontSize: "clamp(22px, 6.5vw, 60px)",
-            }}
-          >
-            {slide.title2}
-          </div>
-        </div>
-        <div
-          className="desc line-clamp-3 overflow-hidden leading-[1.55] text-muted-foreground sm:line-clamp-none sm:overflow-visible sm:leading-relaxed"
-          style={{
-            marginTop: 10,
-            fontSize: "clamp(12px, 3.4vw, 13.5px)",
-            maxWidth: "min(420px, 92vw)",
-          }}
-        >
-          {slide.description}
-        </div>
-        <div
-          className="features-row flex flex-wrap gap-1 sm:gap-2"
-          style={{ marginTop: 10, maxWidth: "min(440px, 94vw)" }}
-        >
-          {slide.features.map((f) => (
-            <span
-              key={f}
-              className="text-[9px] font-semibold uppercase tracking-wider sm:text-[9.5px]"
+            <div
+              className="title-1 text-balance font-bold break-words leading-[0.92] tracking-tight text-foreground max-sm:line-clamp-2"
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                background: "rgba(236,173,41,0.12)",
-                border: "1px solid rgba(236,173,41,0.38)",
-                color: "#ecad29",
-                padding: "4px 9px",
+                fontFamily: "'Oswald',sans-serif",
+                fontSize: "clamp(22px, 6.5vw, 60px)",
+              }}
+            >
+              {slide.title}
+            </div>
+          </div>
+
+          <div
+            className="title-box-2 mt-0.5 min-h-[44px] overflow-hidden sm:mt-0 sm:min-h-[96px]"
+            style={{ marginTop: 4 }}
+          >
+            <div
+              className="title-2 text-balance font-bold break-words leading-[0.92] tracking-tight text-foreground max-sm:line-clamp-2"
+              style={{
+                fontFamily: "'Oswald',sans-serif",
+                fontSize: "clamp(22px, 6.5vw, 60px)",
+              }}
+            >
+              {slide.title2}
+            </div>
+          </div>
+          <div
+            className="desc line-clamp-3 overflow-hidden leading-[1.55] text-muted-foreground sm:line-clamp-none sm:overflow-visible sm:leading-relaxed"
+            style={{
+              marginTop: 10,
+              fontSize: "clamp(12px, 3.4vw, 13.5px)",
+              maxWidth: "min(420px, 92vw)",
+            }}
+          >
+            {slide.description}
+          </div>
+          <div
+            className="features-row flex flex-wrap gap-1 sm:gap-2"
+            style={{ marginTop: 10, maxWidth: "min(440px, 94vw)" }}
+          >
+            {slide.features.map((f) => (
+              <span
+                key={f}
+                className="text-[9px] font-semibold uppercase tracking-wider sm:text-[9.5px]"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  background: "rgba(236,173,41,0.12)",
+                  border: "1px solid rgba(236,173,41,0.38)",
+                  color: "#ecad29",
+                  padding: "4px 9px",
+                  borderRadius: 99,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {f}
+              </span>
+            ))}
+          </div>
+          <div className="cta pointer-events-auto mt-3 flex max-w-full flex-col gap-2 sm:mt-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+            <span
+              className="category-pill w-fit border border-border bg-muted/50 text-foreground dark:bg-muted/35"
+              style={{
+                fontSize: 10,
+                fontWeight: 600,
+                textTransform: "uppercase",
+                letterSpacing: "0.1em",
+                padding: "5px 12px",
                 borderRadius: 99,
                 whiteSpace: "nowrap",
               }}
             >
-              {f}
+              {slide.category}
             </span>
-          ))}
-        </div>
-        <div className="cta pointer-events-auto mt-3 flex max-w-full flex-col gap-2 sm:mt-5 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
-          <span
-            className="category-pill w-fit border border-border bg-muted/50 text-foreground dark:bg-muted/35"
-            style={{
-              fontSize: 10,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              padding: "5px 12px",
-              borderRadius: 99,
-              whiteSpace: "nowrap",
-            }}
-          >
-            {slide.category}
-          </span>
 
-          <a
-            href={slide.url}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex h-11 min-h-[44px] w-full min-w-0 items-center justify-center gap-2 rounded-full bg-[#ecad29] px-5 text-[#1a1a1a] shadow-md shadow-[#ecad29]/25 transition-[transform,background,color] active:scale-[0.98] sm:h-[38px] sm:min-h-0 sm:w-auto sm:min-w-0 sm:justify-start sm:px-[22px] sm:shadow-none"
-            style={{
-              borderRadius: 99,
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.15em",
-              textDecoration: "none",
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e: MouseEvent<HTMLAnchorElement>) => {
-              const el = e.currentTarget;
-              el.style.background = "#fff";
-              el.style.color = "#1a1a1a";
-            }}
-            onMouseLeave={(e: MouseEvent<HTMLAnchorElement>) => {
-              const el = e.currentTarget;
-              el.style.background = "#ecad29";
-              el.style.color = "#1a1a1a";
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width={13} height={13}>
-              <path
-                fillRule="evenodd"
-                d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z"
-                clipRule="evenodd"
-              />
-              <path
-                fillRule="evenodd"
-                d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z"
-                clipRule="evenodd"
-              />
-            </svg>
-            View Product
-          </a>
+            <a
+              href={slide.url}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-11 min-h-[44px] w-full min-w-0 items-center justify-center gap-2 rounded-full bg-[#ecad29] px-5 text-[#1a1a1a] shadow-md shadow-[#ecad29]/25 transition-[transform,background,color] active:scale-[0.98] sm:h-[38px] sm:min-h-0 sm:w-auto sm:min-w-0 sm:justify-start sm:px-[22px] sm:shadow-none"
+              style={{
+                borderRadius: 99,
+                fontSize: 11,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: "0.15em",
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e: MouseEvent<HTMLAnchorElement>) => {
+                const el = e.currentTarget;
+                el.style.background = "#fff";
+                el.style.color = "#1a1a1a";
+              }}
+              onMouseLeave={(e: MouseEvent<HTMLAnchorElement>) => {
+                const el = e.currentTarget;
+                el.style.background = "#ecad29";
+                el.style.color = "#1a1a1a";
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width={13} height={13}>
+                <path
+                  fillRule="evenodd"
+                  d="M4.25 5.5a.75.75 0 00-.75.75v8.5c0 .414.336.75.75.75h8.5a.75.75 0 00.75-.75v-4a.75.75 0 011.5 0v4A2.25 2.25 0 0112.75 17h-8.5A2.25 2.25 0 012 14.75v-8.5A2.25 2.25 0 014.25 4h5a.75.75 0 010 1.5h-5z"
+                  clipRule="evenodd"
+                />
+                <path
+                  fillRule="evenodd"
+                  d="M6.194 12.753a.75.75 0 001.06.053L16.5 4.44v2.81a.75.75 0 001.5 0v-4.5a.75.75 0 00-.75-.75h-4.5a.75.75 0 000 1.5h2.553l-9.056 8.194a.75.75 0 00-.053 1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              View Product
+            </a>
+          </div>
         </div>
-      </div>
     </div>
   );
 }
@@ -222,14 +222,12 @@ export default function ProductsPage() {
     let CARDS_BOTTOM_MARGIN = 100;
     let PAGINATION_BELOW_CARDS = 24;
 
-    /** Width available for the card strip. Uses the stage (#demo), not the window. */
     function getStageWidth(): number {
       const demo = document.getElementById("demo");
       const w = demo?.clientWidth ?? 0;
       return w > 0 ? w : Math.max(0, window.innerWidth);
     }
 
-    /** Visible height for layout (address bar / dynamic viewport). */
     function getViewportHeight(): number {
       const vv = window.visualViewport;
       return Math.max(window.innerHeight, vv?.height ?? window.innerHeight);
@@ -241,8 +239,7 @@ export default function ProductsPage() {
 
     function refreshMetrics() {
       const W = getStageWidth();
-      const bw =
-        typeof window !== "undefined" ? window.innerWidth : W;
+      const bw = typeof window !== "undefined" ? window.innerWidth : W;
       const n = Math.max(1, order.length);
       const padX = padXForWidth(W);
       const availableW = Math.max(0, W - padX * 2);
@@ -250,7 +247,6 @@ export default function ProductsPage() {
       if (bw < 1024) {
         GAP = bw < 400 ? 4 : bw < 480 ? 6 : bw < 640 ? 8 : 12;
       } else {
-        // Tighter gaps on desktop so each card can be wider.
         GAP = bw < 1280 ? 16 : bw < 1536 ? 22 : 28;
       }
 
@@ -264,14 +260,10 @@ export default function ProductsPage() {
         CARD_W = Math.min(raw, cap);
         CARD_W = Math.max(64, CARD_W);
       } else {
-        const maxCard =
-          bw >= 1920 ? 560 : bw >= 1536 ? 540 : bw >= 1280 ? 520 : 480;
-        const minDesktopCard =
-          bw >= 1920 ? 340 : bw >= 1536 ? 320 : bw >= 1280 ? 300 : 280;
+        const maxCard = bw >= 1920 ? 560 : bw >= 1536 ? 540 : bw >= 1280 ? 520 : 480;
+        const minDesktopCard = bw >= 1920 ? 340 : bw >= 1536 ? 320 : bw >= 1280 ? 300 : 280;
         CARD_W = Math.min(maxCard, Math.max(minDesktopCard, raw));
-        if (raw > 0) {
-          CARD_W = Math.min(CARD_W, raw);
-        }
+        if (raw > 0) CARD_W = Math.min(CARD_W, raw);
       }
 
       let stripW = n * CARD_W + (n - 1) * GAP;
@@ -283,33 +275,19 @@ export default function ProductsPage() {
         GAP -= 1;
         stripW = n * CARD_W + (n - 1) * GAP;
       }
-      if (n === 1 && CARD_W > availableW) {
-        CARD_W = availableW;
-      }
+      if (n === 1 && CARD_W > availableW) CARD_W = availableW;
 
       CARD_H = Math.round(CARD_W * (bw < 1024 ? 1.35 : 1.375));
       CARD_LABEL_H = Math.min(110, Math.max(56, Math.round(CARD_H * 0.22)));
       CARD_ENTRANCE_X = bw < 480 ? 10 : bw < 1024 ? 18 : 40;
-
       NUM_SZ = Math.min(50, Math.max(22, Math.round(CARD_W * 0.17)));
-
-      PROGRESS_W = Math.min(
-        520,
-        Math.max(
-          100,
-          Math.min(
-            500,
-            availableW - (bw < 640 ? 148 : bw < 1024 ? 176 : 220),
-          ),
-        ),
-      );
+      PROGRESS_W = Math.min(520, Math.max(100, Math.min(500, availableW - (bw < 640 ? 148 : bw < 1024 ? 176 : 220))));
 
       if (bw < 1024) {
         CARDS_BOTTOM_MARGIN = bw < 480 ? 52 : 64;
         PAGINATION_BELOW_CARDS = bw < 480 ? 12 : 16;
       } else {
         CARDS_BOTTOM_MARGIN = bw < 1280 ? 88 : 100;
-        // Extra gap so arrows / progress sit clearly below the card strip (desktop).
         PAGINATION_BELOW_CARDS = bw < 1280 ? 48 : 56;
       }
 
@@ -333,6 +311,7 @@ export default function ProductsPage() {
       if (gsap.utils.toArray(target).length === 0) return;
       gsap.to(target, vars);
     };
+
     const getCard    = (i: number) => `#card${i}`;
     const getContent = (i: number) => `#card-content-${i}`;
     const getNum     = (i: number) => `#slide-item-${i}`;
@@ -376,8 +355,7 @@ export default function ProductsPage() {
           </div>
         </div>`).join("");
 
-    const numFs = () =>
-      Math.min(26, Math.max(14, Math.round(NUM_SZ * 0.52)));
+    const numFs = () => Math.min(26, Math.max(14, Math.round(NUM_SZ * 0.52)));
     const makeNumbers = () =>
       data.map((_, idx) => `
         <div id="slide-item-${idx}" style="
@@ -395,10 +373,7 @@ export default function ProductsPage() {
 
     function animate(target: gsap.TweenTarget, duration: number, props: gsap.TweenVars) {
       return new Promise<void>((res) => {
-        if (isCancelled || gsap.utils.toArray(target).length === 0) {
-          res();
-          return;
-        }
+        if (isCancelled || gsap.utils.toArray(target).length === 0) { res(); return; }
         tweenTo(target, { ...props, duration, onComplete: () => res() });
       });
     }
@@ -422,11 +397,9 @@ export default function ProductsPage() {
       const section = document.getElementById("products-stage");
       if (!section) return;
       const W = getStageWidth();
-      const bw =
-        typeof window !== "undefined" ? window.innerWidth : W;
+      const bw = typeof window !== "undefined" ? window.innerWidth : W;
       const pagBand = bw < 640 ? 118 : bw < 1024 ? 96 : 88;
-      const bottom =
-        offsetTop + CARD_H + PAGINATION_BELOW_CARDS + pagBand + 24;
+      const bottom = offsetTop + CARD_H + PAGINATION_BELOW_CARDS + pagBand + 24;
       const H = getViewportHeight();
       section.style.minHeight = `${Math.max(H, bottom)}px`;
     }
@@ -435,7 +408,6 @@ export default function ProductsPage() {
       return typeof window !== "undefined" && window.innerWidth >= 1024;
     }
 
-    /** Full-width desktop: card height matches title → View Product; position from measured DOM. */
     function applySplitDesktopLayoutFromDOM() {
       const demo = document.getElementById("demo");
       const id = detailsEven ? "details-even" : "details-odd";
@@ -468,13 +440,10 @@ export default function ProductsPage() {
         return;
       }
 
-      // Vertical position of card strip + pagination (negative nudge = shift whole block up).
       const lowerNudgePx = -10;
       offsetTop = Math.max(12, Math.round(titleTop - demoRect.top + lowerNudgePx));
 
-      // Match title→CTA height; slightly taller cards (lower aspect ratio) read as bigger on screen.
       const aspect = 1.28;
-      // Use full measured span. Do not cap low. Tall viewports get full-height cards.
       let nextH = Math.max(300, Math.min(spanH, 1200));
       let nextW = Math.round(nextH / aspect);
 
@@ -483,8 +452,6 @@ export default function ProductsPage() {
       const padX = padXForWidth(W);
       const availableW = Math.max(0, W - padX * 2);
 
-      // Shrink gaps only. Never shrink card width/height to fit the row (that made tiny cards).
-      // Extra strip width scrolls horizontally on the carousel rail (lg+).
       let gap = GAP;
       let stripW = n * nextW + Math.max(0, n - 1) * gap;
       while (stripW > availableW && gap > 8 && n > 1) {
@@ -492,7 +459,6 @@ export default function ProductsPage() {
         stripW = n * nextW + (n - 1) * gap;
       }
       GAP = gap;
-
       CARD_W = nextW;
       CARD_H = nextH;
 
@@ -508,13 +474,7 @@ export default function ProductsPage() {
 
       CARD_LABEL_H = Math.min(110, Math.max(56, Math.round(CARD_H * 0.22)));
       NUM_SZ = Math.min(50, Math.max(22, Math.round(CARD_W * 0.17)));
-      PROGRESS_W = Math.min(
-        520,
-        Math.max(
-          100,
-          Math.min(500, availableW - 220),
-        ),
-      );
+      PROGRESS_W = Math.min(520, Math.max(100, Math.min(500, availableW - 220)));
       LABEL_TITLE_FS = Math.min(16, Math.max(11, Math.round(CARD_W * 0.052)));
       LABEL_PLACE_FS = Math.min(10, Math.max(8, Math.round(CARD_W * 0.036)));
       CARD_ENTRANCE_X = 40;
@@ -523,8 +483,7 @@ export default function ProductsPage() {
     function layoutOffsets() {
       refreshMetrics();
       const W = getStageWidth();
-      const stripW =
-        order.length * CARD_W + Math.max(0, order.length - 1) * GAP;
+      const stripW = order.length * CARD_W + Math.max(0, order.length - 1) * GAP;
       const padX = padXForWidth(W);
       const split = isSplitDesktopLayout();
 
@@ -540,16 +499,10 @@ export default function ProductsPage() {
           offsetLeft =
             rightAligned >= minAfterCopy
               ? rightAligned
-              : Math.max(
-                  padX,
-                  Math.min(maxLeft, Math.max(centered, minAfterCopy)),
-                );
+              : Math.max(padX, Math.min(maxLeft, Math.max(centered, minAfterCopy)));
         } else if (W >= 640) {
           const minAfterCopy = Math.min(560, Math.max(260, W * 0.45));
-          offsetLeft = Math.max(
-            padX,
-            Math.min(maxLeft, Math.max(centered, minAfterCopy)),
-          );
+          offsetLeft = Math.max(padX, Math.min(maxLeft, Math.max(centered, minAfterCopy)));
         } else {
           offsetLeft = Math.max(padX, Math.min(centered, maxLeft));
         }
@@ -571,29 +524,11 @@ export default function ProductsPage() {
       layoutOffsets();
       order.forEach((cardIdx, idx) => {
         const x = offsetLeft + idx * (CARD_W + GAP);
-        set(getCard(cardIdx), {
-          x,
-          y: offsetTop,
-          width: CARD_W,
-          height: CARD_H,
-          zIndex: 30,
-          borderRadius: 10,
-          scale: 1,
-          opacity: 1,
-        });
-        set(getContent(cardIdx), {
-          x,
-          y: offsetTop + CARD_H - CARD_LABEL_H,
-          width: CARD_W,
-          height: CARD_LABEL_H,
-          opacity: 1,
-          zIndex: 50 - idx,
-        });
+        set(getCard(cardIdx), { x, y: offsetTop, width: CARD_W, height: CARD_H, zIndex: 30, borderRadius: 10, scale: 1, opacity: 1 });
+        set(getContent(cardIdx), { x, y: offsetTop + CARD_H - CARD_LABEL_H, width: CARD_W, height: CARD_LABEL_H, opacity: 1, zIndex: 50 - idx });
         set(getNum(cardIdx), { x: idx * NUM_SZ });
       });
-      set(".progress-sub-foreground", {
-        width: PROGRESS_W * (1 / data.length) * (order[0] + 1),
-      });
+      set(".progress-sub-foreground", { width: PROGRESS_W * (1 / data.length) * (order[0] + 1) });
       const detActive = detailsEven ? "#details-even" : "#details-odd";
       set(detActive, { x: window.innerWidth < 1024 ? 0 : -28 });
       data.forEach((_, idx) => {
@@ -612,9 +547,7 @@ export default function ProductsPage() {
           sn.style.fontSize = `${Math.min(26, Math.max(14, Math.round(NUM_SZ * 0.52)))}px`;
         }
       });
-      requestAnimationFrame(() => {
-        updateDetailsColumnHeight();
-      });
+      requestAnimationFrame(() => { updateDetailsColumnHeight(); });
     }
 
     function hideInactivePanel(inactiveSel: string) {
@@ -626,6 +559,7 @@ export default function ProductsPage() {
       set(`${inactiveSel} .features-row`, { y: 40, opacity: 0 });
       set(`${inactiveSel} .cta`, { y: 60 });
     }
+
     function prepDetailLines(panelSel: string) {
       set(`${panelSel} .text`, { y: 20, opacity: 0 });
       set(`${panelSel} .title-1`, { y: 28, opacity: 0 });
@@ -635,57 +569,15 @@ export default function ProductsPage() {
       set(`${panelSel} .cta`, { y: 12, opacity: 0 });
     }
 
-    function revealDetailLines(
-      panelSel: string,
-      baseDelay: number,
-      ease: string,
-      onLastComplete?: () => void,
-    ) {
+    function revealDetailLines(panelSel: string, baseDelay: number, ease: string, onLastComplete?: () => void) {
       const D = 0.52;
       const S = 0.055;
-      tweenTo(`${panelSel} .text`, {
-        y: 0,
-        opacity: 1,
-        duration: D,
-        delay: baseDelay,
-        ease,
-      });
-      tweenTo(`${panelSel} .title-1`, {
-        y: 0,
-        opacity: 1,
-        duration: D + 0.04,
-        delay: baseDelay + S * 1,
-        ease,
-      });
-      tweenTo(`${panelSel} .title-2`, {
-        y: 0,
-        opacity: 1,
-        duration: D + 0.04,
-        delay: baseDelay + S * 2,
-        ease,
-      });
-      tweenTo(`${panelSel} .desc`, {
-        y: 0,
-        opacity: 1,
-        duration: D,
-        delay: baseDelay + S * 3,
-        ease,
-      });
-      tweenTo(`${panelSel} .features-row`, {
-        y: 0,
-        opacity: 1,
-        duration: 0.42,
-        delay: baseDelay + S * 4,
-        ease,
-      });
-      tweenTo(`${panelSel} .cta`, {
-        y: 0,
-        opacity: 1,
-        duration: 0.42,
-        delay: baseDelay + S * 5,
-        ease,
-        onComplete: onLastComplete,
-      });
+      tweenTo(`${panelSel} .text`, { y: 0, opacity: 1, duration: D, delay: baseDelay, ease });
+      tweenTo(`${panelSel} .title-1`, { y: 0, opacity: 1, duration: D + 0.04, delay: baseDelay + S * 1, ease });
+      tweenTo(`${panelSel} .title-2`, { y: 0, opacity: 1, duration: D + 0.04, delay: baseDelay + S * 2, ease });
+      tweenTo(`${panelSel} .desc`, { y: 0, opacity: 1, duration: D, delay: baseDelay + S * 3, ease });
+      tweenTo(`${panelSel} .features-row`, { y: 0, opacity: 1, duration: 0.42, delay: baseDelay + S * 4, ease });
+      tweenTo(`${panelSel} .cta`, { y: 0, opacity: 1, duration: 0.42, delay: baseDelay + S * 5, ease, onComplete: onLastComplete });
     }
 
     function init() {
@@ -694,57 +586,24 @@ export default function ProductsPage() {
       set("#demo", { autoAlpha: 1 });
       const detActive   = detailsEven ? "#details-even" : "#details-odd";
       const detInactive = detailsEven ? "#details-odd"  : "#details-even";
-      const W = window.innerWidth;
       const narrowStage = window.innerWidth < 1024;
 
-      set("#pagination", {
-        y: 36,
-        autoAlpha: 0,
-        zIndex: 60,
-      });
-
-      set(".progress-sub-foreground", {
-        width: PROGRESS_W * (1 / data.length) * (order[0] + 1),
-      });
+      set("#pagination", { y: 36, autoAlpha: 0, zIndex: 60 });
+      set(".progress-sub-foreground", { width: PROGRESS_W * (1 / data.length) * (order[0] + 1) });
 
       order.forEach((i, idx) => {
-        set(getCard(i), {
-          x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP),
-          y: offsetTop + 20,
-          width: CARD_W,
-          height: CARD_H,
-          zIndex: 30,
-          borderRadius: 10,
-          scale: 1,
-          opacity: 0,
-        });
-        set(getContent(i), {
-          x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP),
-          zIndex: 50 - idx,
-          y: offsetTop + CARD_H - CARD_LABEL_H + 14,
-          width: CARD_W,
-          height: CARD_LABEL_H,
-          opacity: 0,
-        });
+        set(getCard(i), { x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP), y: offsetTop + 20, width: CARD_W, height: CARD_H, zIndex: 30, borderRadius: 10, scale: 1, opacity: 0 });
+        set(getContent(i), { x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP), zIndex: 50 - idx, y: offsetTop + CARD_H - CARD_LABEL_H + 14, width: CARD_W, height: CARD_LABEL_H, opacity: 0 });
         set(getNum(i), { x: idx * NUM_SZ });
       });
 
       hideInactivePanel(detInactive);
-
       set(detActive, { autoAlpha: 1, zIndex: 40, x: narrowStage ? 0 : -28 });
       prepDetailLines(detActive);
-      requestAnimationFrame(() => {
-        updateDetailsColumnHeight();
-      });
+      requestAnimationFrame(() => { updateDetailsColumnHeight(); });
 
-      set(".indicator", { x: -W });
-
-      const textRevealDone =
-        INTRO_DELAY + 0.22 + 0.055 * 5 + 0.52 + 0.35;
-      const introDone = Math.max(
-        INTRO_DELAY + INTRO_STAGGER * (order.length - 1) + INTRO_DUR,
-        textRevealDone,
-      ) + 0.45;
+      const textRevealDone = INTRO_DELAY + 0.22 + 0.055 * 5 + 0.52 + 0.35;
+      const introDone = Math.max(INTRO_DELAY + INTRO_STAGGER * (order.length - 1) + INTRO_DUR, textRevealDone) + 0.45;
       introDelayTween?.kill();
       introDelayTween = gsap.delayedCall(introDone, () => {
         introDelayTween = undefined;
@@ -753,51 +612,19 @@ export default function ProductsPage() {
 
       order.forEach((i, idx) => {
         const stagger = INTRO_DELAY + INTRO_STAGGER * idx;
-        tweenTo(getCard(i), {
-          x: offsetLeft + idx * (CARD_W + GAP),
-          y: offsetTop,
-          opacity: 1,
-          zIndex: 30,
-          duration: INTRO_DUR,
-          delay: stagger,
-          ease: INTRO_EASE,
-        });
-        tweenTo(getContent(i), {
-          x: offsetLeft + idx * (CARD_W + GAP),
-          y: offsetTop + CARD_H - CARD_LABEL_H,
-          width: CARD_W,
-          height: CARD_LABEL_H,
-          zIndex: 50 - idx,
-          opacity: 1,
-          duration: INTRO_DUR,
-          delay: stagger,
-          ease: INTRO_EASE,
-        });
+        tweenTo(getCard(i), { x: offsetLeft + idx * (CARD_W + GAP), y: offsetTop, opacity: 1, zIndex: 30, duration: INTRO_DUR, delay: stagger, ease: INTRO_EASE });
+        tweenTo(getContent(i), { x: offsetLeft + idx * (CARD_W + GAP), y: offsetTop + CARD_H - CARD_LABEL_H, width: CARD_W, height: CARD_LABEL_H, zIndex: 50 - idx, opacity: 1, duration: INTRO_DUR, delay: stagger, ease: INTRO_EASE });
       });
 
-      tweenTo("#pagination", {
-        y: 0,
-        autoAlpha: 1,
-        duration: INTRO_DUR * 0.92,
-        delay: INTRO_DELAY + 0.16,
-        ease: INTRO_EASE,
-      });
-      tweenTo(detActive, {
-        x: 0,
-        duration: INTRO_DUR,
-        delay: INTRO_DELAY + 0.22,
-        ease: INTRO_EASE,
-      });
-      revealDetailLines(detActive, INTRO_DELAY + 0.28, INTRO_EASE, () => {
-        updateDetailsColumnHeight();
-      });
+      tweenTo("#pagination", { y: 0, autoAlpha: 1, duration: INTRO_DUR * 0.92, delay: INTRO_DELAY + 0.16, ease: INTRO_EASE });
+      tweenTo(detActive, { x: 0, duration: INTRO_DUR, delay: INTRO_DELAY + 0.22, ease: INTRO_EASE });
+      revealDetailLines(detActive, INTRO_DELAY + 0.28, INTRO_EASE, () => { updateDetailsColumnHeight(); });
     }
 
     function applySlideContent() {
       const detActive = detailsEven ? "#details-even" : "#details-odd";
       const d = data[order[0]];
-      const q = <T extends Element>(sel: string) =>
-        document.querySelector<T>(`${detActive} ${sel}`);
+      const q = <T extends Element>(sel: string) => document.querySelector<T>(`${detActive} ${sel}`);
 
       const placeEl = q<HTMLElement>(".place-box .text");
       const t1El = q<HTMLElement>(".title-1");
@@ -814,27 +641,23 @@ export default function ProductsPage() {
       if (linkEl) linkEl.href = d.url;
       if (catEl) catEl.textContent = d.category;
       if (featEl)
-        featEl.innerHTML = d.features
-          .map(
-            (f) =>
-              `<span style="display:inline-flex;align-items:center;
+        featEl.innerHTML = d.features.map((f) =>
+          `<span style="display:inline-flex;align-items:center;
             background:rgba(236,173,41,0.15);border:1px solid rgba(236,173,41,0.45);
             color:#ecad29;font-size:9.5px;font-weight:600;text-transform:uppercase;
             letter-spacing:0.1em;padding:4px 10px;border-radius:99px;white-space:nowrap;">
             ${f}
           </span>`
-          )
-          .join("");
+        ).join("");
     }
 
     function animateRowAfterOrderChange(resolve: () => void) {
-      const detActive = detailsEven ? "#details-even" : "#details-odd";
-      const detInactive = detailsEven ? "#details-odd" : "#details-even";
+      const detActive   = detailsEven ? "#details-even" : "#details-odd";
+      const detInactive = detailsEven ? "#details-odd"  : "#details-even";
       const leadId = order[0];
 
       hideInactivePanel(detInactive);
       applySlideContent();
-      // Measure title → CTA after copy updates (split desktop uses DOM rects).
       layoutOffsets();
 
       set(detActive, { zIndex: 40, autoAlpha: 1, x: 0 });
@@ -850,78 +673,29 @@ export default function ProductsPage() {
       set(getCard(prv), { zIndex: 10 });
       set(getCard(active), { zIndex: 25 });
       tweenTo(getCard(prv), { scale: 1.08, ease: EASE });
-
       tweenTo(getNum(active), { x: 0, ease: EASE });
       tweenTo(getNum(prv), { x: -NUM_SZ, ease: EASE });
-      tweenTo(".progress-sub-foreground", {
-        width: PROGRESS_W * (1 / data.length) * (leadId + 1),
-        ease: EASE,
-      });
+      tweenTo(".progress-sub-foreground", { width: PROGRESS_W * (1 / data.length) * (leadId + 1), ease: EASE });
 
       tweenTo(getCard(active), {
-        x: offsetLeft,
-        y: offsetTop,
-        width: CARD_W,
-        height: CARD_H,
-        borderRadius: 10,
-        ease: EASE,
+        x: offsetLeft, y: offsetTop, width: CARD_W, height: CARD_H, borderRadius: 10, ease: EASE,
         onComplete: () => {
           const xNew = offsetLeft + rest.length * (CARD_W + GAP);
-
-          set(getCard(prv), {
-            x: xNew,
-            y: offsetTop,
-            width: CARD_W,
-            height: CARD_H,
-            zIndex: 30,
-            borderRadius: 10,
-            scale: 1,
-          });
-          set(getContent(prv), {
-            x: xNew,
-            y: offsetTop + CARD_H - CARD_LABEL_H,
-            width: CARD_W,
-            height: CARD_LABEL_H,
-            opacity: 1,
-            zIndex: 30,
-          });
+          set(getCard(prv), { x: xNew, y: offsetTop, width: CARD_W, height: CARD_H, zIndex: 30, borderRadius: 10, scale: 1 });
+          set(getContent(prv), { x: xNew, y: offsetTop + CARD_H - CARD_LABEL_H, width: CARD_W, height: CARD_LABEL_H, opacity: 1, zIndex: 30 });
           set(getNum(prv), { x: rest.length * NUM_SZ });
         },
       });
 
-      tweenTo(getContent(active), {
-        x: offsetLeft,
-        y: offsetTop + CARD_H - CARD_LABEL_H,
-        width: CARD_W,
-        height: CARD_LABEL_H,
-        opacity: 1,
-        zIndex: 50,
-        duration: 0.35,
-        ease: EASE,
-      });
+      tweenTo(getContent(active), { x: offsetLeft, y: offsetTop + CARD_H - CARD_LABEL_H, width: CARD_W, height: CARD_LABEL_H, opacity: 1, zIndex: 50, duration: 0.35, ease: EASE });
+
       rest.forEach((i, idx) => {
         if (i === prv) return;
         const slotIdx = idx + 1;
         const xNew = offsetLeft + slotIdx * (CARD_W + GAP);
         set(getCard(i), { zIndex: 30 });
-        tweenTo(getCard(i), {
-          x: xNew,
-          y: offsetTop,
-          width: CARD_W,
-          height: CARD_H,
-          ease: EASE,
-          delay: 0.1 * slotIdx,
-        });
-        tweenTo(getContent(i), {
-          x: xNew,
-          y: offsetTop + CARD_H - CARD_LABEL_H,
-          width: CARD_W,
-          height: CARD_LABEL_H,
-          opacity: 1,
-          zIndex: 50 - slotIdx,
-          ease: EASE,
-          delay: 0.1 * slotIdx,
-        });
+        tweenTo(getCard(i), { x: xNew, y: offsetTop, width: CARD_W, height: CARD_H, ease: EASE, delay: 0.1 * slotIdx });
+        tweenTo(getContent(i), { x: xNew, y: offsetTop + CARD_H - CARD_LABEL_H, width: CARD_W, height: CARD_LABEL_H, opacity: 1, zIndex: 50 - slotIdx, ease: EASE, delay: 0.1 * slotIdx });
         tweenTo(getNum(i), { x: slotIdx * NUM_SZ, ease: EASE });
       });
     }
@@ -977,43 +751,22 @@ export default function ProductsPage() {
     set("#demo", { autoAlpha: 0 });
     set("#pagination", { autoAlpha: 0, y: 36, zIndex: 60 });
     order.forEach((i, idx) => {
-      set(getCard(i), {
-        x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP),
-        y: offsetTop + 20,
-        width: CARD_W,
-        height: CARD_H,
-        zIndex: 30,
-        borderRadius: 10,
-        scale: 1,
-        opacity: 0,
-      });
-      set(getContent(i), {
-        x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP),
-        zIndex: 50 - idx,
-        y: offsetTop + CARD_H - CARD_LABEL_H + 14,
-        width: CARD_W,
-        height: CARD_LABEL_H,
-        opacity: 0,
-      });
+      set(getCard(i), { x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP), y: offsetTop + 20, width: CARD_W, height: CARD_H, zIndex: 30, borderRadius: 10, scale: 1, opacity: 0 });
+      set(getContent(i), { x: offsetLeft + CARD_ENTRANCE_X + idx * (CARD_W + GAP), zIndex: 50 - idx, y: offsetTop + CARD_H - CARD_LABEL_H + 14, width: CARD_W, height: CARD_LABEL_H, opacity: 0 });
       set(getNum(i), { x: idx * NUM_SZ });
     });
 
     let resizeTimer: ReturnType<typeof setTimeout> | undefined;
     const scheduleLayout = () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        syncLayoutAfterResize();
-      }, RESIZE_DEBOUNCE_MS);
+      resizeTimer = setTimeout(() => { syncLayoutAfterResize(); }, RESIZE_DEBOUNCE_MS);
     };
     window.addEventListener("resize", scheduleLayout);
     window.addEventListener("orientationchange", scheduleLayout);
     window.visualViewport?.addEventListener("resize", scheduleLayout);
 
     const stageEl = document.getElementById("products-stage");
-    const ro =
-      typeof ResizeObserver !== "undefined" && stageEl
-        ? new ResizeObserver(() => scheduleLayout())
-        : null;
+    const ro = typeof ResizeObserver !== "undefined" && stageEl ? new ResizeObserver(() => scheduleLayout()) : null;
     if (ro && stageEl) ro.observe(stageEl);
 
     Promise.all(data.map(({ image }) => loadImg(image))).then(() => {
@@ -1059,9 +812,7 @@ export default function ProductsPage() {
       <>
         <Header />
         <main className="flex min-h-screen flex-col items-center justify-center gap-4 bg-background px-4 text-center text-foreground">
-          <p className="text-muted-foreground">
-            {loadError ?? "No products to show."}
-          </p>
+          <p className="text-muted-foreground">{loadError ?? "No products to show."}</p>
         </main>
       </>
     );
@@ -1075,6 +826,7 @@ export default function ProductsPage() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap');
 
+        /* ── Details panels ──────────────────────────────────────────────── */
         #details-even,
         #details-odd {
           opacity: 0;
@@ -1092,19 +844,18 @@ export default function ProductsPage() {
         }
 
         .arrow-left, .arrow-right { cursor: pointer; }
-        .arrow-left:hover, .arrow-right:hover { border-color: color-mix(in oklab, var(--foreground) 35%, transparent) !important; }
+        .arrow-left:hover, .arrow-right:hover {
+          border-color: color-mix(in oklab, var(--foreground) 35%, transparent) !important;
+        }
 
         .details { pointer-events: none; }
         .details .cta { pointer-events: auto; }
 
-        /* Hide native horizontal scrollbar; arrows + track still scroll the rail. */
         #carousel-rail {
           scrollbar-width: none;
           -ms-overflow-style: none;
         }
-        #carousel-rail::-webkit-scrollbar {
-          display: none;
-        }
+        #carousel-rail::-webkit-scrollbar { display: none; }
 
         @media (min-width: 1024px) {
           #details-even,
@@ -1153,7 +904,7 @@ export default function ProductsPage() {
             className="relative z-40 min-h-0 w-full lg:min-h-[min(100vh,900px)] lg:shrink-0"
           >
             <ProductDetailsPanel id="details-even" slide={slideA} />
-            <ProductDetailsPanel id="details-odd" slide={slideB} />
+            <ProductDetailsPanel id="details-odd"  slide={slideB} />
           </div>
 
           <div
@@ -1162,39 +913,37 @@ export default function ProductsPage() {
           >
             <div id="demo" className="absolute inset-0 z-20 min-h-full min-w-0" aria-hidden />
 
-          <div
-            id="pagination"
-            className="absolute inline-flex max-w-[calc(100vw-1rem)] flex-wrap items-center justify-center gap-x-2 gap-y-2 rounded-2xl border border-border/40 bg-background/75 px-2.5 py-2 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.35)] backdrop-blur-md dark:border-border/25 dark:bg-background/65 sm:max-w-none sm:flex-nowrap sm:gap-0 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none sm:backdrop-blur-none"
-            style={{ zIndex: 60, opacity: 0, visibility: "hidden" }}
-          >
-            <button
-              type="button"
-              className="arrow-left z-[60] order-1 grid size-11 shrink-0 touch-manipulation place-items-center rounded-full border border-foreground/20 bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-[transform,colors] active:scale-95 sm:order-1 sm:size-[50px] sm:border-2 sm:border-foreground/25 sm:bg-background/70 sm:text-muted-foreground sm:shadow-none"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-5 sm:size-6" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-              </svg>
-            </button>
             <div
-              id="slide-numbers"
-              className="relative z-[60] order-2 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden sm:order-4 sm:h-[50px] sm:w-[50px]"
-            />
-            <button
-              type="button"
-              className="arrow-right z-[60] order-3 grid size-11 shrink-0 touch-manipulation place-items-center rounded-full border border-foreground/20 bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-[transform,colors] active:scale-95 sm:order-2 sm:ml-5 sm:size-[50px] sm:border-2 sm:border-foreground/25 sm:bg-background/70 sm:text-muted-foreground sm:shadow-none"
+              id="pagination"
+              className="absolute inline-flex max-w-[calc(100vw-1rem)] flex-wrap items-center justify-center gap-x-2 gap-y-2 rounded-2xl border border-border/40 bg-background/75 px-2.5 py-2 shadow-[0_8px_32px_-12px_rgba(0,0,0,0.35)] backdrop-blur-md dark:border-border/25 dark:bg-background/65 sm:max-w-none sm:flex-nowrap sm:gap-0 sm:rounded-none sm:border-0 sm:bg-transparent sm:px-0 sm:py-0 sm:shadow-none sm:backdrop-blur-none"
+              style={{ zIndex: 60, opacity: 0, visibility: "hidden" }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-5 sm:size-6" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-              </svg>
-            </button>
-            <div
-              className="progress-sub-container z-[60] order-4 flex h-11 w-full min-w-0 max-w-[min(100%,420px)] shrink basis-full items-center sm:order-3 sm:ml-6 sm:h-[50px] sm:w-[500px] sm:max-w-[min(500px,calc(100vw-220px))] sm:basis-auto"
-            >
-              <div className="progress-sub-background h-[4px] w-full overflow-hidden rounded-full bg-foreground/18 sm:h-[3px] sm:bg-foreground/20">
-                <div className="progress-sub-foreground h-[4px] rounded-full bg-[#ecad29] sm:h-[3px]" style={{ width: 0 }} />
+              <button
+                type="button"
+                className="arrow-left z-[60] order-1 grid size-11 shrink-0 touch-manipulation place-items-center rounded-full border border-foreground/20 bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-[transform,colors] active:scale-95 sm:order-1 sm:size-[50px] sm:border-2 sm:border-foreground/25 sm:bg-background/70 sm:text-muted-foreground sm:shadow-none"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-5 sm:size-6" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                </svg>
+              </button>
+              <div
+                id="slide-numbers"
+                className="relative z-[60] order-2 flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden sm:order-4 sm:h-[50px] sm:w-[50px]"
+              />
+              <button
+                type="button"
+                className="arrow-right z-[60] order-3 grid size-11 shrink-0 touch-manipulation place-items-center rounded-full border border-foreground/20 bg-background/85 text-foreground shadow-sm backdrop-blur-sm transition-[transform,colors] active:scale-95 sm:order-2 sm:ml-5 sm:size-[50px] sm:border-2 sm:border-foreground/25 sm:bg-background/70 sm:text-muted-foreground sm:shadow-none"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-5 sm:size-6" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                </svg>
+              </button>
+              <div className="progress-sub-container z-[60] order-4 flex h-11 w-full min-w-0 max-w-[min(100%,420px)] shrink basis-full items-center sm:order-3 sm:ml-6 sm:h-[50px] sm:w-[500px] sm:max-w-[min(500px,calc(100vw-220px))] sm:basis-auto">
+                <div className="progress-sub-background h-[4px] w-full overflow-hidden rounded-full bg-foreground/18 sm:h-[3px] sm:bg-foreground/20">
+                  <div className="progress-sub-foreground h-[4px] rounded-full bg-[#ecad29] sm:h-[3px]" style={{ width: 0 }} />
+                </div>
               </div>
             </div>
-          </div>
           </div>
         </section>
       </main>

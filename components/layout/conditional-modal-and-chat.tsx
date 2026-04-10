@@ -15,7 +15,9 @@ export function ConditionalModalAndChat() {
   return (
     <>
       <ModalRoot />
-      <ChatbotWidget />
+      <ChatbotWidget
+        welcomeMessage="Hi! I'm Trimesha AI. Ask about what we build, our services, or email us at admin@trimesha.com."
+      />
     </>
   )
 }

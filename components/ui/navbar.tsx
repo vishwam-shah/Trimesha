@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { HoveredLink, Menu, MenuItem } from "@/components/ui/navbar-menu";
@@ -8,6 +9,10 @@ import { BookCallButton } from "@/components/ui/animated-button";
 import { Icon } from "@iconify/react";
 import { useModal } from "@/components/ui/animated-modal";
 import { prepareBookingModalTheme } from "@/lib/booking-cta";
+import { ServicesNavDropdown } from "@/components/ui/services-nav-dropdown";
+import { PricingNavDropdown } from "@/components/ui/pricing-nav-dropdown";
+import type { ServiceWithId } from "@/types/service";
+import type { PricingPlanWithId } from "@/types/pricing";
 
 const menuItems = [
   {
@@ -25,6 +30,41 @@ export function Navbar({ className }: { className?: string }) {
   const [active, setActive] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedItem, setExpandedItem] = useState<string | null>(null);
+  const [navServices, setNavServices] = useState<ServiceWithId[] | null>(null);
+  const [navPlans, setNavPlans] = useState<PricingPlanWithId[] | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const [rs, rp] = await Promise.all([
+          fetch("/api/v1/services"),
+          fetch("/api/v1/pricing"),
+        ]);
+        if (cancelled) return;
+        if (rs.ok) {
+          const d = (await rs.json()) as unknown;
+          setNavServices(Array.isArray(d) ? d : []);
+        } else {
+          setNavServices([]);
+        }
+        if (rp.ok) {
+          const d = (await rp.json()) as unknown;
+          setNavPlans(Array.isArray(d) ? d : []);
+        } else {
+          setNavPlans([]);
+        }
+      } catch {
+        if (!cancelled) {
+          setNavServices([]);
+          setNavPlans([]);
+        }
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function openBookingFromMobileMenu() {
     prepareBookingModalTheme();
@@ -37,22 +77,31 @@ export function Navbar({ className }: { className?: string }) {
       <div className="mx-auto max-w-7xl flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center shrink-0">
-          <Link href="/" className="cursor-pointer">
-            <img src="logo/logo_dark.png" alt="Trimesha Logo" className="h-12 sm:h-16 lg:h-28" />
+          <Link
+            href="/"
+            className="cursor-pointer select-none rounded-xl px-2 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-500/60"
+            aria-label="Trimesha home"
+          >
+            <Image
+              src="/logo/logo_dark.png"
+              alt="Trimesha Logo"
+              width={280}
+              height={80}
+              priority
+              className="h-16 w-auto sm:h-24 lg:h-36"
+              sizes="(max-width: 640px) 220px, (max-width: 1024px) 320px, 420px"
+            />
           </Link>
         </div>
 
         {/* Desktop menu - centered */}
         <div className="hidden lg:flex flex-1 justify-center">
           <Menu setActive={setActive}>
-            <div className="flex items-center">
-              <Link
-                href="/services"
-                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
-              >
-                Services
-              </Link>
-            </div>
+            <ServicesNavDropdown
+              setActive={setActive}
+              active={active}
+              services={navServices}
+            />
             <div className="flex items-center">
               <Link
                 href="/products"
@@ -61,14 +110,11 @@ export function Navbar({ className }: { className?: string }) {
                 Products
               </Link>
             </div>
-            <div className="flex items-center">
-              <Link
-                href="/pricing"
-                className="cursor-pointer text-sm font-medium text-black transition-colors hover:text-secondary dark:text-white dark:hover:text-secondary"
-              >
-                Pricing
-              </Link>
-            </div>
+            <PricingNavDropdown
+              setActive={setActive}
+              active={active}
+              plans={navPlans}
+            />
             <MenuItem setActive={setActive} active={active} item="About" href="/about">
               <div className="flex flex-col space-y-4 text-sm">
                 <HoveredLink href="/about">Our Story</HoveredLink>
@@ -164,16 +210,61 @@ export function Navbar({ className }: { className?: string }) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.06 }}
                 >
-                  <Link
-                    href="/services"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedItem(expandedItem === "Services" ? null : "Services")
+                    }
+                    className="flex w-full items-center justify-between rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
-                      <Icon icon="line-md:cog-loop" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                        <Icon icon="ph:stack-duotone" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                      </div>
+                      Services
                     </div>
-                    Services
-                  </Link>
+                    <motion.div
+                      animate={{ rotate: expandedItem === "Services" ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Icon icon="line-md:chevron-down" className="w-5 h-5 text-violet-500" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {expandedItem === "Services" && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="space-y-1 pt-2 pl-2">
+                          {navServices === null ? (
+                            <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                              Loading…
+                            </p>
+                          ) : navServices.length === 0 ? (
+                            <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                              No services listed.
+                            </p>
+                          ) : (
+                            navServices.map((s) => (
+                              <Link
+                                key={s.id}
+                                href={`/services/${s.slug}`}
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center gap-3 rounded-xl p-3 font-medium text-gray-700 transition-colors hover:bg-violet-100/50 dark:text-gray-300 dark:hover:bg-violet-900/20"
+                              >
+                                <span className="size-2 shrink-0 rounded-full bg-violet-400" />
+                                {s.title}
+                              </Link>
+                            ))
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
@@ -196,16 +287,62 @@ export function Navbar({ className }: { className?: string }) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 }}
                 >
-                  <Link
-                    href="/pricing"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex w-full items-center gap-4 rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setExpandedItem(expandedItem === "Pricing" ? null : "Pricing")
+                    }
+                    className="flex w-full items-center justify-between rounded-2xl border border-violet-200/30 bg-white/60 p-4 font-semibold text-gray-800 backdrop-blur-sm transition-colors hover:border-violet-400/50 dark:border-violet-700/30 dark:bg-gray-800/40 dark:text-gray-200"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
-                      <Icon icon="line-md:text-box" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-violet-500/20 to-purple-600/20">
+                        <Icon icon="line-md:text-box" className="h-6 w-6 text-violet-600 dark:text-violet-400" />
+                      </div>
+                      Pricing
                     </div>
-                    Pricing
-                  </Link>
+                    <motion.div
+                      animate={{ rotate: expandedItem === "Pricing" ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Icon icon="line-md:chevron-down" className="w-5 h-5 text-violet-500" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {expandedItem === "Pricing" && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="space-y-1 pt-2 pl-2">
+                          {navPlans === null ? (
+                            <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                              Loading…
+                            </p>
+                          ) : navPlans.length === 0 ? (
+                            <p className="px-3 py-2 text-sm text-gray-500 dark:text-gray-400">
+                              No plans listed.
+                            </p>
+                          ) : (
+                            navPlans.map((p) => (
+                              <Link
+                                key={p.id}
+                                href="/pricing"
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center gap-3 rounded-xl p-3 font-medium text-gray-700 transition-colors hover:bg-violet-100/50 dark:text-gray-300 dark:hover:bg-violet-900/20"
+                              >
+                                <span className="size-2 shrink-0 rounded-full bg-violet-400" />
+                                {p.name}
+                                {p.nameSecondary ? ` (${p.nameSecondary})` : ""}
+                              </Link>
+                            ))
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
                 <motion.div
                   initial={{ opacity: 0, x: 50 }}
