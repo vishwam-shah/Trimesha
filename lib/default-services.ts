@@ -7,7 +7,7 @@ export const DEFAULT_SERVICES: Omit<Service, "sortOrder">[] = SERVICES.map(
     slug: s.id,
     title: s.title,
     description: s.description,
-    image: s.image,
+    image: "",
     color: s.color,
     overview: s.details.overview,
     deliverables: s.details.deliverables,

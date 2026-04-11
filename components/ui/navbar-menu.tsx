@@ -3,6 +3,7 @@ import React from "react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 
 const transition = {
   type: "spring" as const,
@@ -19,12 +20,14 @@ export const MenuItem = ({
   item,
   children,
   href,
+  contentClassName,
 }: {
   setActive: (item: string) => void;
   active: string | null;
   item: string;
   children?: React.ReactNode;
   href?: string;
+  contentClassName?: string;
 }) => {
   const content = (
     <motion.p
@@ -54,12 +57,12 @@ export const MenuItem = ({
             <div className="absolute top-[calc(100%+1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
               <motion.div
                 transition={transition}
-                layoutId="active"
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/20 dark:border-white/20 shadow-xl"
+                layoutId={`nav-dropdown-${item}`}
+                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/20 dark:border-white/20 shadow-2xl shadow-black/10 dark:shadow-black/40"
               >
                 <motion.div
                   layout
-                  className="w-max h-full p-4"
+                  className={cn("w-max h-full p-4", contentClassName)}
                 >
                   {children}
                 </motion.div>

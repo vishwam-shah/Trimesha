@@ -21,6 +21,7 @@ import {
   opensBookingModal,
   prepareBookingModalTheme,
 } from "@/lib/booking-cta";
+import { GlowingShadow } from "@/components/ui/glowing-shadow";
 
 export function PricingTiers() {
   const { setOpen } = useModal();
@@ -68,7 +69,7 @@ export function PricingTiers() {
   return (
     <section
       id="packages"
-      className="relative overflow-hidden bg-background px-4 py-16 sm:px-6 sm:py-24 lg:py-28"
+      className="relative overflow-x-hidden bg-background px-4 py-16 sm:px-6 sm:py-24 lg:py-28"
     >
       <div className="pointer-events-none absolute inset-0 opacity-25 dark:opacity-[0.07]">
         <Spotlight
@@ -88,31 +89,16 @@ export function PricingTiers() {
           </p>
         </div>
 
-        <div className="grid gap-8 lg:grid-cols-3 lg:gap-6 lg:items-stretch">
-          {plans.map((plan, index) => (
-            <motion.div
-              key={plan.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ delay: index * 0.08, duration: 0.5 }}
-              className={cn(
-                "relative flex",
-                plan.highlighted && "lg:-mt-2 lg:mb-2",
-              )}
-            >
-              {plan.highlighted ? (
-                <div
-                  aria-hidden
-                  className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-violet-500 via-purple-500 to-blue-500 opacity-90 blur-[1px]"
-                />
-              ) : null}
+        <div className="grid gap-10 lg:grid-cols-3 lg:gap-8 lg:items-stretch lg:py-2">
+          {plans.map((plan, index) => {
+            const ctaLabel = opensBookingModal(plan.ctaUrl)
+              ? "Get a Quote"
+              : plan.ctaLabel;
+            const card = (
               <Card
                 className={cn(
-                  "relative flex w-full flex-col rounded-2xl border bg-card/95 text-card-foreground shadow-lg backdrop-blur-sm dark:bg-card/80",
-                  plan.highlighted
-                    ? "border-violet-500/50 shadow-violet-500/20 ring-1 ring-violet-500/30"
-                    : "border-border/60",
+                  "relative z-[1] flex h-full min-h-0 w-full flex-1 flex-col rounded-[14px] border-0 shadow-none bg-card text-card-foreground",
+                  plan.highlighted && "rounded-[13px]",
                 )}
               >
                 {plan.highlighted ? (
@@ -169,7 +155,7 @@ export function PricingTiers() {
                       variant={plan.highlighted ? "default" : "outline"}
                       onClick={openBooking}
                     >
-                      {plan.ctaLabel}
+                      {ctaLabel}
                     </Button>
                   ) : (
                     <Button
@@ -182,13 +168,31 @@ export function PricingTiers() {
                       )}
                       variant={plan.highlighted ? "default" : "outline"}
                     >
-                      <Link href={plan.ctaUrl}>{plan.ctaLabel}</Link>
+                      <Link href={plan.ctaUrl}>{ctaLabel}</Link>
                     </Button>
                   )}
                 </CardFooter>
               </Card>
+            );
+            return (
+            <motion.div
+              key={plan.id}
+              id={`pricing-plan-${plan.id}`}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ delay: index * 0.08, duration: 0.5 }}
+              className={cn(
+                "relative flex h-full min-h-0 w-full scroll-mt-28 flex-col p-2 sm:p-3",
+                plan.highlighted && "lg:-mt-2 lg:mb-2",
+              )}
+            >
+              <GlowingShadow variant="card" className="min-h-0 flex-1 flex-col">
+                {card}
+              </GlowingShadow>
             </motion.div>
-          ))}
+          );
+          })}
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,6 +27,10 @@ export default function DashboardCareersPage() {
   const [msg, setMsg] = useState<string | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [aiLoading, setAiLoading] = useState(false);
+  const autoFilledRef = useRef(false);
+  const formRef = useRef(form);
+  formRef.current = form;
 
   async function load() {
     const r = await fetch("/api/v1/careers");
@@ -64,7 +69,94 @@ export default function DashboardCareersPage() {
     setForm(empty);
     setMsg(null);
     setErr(null);
+    autoFilledRef.current = false;
   }
+
+  async function fillFromAi(
+    title: string,
+    opts?: { force?: boolean; creatingOnly?: boolean },
+  ) {
+    const force = opts?.force ?? false;
+    const creatingOnly = opts?.creatingOnly ?? false;
+    const t = title.trim();
+    if (t.length < 2) {
+      setErr("Enter a job title first.");
+      return;
+    }
+    if (!force && autoFilledRef.current) return;
+    const currentId = formRef.current.id;
+    if (creatingOnly && currentId) return;
+    if (!force && !creatingOnly && currentId) return;
+
+    setErr(null);
+    setAiLoading(true);
+    try {
+      const r = await fetch("/api/v1/admin/careers/suggest", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: t }),
+      });
+      const data = (await r.json().catch(() => ({}))) as Record<
+        string,
+        unknown
+      >;
+      if (!r.ok) {
+        setErr(
+          typeof data.error === "string"
+            ? data.error
+            : "Could not generate listing fields.",
+        );
+        return;
+      }
+
+      const benefitsArr = Array.isArray(data.benefits)
+        ? data.benefits.map((x) => String(x))
+        : [];
+      const tagsArr = Array.isArray(data.tags)
+        ? data.tags.map((x) => String(x))
+        : [];
+
+      setForm((f) => ({
+        ...f,
+        type: typeof data.type === "string" ? data.type : f.type,
+        experience:
+          typeof data.experience === "string" ? data.experience : f.experience,
+        compensation:
+          typeof data.compensation === "string"
+            ? data.compensation
+            : f.compensation,
+        description:
+          typeof data.description === "string"
+            ? data.description
+            : f.description,
+        benefitsStr: benefitsArr.filter(Boolean).join(", "),
+        tagsStr: tagsArr.filter(Boolean).join(", "),
+      }));
+      autoFilledRef.current = true;
+      setMsg(
+        force
+          ? "Fields regenerated with Gemini. Review and save."
+          : "Fields auto-filled from the job title. Review and save.",
+      );
+    } finally {
+      setAiLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    if (form.id) return;
+    if (autoFilledRef.current) return;
+    const title = form.title.trim();
+    if (title.length < 4) return;
+    if (form.description.trim().length > 0) return;
+
+    const t = window.setTimeout(() => {
+      void fillFromAi(title, { creatingOnly: true });
+    }, 1100);
+
+    return () => window.clearTimeout(t);
+  }, [form.title, form.description, form.id]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -154,15 +246,33 @@ export default function DashboardCareersPage() {
         <form onSubmit={submit} className="grid gap-4">
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2 sm:col-span-2">
-              <Label htmlFor="title">Job title</Label>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Label htmlFor="title">Job title</Label>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  className="gap-1.5"
+                  disabled={aiLoading || form.title.trim().length < 2}
+                  onClick={() => {
+                    autoFilledRef.current = false;
+                    void fillFromAi(form.title, { force: true });
+                  }}
+                >
+                  <Sparkles className="size-3.5" />
+                  {aiLoading ? "Generating…" : "Fill with Gemini"}
+                </Button>
+              </div>
               <Input
                 id="title"
                 value={form.title}
-                onChange={(e) =>
-                  setForm((f) => ({ ...f, title: e.target.value }))
-                }
+                onChange={(e) => {
+                  autoFilledRef.current = false;
+                  setForm((f) => ({ ...f, title: e.target.value }));
+                }}
                 required
               />
+              
             </div>
             <div className="space-y-2">
               <Label htmlFor="type">Type</Label>

@@ -43,14 +43,14 @@ export function CareersHero() {
             />
 
             {/* Content */}
-            <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+            <div className="relative z-10 mx-auto max-w-6xl px-4 text-center sm:px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8 }}
                 >
                     <motion.h1
-                        className="text-5xl md:text-7xl font-bold mb-6 text-foreground"
+                        className="mb-6 text-balance text-3xl font-bold text-foreground sm:text-5xl md:text-7xl"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.8 }}
@@ -61,12 +61,12 @@ export function CareersHero() {
                     </motion.h1>
 
                     <motion.p
-                        className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-3xl mx-auto leading-relaxed"
+                        className="mx-auto mb-8 max-w-3xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-xl md:text-2xl"
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
                     >
-                        Shape the future of AI and digital technology. We're looking for passionate individuals who want to make a real impact.
+                        Shape the future of AI and digital technology. We&apos;re looking for passionate individuals who want to make a real impact.
                     </motion.p>
 
                     <motion.div

@@ -38,7 +38,7 @@ export function PricingHero() {
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 text-center">
+      <div className="relative z-10 mx-auto max-w-6xl px-4 text-center sm:px-6">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,7 +48,7 @@ export function PricingHero() {
             AI packages
           </p>
           <motion.h1
-            className="mb-6 text-4xl font-bold tracking-tight text-foreground md:text-6xl lg:text-7xl"
+            className="mb-6 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-6xl lg:text-7xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.8 }}
@@ -60,7 +60,7 @@ export function PricingHero() {
             </span>
           </motion.h1>
           <motion.p
-            className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground md:text-xl"
+            className="mx-auto mb-8 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg md:text-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.8 }}

@@ -1,6 +1,6 @@
 /**
- * Admin `ctaUrl` values that should open the Calendly booking modal
- * (stay on the current page) instead of navigating away.
+ * Admin `ctaUrl` values that should open the booking modal (stay on the page)
+ * instead of navigating away.
  */
 export function opensBookingModal(url: string): boolean {
   const u = url.trim().toLowerCase();
@@ -14,12 +14,7 @@ export function opensBookingModal(url: string): boolean {
   return false;
 }
 
-/** Match BookCallButton: modal looks best in dark theme. */
+/** Booking UI follows site light/dark; reserved for future tweaks. */
 export function prepareBookingModalTheme() {
-  if (
-    typeof document !== "undefined" &&
-    !document.documentElement.classList.contains("dark")
-  ) {
-    document.documentElement.classList.add("dark");
-  }
+  /* no-op */
 }

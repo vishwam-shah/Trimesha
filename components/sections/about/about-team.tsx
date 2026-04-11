@@ -2,6 +2,7 @@
 
 import { motion } from "motion/react";
 import { useState } from "react";
+import Link from "next/link";
 import { Icon } from "@iconify/react";
 
 export function AboutTeam() {
@@ -47,7 +48,7 @@ export function AboutTeam() {
                 <div className="absolute inset-0 bg-[linear-gradient(to_right,rgb(139,92,246)_1px,transparent_1px),linear-gradient(to_bottom,rgb(139,92,246)_1px,transparent_1px)] bg-[size:80px_80px]" />
             </div>
 
-            <div className="relative z-10 max-w-7xl mx-auto px-6">
+            <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6">
                 <motion.div
                     className="text-center mb-16"
                     initial={{ opacity: 0, y: 20 }}
@@ -211,7 +212,7 @@ export function AboutTeam() {
                         Ready to Build Something Amazing?
                     </h3>
                     <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-                        Let's turn your vision into reality. Our team is ready to discuss your project.
+                        Let&apos;s turn your vision into reality. Our team is ready to discuss your project.
                     </p>
                     <div className="flex flex-wrap gap-4 justify-center">
                         <a
@@ -223,12 +224,12 @@ export function AboutTeam() {
                                 <Icon icon="mdi:arrow-right" className="w-5 h-5" />
                             </span>
                         </a>
-                        <a
+                        <Link
                             href="/services"
                             className="px-8 py-4 border-2 border-purple-600 text-purple-600 dark:text-purple-400 dark:border-purple-400 font-semibold rounded-xl hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white dark:hover:border-purple-600 transition-all"
                         >
                             View Our Services
-                        </a>
+                        </Link>
                     </div>
                 </motion.div>
             </div>
