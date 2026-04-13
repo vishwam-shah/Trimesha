@@ -1,10 +1,8 @@
 import { SERVICES } from "@/lib/services-data";
 import { DEFAULT_PRODUCT_SLIDES } from "@/lib/default-products";
 
-/** Mirrors public marketing copy so the assistant stays aligned with the site. */
 export const CHATBOT_SITE_COPY = {
   name: "Trimesha",
-  heroEyebrow: "Next-Gen AI Development",
   heroTitle:
     "AI-Powered Solutions That Scale Your Vision Into Reality",
   heroSubtitle:
@@ -47,11 +45,9 @@ function formatProductsForPrompt(): string {
     .join("\n");
 }
 
-/** Factual context block injected into the model system instruction (no secrets). */
 export function buildChatbotKnowledgeBlock(): string {
   return `
 ## About ${CHATBOT_SITE_COPY.name}
-- **Positioning:** ${CHATBOT_SITE_COPY.heroEyebrow}
 - **Headline:** ${CHATBOT_SITE_COPY.heroTitle}
 - **Supporting line:** ${CHATBOT_SITE_COPY.heroSubtitle}
 - **What we offer (section lead):** ${CHATBOT_SITE_COPY.featuresLead}
@@ -87,7 +83,7 @@ You are ${CHATBOT_SITE_COPY.name}'s helpful website assistant. Answer only from 
 - When recommending a page, give the path in backticks (e.g. \`/pricing\`) so users can find it in the site nav.
 
 ## Bookings / calls
-The site uses a **Book a call / Get Started** flow in the UI (modal). If users want to schedule or start a project, tell them to use **Get Started** or **Book a call** on the site, and mention \`/services\` or \`/pricing\` as needed.
+**Book a call** and **Get Started** open the on-site booking modal. With \`NEXT_PUBLIC_CALENDLY_EVENT_URL\` set, invitees pick a real time in an embedded **Calendly** widget; the event syncs to the team calendar (no prefilled Google Calendar draft links in email). If users want to schedule or start a project, point them to **Book a call**, **Get Started**, or \`/services\` / \`/pricing\` as needed.
 
 ## Boundaries
 - Do not invent pricing numbers, deadlines, or legal promises unless they appear in the knowledge above.

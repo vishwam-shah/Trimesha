@@ -28,7 +28,7 @@ export const DEFAULT_PRICING_PLANS: Omit<
     tagline: "The Scale",
     priceDisplay: "Most teams start here",
     description:
-      "One tier with two names: Catalyst AI for go-to-market acceleration, or Velocity AI for operational throughput. Most teams pick Catalyst.",
+      "Catalyst AI for go-to-market acceleration and operational throughput at scale—our most popular tier for growing teams.",
     features: [
       "Multi-workflow automation & orchestration",
       "Advanced models, guardrails, and evals",

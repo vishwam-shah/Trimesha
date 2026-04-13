@@ -82,7 +82,7 @@ export function PricingTiers() {
       <div className="relative z-10 mx-auto max-w-7xl">
         <div className="mb-12 text-center">
           <h2 className="text-3xl font-bold tracking-tight text-foreground md:text-4xl">
-            Transparent tiers
+            Our Pricing
           </h2>
           <p className="mt-3 text-muted-foreground md:text-lg">
             Catalyst AI is our most popular package for teams ready to scale.
@@ -113,11 +113,6 @@ export function PricingTiers() {
                   <CardTitle className="mt-1 text-2xl md:text-3xl">
                     {plan.name}
                   </CardTitle>
-                  {plan.nameSecondary ? (
-                    <p className="text-sm font-medium text-purple-600 dark:text-purple-400">
-                      or {plan.nameSecondary}
-                    </p>
-                  ) : null}
                   <CardDescription className="text-base font-medium text-foreground/90">
                     {plan.tagline}
                   </CardDescription>
@@ -187,7 +182,11 @@ export function PricingTiers() {
                 plan.highlighted && "lg:-mt-2 lg:mb-2",
               )}
             >
-              <GlowingShadow variant="card" className="min-h-0 flex-1 flex-col">
+              <GlowingShadow
+                variant="card"
+                animatedOrbit={plan.highlighted}
+                className="min-h-0 flex-1 flex-col"
+              >
                 {card}
               </GlowingShadow>
             </motion.div>

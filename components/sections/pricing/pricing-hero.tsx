@@ -65,8 +65,8 @@ export function PricingHero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35, duration: 0.8 }}
           >
-            From pilot to enterprise, LaunchPad, Catalyst or Velocity, and
-            Supreme AI are built to match how your team grows.
+            From pilot to enterprise, LaunchPad, Catalyst, and Supreme AI are
+            built to match how your team grows.
           </motion.p>
           <motion.div
             className="flex flex-wrap items-center justify-center gap-4"

@@ -64,12 +64,6 @@ export function PricingNavDropdown({
                   <div className="min-w-0 flex-1 pt-0.5">
                     <span className="block text-sm font-semibold text-foreground group-hover:text-violet-700 dark:group-hover:text-violet-300">
                       {plan.name}
-                      {plan.nameSecondary ? (
-                        <span className="font-normal text-muted-foreground">
-                          {" "}
-                          ({plan.nameSecondary})
-                        </span>
-                      ) : null}
                     </span>
                     <span className="mt-0.5 block text-xs font-medium text-violet-600 dark:text-violet-400">
                       {plan.tagline}, {plan.priceDisplay}
