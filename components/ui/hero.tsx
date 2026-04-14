@@ -14,7 +14,7 @@ interface HeroProps {
 }
 
 export function Hero({
-  eyebrow = "Innovate Without Limits",
+  eyebrow,
   title,
   subtitle,
   ctaLabel = "Explore Now",

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { format, startOfToday } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -53,10 +53,52 @@ const timeSlots = [
   "05:30 PM",
 ];
 
-function parseDurationMinutes(duration: string): number {
-  const m = /^(\d+)/.exec(duration.trim());
-  return m ? parseInt(m[1], 10) : 30;
+function calendlyBaseFromEnv(): string | null {
+  const u = process.env.NEXT_PUBLIC_CALENDLY_EVENT_URL?.trim();
+  return u || null;
 }
+
+function buildPrefilledCalendlyUrl(
+  base: string,
+  fd: { name: string; email: string },
+): string {
+  try {
+    const u = new URL(base);
+    if (fd.name.trim()) u.searchParams.set("name", fd.name.trim());
+    if (fd.email.trim()) u.searchParams.set("email", fd.email.trim());
+    return u.toString();
+  } catch {
+    return base;
+  }
+}
+
+function ensureCalendlyScript(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof window === "undefined") {
+      resolve();
+      return;
+    }
+    const w = window as unknown as { Calendly?: { initInlineWidget?: unknown } };
+    if (w.Calendly?.initInlineWidget) {
+      resolve();
+      return;
+    }
+    const src = "https://assets.calendly.com/assets/external/widget.js";
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.onload = () => resolve();
+    document.body.appendChild(script);
+  });
+}
+
+type StepLegacy = "datetime" | "details" | "confirmed";
+type StepCalendly = "details" | "calendly" | "confirmed";
 
 export default function BookingCalendar({
   open,
@@ -65,14 +107,22 @@ export default function BookingCalendar({
   duration = "30 minutes",
   price = "Complimentary",
 }: BookingCalendarProps) {
-  const [step, setStep] = useState<"datetime" | "details" | "confirmed">(
-    "datetime",
+  const calendlyBase = useMemo(() => calendlyBaseFromEnv(), []);
+  const useCalendly = calendlyBase != null;
+
+  const [stepLegacy, setStepLegacy] = useState<StepLegacy>("datetime");
+  const [stepCal, setStepCal] = useState<StepCalendly>("details");
+  const [lockedCalendlyUrl, setLockedCalendlyUrl] = useState<string | null>(
+    null,
   );
+  const calendlyNotifyDone = useRef(false);
+
+  const step = useCalendly ? stepCal : stepLegacy;
+
   const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  /** After successful submit: whether Resend actually sent mail (false if API key missing). */
   const [emailsDispatched, setEmailsDispatched] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
@@ -81,15 +131,20 @@ export default function BookingCalendar({
     notes: "",
   });
 
+  const calendlyParentRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!open) {
-      setStep("datetime");
+      setStepLegacy("datetime");
+      setStepCal("details");
+      setLockedCalendlyUrl(null);
       setSelectedDate(undefined);
       setSelectedTime(null);
       setFormData({ name: "", email: "", phone: "", notes: "" });
       setSubmitting(false);
       setSubmitError(null);
       setEmailsDispatched(false);
+      calendlyNotifyDone.current = false;
     }
   }, [open]);
 
@@ -100,52 +155,25 @@ export default function BookingCalendar({
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);
-    window.setTimeout(() => setStep("details"), 280);
+    window.setTimeout(() => setStepLegacy("details"), 280);
   };
 
-  const createGoogleCalendarEvent = () => {
-    if (!selectedDate || !selectedTime) return "";
-    const [timePart, period] = selectedTime.split(" ");
-    if (!timePart || !period) return "";
-    let [hours, minutes] = timePart.split(":").map(Number);
-    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return "";
-    if (period === "PM" && hours !== 12) hours += 12;
-    if (period === "AM" && hours === 12) hours = 0;
-    const startDate = new Date(selectedDate);
-    startDate.setHours(hours, minutes, 0, 0);
-    const endDate = new Date(startDate);
-    endDate.setMinutes(
-      endDate.getMinutes() + parseDurationMinutes(duration),
-    );
-    const formatGoogleDate = (d: Date) =>
-      d.toISOString().replace(/-|:|\.\d\d\d/g, "");
-    const params = new URLSearchParams({
-      action: "TEMPLATE",
-      text: `${packageTitle} · Trimesha`,
-      details: `Session with Trimesha\n\nPackage: ${packageTitle}\nDuration: ${duration}\nPrice: ${price}\n\nGuest: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nNotes: ${formData.notes || "N/A"}`,
-      dates: `${formatGoogleDate(startDate)}/${formatGoogleDate(endDate)}`,
-      location: "Video call (link sent by email)",
-    });
-    return `https://calendar.google.com/calendar/render?${params.toString()}`;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const submitLegacyBooking = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
     setSubmitError(null);
     try {
-      const calendarUrl = createGoogleCalendarEvent();
       const res = await fetch("/api/v1/booking-request", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          source: "site",
           packageTitle,
           duration,
           price,
           date: selectedDate?.toISOString(),
           time: selectedTime,
           ...formData,
-          googleCalendarUrl: calendarUrl,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as {
@@ -157,7 +185,7 @@ export default function BookingCalendar({
         return;
       }
       setEmailsDispatched(data.emailed === true);
-      setStep("confirmed");
+      setStepLegacy("confirmed");
     } catch {
       setSubmitError("Network error. Check your connection and try again.");
     } finally {
@@ -165,18 +193,128 @@ export default function BookingCalendar({
     }
   };
 
+  const notifyCalendlyBooked = useCallback(
+    async (payload: {
+      calendlyEventUri: string;
+      calendlyInviteeUri: string;
+    }) => {
+      setSubmitting(true);
+      setSubmitError(null);
+      try {
+        const res = await fetch("/api/v1/booking-request", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            source: "calendly",
+            packageTitle,
+            duration,
+            price,
+            ...formData,
+            calendlyEventUri: payload.calendlyEventUri,
+            calendlyInviteeUri: payload.calendlyInviteeUri,
+          }),
+        });
+        const data = (await res.json().catch(() => ({}))) as {
+          error?: string;
+          emailed?: boolean;
+        };
+        if (!res.ok) {
+          setSubmitError(data.error ?? "Something went wrong. Please try again.");
+          return;
+        }
+        setEmailsDispatched(data.emailed === true);
+      } catch {
+        setSubmitError("Network error. Check your connection and try again.");
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    [duration, formData, packageTitle, price],
+  );
+
+  useEffect(() => {
+    if (!open || !useCalendly || stepCal !== "calendly" || !lockedCalendlyUrl) {
+      return;
+    }
+    const parent = calendlyParentRef.current;
+    if (!parent) return;
+    let cancelled = false;
+    (async () => {
+      await ensureCalendlyScript();
+      if (cancelled || !parent) return;
+      parent.innerHTML = "";
+      const w = window as unknown as {
+        Calendly?: {
+          initInlineWidget: (opts: {
+            url: string;
+            parentElement: HTMLElement;
+          }) => void;
+        };
+      };
+      w.Calendly?.initInlineWidget({
+        url: lockedCalendlyUrl,
+        parentElement: parent,
+      });
+    })();
+    return () => {
+      cancelled = true;
+      parent.innerHTML = "";
+    };
+  }, [open, useCalendly, stepCal, lockedCalendlyUrl]);
+
+  useEffect(() => {
+    if (!open || !useCalendly || stepCal !== "calendly") return;
+
+    const onMessage = (e: MessageEvent) => {
+      const data = e.data as { event?: string; payload?: unknown } | undefined;
+      if (data?.event !== "calendly.event_scheduled") return;
+      if (calendlyNotifyDone.current) return;
+      calendlyNotifyDone.current = true;
+      const payload = data.payload as
+        | {
+            event?: { uri?: string };
+            invitee?: { uri?: string };
+          }
+        | undefined;
+      const calendlyEventUri = payload?.event?.uri ?? "";
+      const calendlyInviteeUri = payload?.invitee?.uri ?? "";
+      void notifyCalendlyBooked({ calendlyEventUri, calendlyInviteeUri });
+      setStepCal("confirmed");
+    };
+
+    window.addEventListener("message", onMessage);
+    return () => window.removeEventListener("message", onMessage);
+  }, [open, useCalendly, stepCal, notifyCalendlyBooked]);
+
   const resetBooking = () => onOpenChange(false);
 
   const handleBack = () => {
-    if (step === "details") setStep("datetime");
+    if (useCalendly) {
+      if (stepCal === "calendly") setStepCal("details");
+      return;
+    }
+    if (stepLegacy === "details") setStepLegacy("datetime");
   };
+
+  const goToCalendlyFromDetails = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!calendlyBase) return;
+    calendlyNotifyDone.current = false;
+    const url = buildPrefilledCalendlyUrl(calendlyBase, formData);
+    setLockedCalendlyUrl(url);
+    setStepCal("calendly");
+  };
+
+  const showDetailsBack =
+    (useCalendly && stepCal === "calendly") ||
+    (!useCalendly && stepLegacy === "details");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[92vh] max-w-5xl overflow-y-auto border-violet-200/30 bg-background dark:border-violet-800/40">
         <DialogHeader>
           <div className="flex items-start gap-3">
-            {step === "details" ? (
+            {showDetailsBack ? (
               <Button
                 type="button"
                 variant="ghost"
@@ -190,9 +328,24 @@ export default function BookingCalendar({
             ) : null}
             <div className="min-w-0 flex-1">
               <DialogTitle className="text-xl font-bold tracking-tight text-foreground sm:text-2xl">
-                {step === "confirmed" ? "You are booked" : packageTitle}
+                {step === "confirmed"
+                  ? "You are booked"
+                  : useCalendly && step === "calendly"
+                    ? "Pick a time"
+                    : packageTitle}
               </DialogTitle>
-              {step === "datetime" ? (
+              {useCalendly && step === "details" ? (
+                <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
+                  <span className="inline-flex items-center gap-1">
+                    <Clock className="size-3.5 text-violet-600 dark:text-violet-400" />
+                    {duration}
+                  </span>
+                  <span className="font-semibold text-violet-600 dark:text-violet-400">
+                    {price}
+                  </span>
+                </div>
+              ) : null}
+              {!useCalendly && stepLegacy === "datetime" ? (
                 <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-muted-foreground">
                   <span className="inline-flex items-center gap-1">
                     <Clock className="size-3.5 text-violet-600 dark:text-violet-400" />
@@ -205,21 +358,39 @@ export default function BookingCalendar({
               ) : null}
               {step === "details" ? (
                 <DialogDescription className="mt-1">
-                  Add your details so we can confirm your call.
+                  {useCalendly
+                    ? "Add your details, then choose an available slot. The meeting is created in Calendly and syncs to our calendar."
+                    : "Add your details so we can confirm your call."}
+                </DialogDescription>
+              ) : null}
+              {useCalendly && step === "calendly" ? (
+                <DialogDescription className="mt-1">
+                  Select a time below. You will receive a confirmation from
+                  Calendly with the video link and calendar invite.
                 </DialogDescription>
               ) : null}
               {step === "confirmed" ? (
                 <DialogDescription className="mt-1">
-                  {emailsDispatched
-                    ? "Check your inbox for a confirmation. We will send the video link and any prep details before your call."
-                    : "Your timeslot is saved. Email delivery is not configured on this server yet. Please email admin@trimesha.com so we can confirm your call."}
+                  {useCalendly
+                    ? emailsDispatched
+                      ? "We emailed you a short summary. Calendly also sends the official confirmation and adds the event to calendars."
+                      : "Your time is reserved in Calendly. Email delivery from this server may be off; you should still get Calendly’s confirmation."
+                    : emailsDispatched
+                      ? "Check your inbox for a confirmation. We will send the video link and any prep details before your call."
+                      : "Your request is saved. Email delivery is not configured on this server yet. Please email admin@trimesha.com so we can confirm your call."}
                 </DialogDescription>
               ) : null}
             </div>
           </div>
         </DialogHeader>
 
-        {step === "datetime" ? (
+        {useCalendly && stepCal === "calendly" ? (
+          <div className="min-h-[min(640px,70vh)] w-full">
+            <div ref={calendlyParentRef} className="min-h-[min(640px,70vh)] w-full" />
+          </div>
+        ) : null}
+
+        {!useCalendly && stepLegacy === "datetime" ? (
           <div className="grid gap-6 md:grid-cols-2">
             <div>
               <h3 className="mb-3 text-base font-semibold text-foreground">
@@ -273,39 +444,46 @@ export default function BookingCalendar({
 
         {step === "details" ? (
           <div className="space-y-6">
-            <Card className="border-violet-500/25 bg-gradient-to-br from-violet-500/5 via-transparent to-blue-500/5 dark:border-violet-500/30">
-              <CardContent className="p-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex flex-wrap items-center gap-4">
-                    <div className="flex items-center gap-2">
-                      <CalendarIcon className="size-[18px] text-violet-600 dark:text-violet-400" />
-                      <span className="font-semibold text-foreground">
-                        {selectedDate
-                          ? format(selectedDate, "MMM d, yyyy")
-                          : ""}
-                      </span>
+            {!useCalendly ? (
+              <Card className="border-violet-500/25 bg-gradient-to-br from-violet-500/5 via-transparent to-blue-500/5 dark:border-violet-500/30">
+                <CardContent className="p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex flex-wrap items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <CalendarIcon className="size-[18px] text-violet-600 dark:text-violet-400" />
+                        <span className="font-semibold text-foreground">
+                          {selectedDate
+                            ? format(selectedDate, "MMM d, yyyy")
+                            : ""}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="size-[18px] text-violet-600 dark:text-violet-400" />
+                        <span className="font-semibold text-foreground">
+                          {selectedTime}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="size-[18px] text-violet-600 dark:text-violet-400" />
-                      <span className="font-semibold text-foreground">
-                        {selectedTime}
-                      </span>
-                    </div>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setStepLegacy("datetime")}
+                      className="text-violet-600 hover:bg-violet-500/10 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
+                    >
+                      Change
+                    </Button>
                   </div>
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => setStep("datetime")}
-                    className="text-violet-600 hover:bg-violet-500/10 hover:text-violet-700 dark:text-violet-400 dark:hover:text-violet-300"
-                  >
-                    Change
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            ) : null}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onSubmit={
+                useCalendly ? goToCalendlyFromDetails : submitLegacyBooking
+              }
+              className="space-y-4"
+            >
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="bk-name">Full name *</Label>
@@ -368,20 +546,26 @@ export default function BookingCalendar({
                 </p>
               ) : null}
               <div className="flex flex-col gap-3 pt-2 sm:flex-row">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setStep("datetime")}
-                  className="flex-1 border-violet-300/50 dark:border-violet-700/50"
-                >
-                  Back
-                </Button>
+                {useCalendly ? null : (
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setStepLegacy("datetime")}
+                    className="flex-1 border-violet-300/50 dark:border-violet-700/50"
+                  >
+                    Back
+                  </Button>
+                )}
                 <Button
                   type="submit"
                   disabled={submitting}
                   className="flex-1 bg-violet-600 text-white hover:bg-violet-700 dark:bg-violet-600 dark:hover:bg-violet-500"
                 >
-                  {submitting ? "Sending…" : "Confirm booking"}
+                  {useCalendly
+                    ? "Continue to schedule"
+                    : submitting
+                      ? "Sending…"
+                      : "Confirm booking"}
                 </Button>
               </div>
             </form>
@@ -400,7 +584,21 @@ export default function BookingCalendar({
                 All set
               </h3>
               <p className="text-muted-foreground">
-                {emailsDispatched ? (
+                {useCalendly ? (
+                  <>
+                    {formData.email ? (
+                      <>
+                        Details were sent for{" "}
+                        <span className="font-semibold text-foreground">
+                          {formData.email}
+                        </span>
+                        .{" "}
+                      </>
+                    ) : null}
+                    Use the Calendly email for your exact time, link, and
+                    calendar invite.
+                  </>
+                ) : emailsDispatched ? (
                   <>
                     A confirmation has been sent to{" "}
                     <span className="font-semibold text-foreground">
@@ -442,21 +640,28 @@ export default function BookingCalendar({
                     <p className="text-sm text-muted-foreground">Trimesha</p>
                   </div>
                 </div>
-                <div className="space-y-3 text-left">
-                  <div className="flex items-center gap-3">
-                    <CalendarIcon className="size-[18px] text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      {selectedDate &&
-                        format(selectedDate, "EEEE, MMMM d, yyyy")}
-                    </span>
+                {useCalendly ? (
+                  <p className="text-left text-sm text-muted-foreground">
+                    Time and meeting link are in your Calendly confirmation. The
+                    event appears on our calendar through Calendly.
+                  </p>
+                ) : (
+                  <div className="space-y-3 text-left">
+                    <div className="flex items-center gap-3">
+                      <CalendarIcon className="size-[18px] text-muted-foreground" />
+                      <span className="font-medium text-foreground">
+                        {selectedDate &&
+                          format(selectedDate, "EEEE, MMMM d, yyyy")}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Clock className="size-[18px] text-muted-foreground" />
+                      <span className="font-medium text-foreground">
+                        {selectedTime} ({duration})
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <Clock className="size-[18px] text-muted-foreground" />
-                    <span className="font-medium text-foreground">
-                      {selectedTime} ({duration})
-                    </span>
-                  </div>
-                </div>
+                )}
                 <div className="flex items-center justify-between border-t border-border pt-4">
                   <span className="text-muted-foreground">Listed as</span>
                   <span className="text-xl font-bold text-violet-600 dark:text-violet-400">
@@ -466,18 +671,6 @@ export default function BookingCalendar({
               </CardContent>
             </Card>
             <div className="mx-auto flex max-w-md flex-col gap-3">
-              <Button
-                type="button"
-                variant="outline"
-                className="border-violet-300/50 dark:border-violet-700/50"
-                onClick={() => {
-                  const url = createGoogleCalendarEvent();
-                  if (url) window.open(url, "_blank", "noopener,noreferrer");
-                }}
-              >
-                <CalendarIcon className="mr-2 size-4" />
-                Add to Google Calendar
-              </Button>
               <Button
                 type="button"
                 onClick={resetBooking}

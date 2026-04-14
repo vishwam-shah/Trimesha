@@ -7,7 +7,6 @@ export function HeroSection() {
     <Hero
       title="AI-Powered Solutions That Scale Your Vision Into Reality"
       subtitle="From concept to deployment, we craft intelligent custom software that transforms challenges into opportunities and accelerates your growth"
-      eyebrow="Next-Gen AI Development"
       ctaLabel="Get Started"
     />
   );

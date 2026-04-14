@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Pricing | Trimesha | LaunchPad, Catalyst and Supreme AI",
   description:
-    "Compare LaunchPad AI (The Pilot), Catalyst / Velocity AI (The Scale), and Supreme AI (The Pinnacle). Catalyst is our most popular tier.",
+    "Compare LaunchPad AI (The Pilot), Catalyst AI (The Scale), and Supreme AI (The Pinnacle). Catalyst is our most popular tier.",
 };
 
 export default function PricingPage() {

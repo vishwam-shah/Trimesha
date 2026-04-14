@@ -7,15 +7,19 @@ export interface GlowingShadowProps {
   children: ReactNode;
   /** `card` = stretch to parent (pricing tiles). `banner` = original demo proportions. */
   variant?: "banner" | "card";
+  /** When false, orbiting glow and border crawl are static (e.g. non-highlight pricing cards). */
+  animatedOrbit?: boolean;
   className?: string;
 }
 
 export function GlowingShadow({
   children,
   variant = "banner",
+  animatedOrbit = true,
   className,
 }: GlowingShadowProps) {
   const isCard = variant === "card";
+  const staticOrbit = isCard && !animatedOrbit;
 
   return (
     <>
@@ -319,6 +323,15 @@ export function GlowingShadow({
           }
         }
 
+        .glow-container--static-orbit .glow-content:before,
+        .glow-container--static-orbit .glow:after,
+        .glow-container--static-orbit .glow {
+          animation: none !important;
+        }
+        .glow-container--static-orbit .glow {
+          opacity: 0;
+        }
+
         @media (prefers-reduced-motion: reduce) {
           .glow-content:before,
           .glow:after,
@@ -329,7 +342,12 @@ export function GlowingShadow({
       `}</style>
 
       <div
-        className={cn("glow-container", isCard && "glow-container--card", className)}
+        className={cn(
+          "glow-container",
+          isCard && "glow-container--card",
+          staticOrbit && "glow-container--static-orbit",
+          className,
+        )}
         role={isCard ? undefined : "presentation"}
       >
         <span className="glow" aria-hidden />

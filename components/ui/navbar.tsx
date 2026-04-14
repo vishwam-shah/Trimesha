@@ -335,7 +335,6 @@ export function Navbar({ className }: { className?: string }) {
                               >
                                 <span className="size-2 shrink-0 rounded-full bg-violet-400" />
                                 {p.name}
-                                {p.nameSecondary ? ` (${p.nameSecondary})` : ""}
                               </Link>
                             ))
                           )}
