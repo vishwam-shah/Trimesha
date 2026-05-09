@@ -14,6 +14,20 @@ export function opensBookingModal(url: string): boolean {
   return false;
 }
 
+/**
+ * Explicit booking-modal targets for chat / deep links (non-empty only).
+ * Use this when deciding to open `BookingCalendar` instead of navigating.
+ */
+export function isBookingModalDeepLink(href: string): boolean {
+  const u = href.trim().toLowerCase();
+  if (!u) return false;
+  if (u === "#book-call" || u === "#/book-call" || u === "/book-call") return true;
+  if (u === "#contact" || u.startsWith("#contact")) return true;
+  if (u === "/#contact" || u.startsWith("/#contact")) return true;
+  if (u === "/contact" || u.startsWith("/contact")) return true;
+  return false;
+}
+
 /** Booking UI follows site light/dark; reserved for future tweaks. */
 export function prepareBookingModalTheme() {
   /* no-op */

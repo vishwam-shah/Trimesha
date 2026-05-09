@@ -46,7 +46,7 @@ export function MissionVision() {
               Vision
             </span>
             <h3 className="text-base font-semibold text-foreground mb-2">
-              Lead the shift into the AI era — one real problem at a time.
+              Lead the shift into the AI era - one real problem at a time.
             </h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
               Not chasing hype. Building lasting competitive advantage for the

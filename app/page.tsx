@@ -1,16 +1,12 @@
-import { Header } from "@/components/layout/header";
-import { HeroSection } from "@/components/sections/hero-section";
-import { FeaturesSection } from "@/components/sections/features-section";
-// import { TestimonialsSection } from "@/components/sections/testimonials-section";
-import { PageLoader } from "@/components/common/page-loader";
+import type { Metadata } from "next";
+import { ImmersiveHome } from "@/components/home/immersive-home";
+
+export const metadata: Metadata = {
+  title: "Trimesha - Digital Solutions Studio",
+  description:
+    "Custom AI systems, web platforms, and mobile apps engineered to scale with your ambition. Scroll-driven 3D showcase of our digital capabilities.",
+};
 
 export default function Home() {
-  return (
-    <PageLoader>
-      <Header />
-      <HeroSection />
-      <FeaturesSection />
-      {/* <TestimonialsSection /> */}
-    </PageLoader>
-  );
+  return <ImmersiveHome />;
 }

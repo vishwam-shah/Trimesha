@@ -23,10 +23,12 @@ export function PricingNavDropdown({
   setActive,
   active,
   plans,
+  routeActive,
 }: {
   setActive: (item: string | null) => void;
   active: string | null;
   plans: PricingPlanWithId[] | null;
+  routeActive?: boolean;
 }) {
   const list = plans ?? [];
 
@@ -36,6 +38,7 @@ export function PricingNavDropdown({
       active={active}
       item="Pricing"
       contentClassName="!w-auto !max-w-none !p-0"
+      routeActive={routeActive}
     >
       <div className="nav-dropdown-scroll w-[min(360px,calc(100vw-2rem))] max-h-[min(400px,70vh)] overflow-y-auto overscroll-contain py-2">
         {plans === null ? (

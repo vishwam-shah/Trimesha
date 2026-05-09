@@ -17,10 +17,12 @@ export function ServicesNavDropdown({
   setActive,
   active,
   services,
+  routeActive,
 }: {
   setActive: (item: string | null) => void;
   active: string | null;
   services: ServiceWithId[] | null;
+  routeActive?: boolean;
 }) {
   const list = services ?? [];
 
@@ -30,6 +32,7 @@ export function ServicesNavDropdown({
       active={active}
       item="Services"
       contentClassName="!w-auto !max-w-none !p-0"
+      routeActive={routeActive}
     >
       <div className="nav-dropdown-scroll w-[min(420px,calc(100vw-2rem))] max-h-[min(480px,72vh)] overflow-y-auto overscroll-contain py-2">
         {services === null ? (

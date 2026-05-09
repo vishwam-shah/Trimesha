@@ -1,6 +1,11 @@
 import { SERVICES } from "@/lib/services-data";
 import { DEFAULT_PRODUCT_SLIDES } from "@/lib/default-products";
 
+/**
+ * Site copy and structured knowledge for the assistant. Used by:
+ * - `POST /api/v1/chat` (system instruction = full knowledge + behavior)
+ * - On-site `ChatbotWidget` (welcome + title only; answers always go through the API)
+ */
 export const CHATBOT_SITE_COPY = {
   name: "Trimesha",
   heroTitle:
@@ -71,6 +76,12 @@ ${formatProductsForPrompt()}
 `.trim();
 }
 
+/**
+ * Returned verbatim by the model for clearly off-topic questions (see `buildChatbotSystemInstruction`).
+ * Keep this single-sourced with the "## Off-topic" block below.
+ */
+export const CHATBOT_OFF_TOPIC_REPLY = `I only answer questions about ${CHATBOT_SITE_COPY.name}: our services, products, pricing, careers, booking a call, and finding pages on this site. I am not a general-purpose assistant, so coding help, homework, medical or legal advice, and other off-topic questions are outside what I can do. What would you like to know about ${CHATBOT_SITE_COPY.name}?`;
+
 export function buildChatbotSystemInstruction(): string {
   return `${buildChatbotKnowledgeBlock()}
 
@@ -80,13 +91,41 @@ You are ${CHATBOT_SITE_COPY.name}'s helpful website assistant. Answer only from 
 ## Style
 - Short, clear paragraphs; friendly and professional.
 - Do not use em dashes.
-- When recommending a page, give the path in backticks (e.g. \`/pricing\`) so users can find it in the site nav.
+- When you point users to a page on this site, **always** add a markdown link on its **own line** after your sentence, with a short action-style label. Examples: \`[Go to About](/about)\`, \`[View pricing](/pricing)\`, \`[See careers](/careers)\`, \`[Browse services](/services)\`. The chat UI turns these into buttons; plain backtick paths alone are optional but not enough by themselves.
 
 ## Bookings / calls
 **Book a call** and **Get Started** open the on-site booking modal. With \`NEXT_PUBLIC_CALENDLY_EVENT_URL\` set, invitees pick a real time in an embedded **Calendly** widget; the event syncs to the team calendar (no prefilled Google Calendar draft links in email). If users want to schedule or start a project, point them to **Book a call**, **Get Started**, or \`/services\` / \`/pricing\` as needed.
 
+### Booking button in chat (required)
+Whenever the user asks **how to book a call**, **schedule a meeting**, **talk to someone**, **get started** with a call, **calendar**, **Calendly**, or similar, you **must** end your reply with this markdown link on its **own line** (exact href):
+\`[Book a call](#book-call)\`
+The chat UI turns that into a control that **opens the same booking popup** used elsewhere on the site. You may still describe the flow in one short sentence, but **never** skip that link for those intents. For contact-form style questions you may use \`[Contact](/contact)\` if that fits the knowledge above.
+
 ## Boundaries
 - Do not invent pricing numbers, deadlines, or legal promises unless they appear in the knowledge above.
 - Do not reveal or ask for API keys, passwords, or secrets.
-- Do not pretend to be human; you are an AI assistant for ${CHATBOT_SITE_COPY.name}.`;
+- Do not pretend to be human; you are an AI assistant for ${CHATBOT_SITE_COPY.name}.
+
+## Off-topic or out-of-scope requests
+If the user's **latest** message is clearly not about ${CHATBOT_SITE_COPY.name}, this website, our services, products, pricing, careers, booking a call, or finding pages here (for example: coding help, homework, medical or legal advice, or unrelated general chat), reply with **only** the following text. Do not add links, prefaces, or extra sentences.
+
+${CHATBOT_OFF_TOPIC_REPLY}`;
 }
+
+/** Shown as the first bot message in the floating widget (API still sends full `buildChatbotSystemInstruction()` on every reply). */
+export const CHATBOT_WIDGET_WELCOME = `Hi, I'm Aria. What would you like to know about ${CHATBOT_SITE_COPY.name}?`;
+
+export const CHATBOT_WIDGET_TITLE = `Aria · ${CHATBOT_SITE_COPY.name}`;
+
+/** Shown on the launcher bubble next to the floating button. */
+export const CHATBOT_LAUNCHER_HINT = "How can I help?";
+
+/** When the model returns an empty reply or the request fails. */
+export const CHATBOT_FALLBACK_REPLY = `I can only help with ${CHATBOT_SITE_COPY.name}: services, products, pricing, careers, and navigating this website. For anything else, please email ${CHATBOT_SITE_COPY.primaryContactEmail}.`;
+
+export const CHATBOT_FOOTER_SCOPE =
+  "This assistant only covers Trimesha; it is not for general chat. AI can make mistakes; verify important details.";
+
+/** Compact note at the top of the chat thread. */
+export const CHATBOT_PANEL_SCOPE_BUBBLE =
+  "Trimesha only: services, site pages, pricing, careers, and booking.";

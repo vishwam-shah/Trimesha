@@ -26,6 +26,7 @@ export function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const resetDone = searchParams.get("reset") === "1";
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -79,6 +80,14 @@ export function LoginForm() {
               </div>
             </CardHeader>
             <CardContent className="px-6 pb-2 pt-2 sm:px-8">
+              {resetDone ? (
+                <p
+                  className="mb-5 rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-sm text-emerald-800 dark:text-emerald-200"
+                  role="status"
+                >
+                  Your password was updated. Sign in with your new password.
+                </p>
+              ) : null}
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
@@ -94,7 +103,15 @@ export function LoginForm() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
+                  <div className="flex items-center justify-between gap-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Link
+                      href="/forgot-password"
+                      className="text-xs font-medium text-violet-600 transition-colors hover:text-violet-500 dark:text-violet-400 dark:hover:text-violet-300"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
                   <Input
                     id="password"
                     name="password"
@@ -124,13 +141,9 @@ export function LoginForm() {
             <CardFooter className="flex flex-col gap-4 px-6 pb-8 pt-2 sm:px-8">
               <Separator className="bg-border/60" />
               <p className="text-center text-sm text-muted-foreground">
-                Don&apos;t have an account?{" "}
-                <Link
-                  href="/signup"
-                  className="font-medium text-secondary underline-offset-4 hover:underline"
-                >
-                  Sign up
-                </Link>
+                New accounts are issued by your administrator. A superadmin can
+                create users from the dashboard; everyone else should request
+                access from their admin team.
               </p>
               <p className="text-center text-sm">
                 <Link

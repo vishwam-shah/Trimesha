@@ -8,7 +8,7 @@ export const ABOUT_SERVICES = [
   {
     label: "AI & Machine Learning",
     description:
-      "Custom models, intelligent automation, and data pipelines built around your specific workflows — not generic templates.",
+      "Custom models, intelligent automation, and data pipelines built around your specific workflows - not generic templates.",
     bg: "bg-blue-50",
     iconColor: "text-blue-600",
   },
@@ -22,7 +22,7 @@ export const ABOUT_SERVICES = [
   {
     label: "Web Applications",
     description:
-      "Full-stack web products — from dashboards to SaaS platforms — built for reliability under real load.",
+      "Full-stack web products - from dashboards to SaaS platforms - built for reliability under real load.",
     bg: "bg-purple-50",
     iconColor: "text-purple-600",
   },

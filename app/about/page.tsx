@@ -5,20 +5,20 @@ import { WhoWeAre } from "@/components/about/WhoWeAre";
 import { WhatWeBuild } from "@/components/about/WhatWeBuild";
 import { Stats } from "@/components/about/Stats";
 import { MissionVision } from "@/components/about/MissionVision";
+import { Team } from "@/components/about/Team";
 import { WhyUs } from "@/components/about/WhyUs";
-import { CTA } from "@/components/about/CTA";
+import { getPublicTeamMembers } from "@/lib/team-public";
 
 export const metadata: Metadata = {
   title: "About Us | Trimesha Digital Solutions",
   description:
-    "Trimesha Digital Solutions builds custom AI systems, mobile apps, and web applications for startups and growing businesses. Founded 2025, Ahmedabad.",
+    "Trimesha Digital Solutions builds custom AI systems, mobile apps, and web applications for startups and growing businesses. Founded 2025.",
   keywords: [
     "custom AI solutions",
     "machine learning development",
-    "mobile app development India",
+    "mobile app development",
     "web application development",
     "AI automation",
-    "Ahmedabad tech company",
   ],
   openGraph: {
     title: "About Trimesha Digital Solutions",
@@ -29,7 +29,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const teamMembers = await getPublicTeamMembers();
+
   return (
     <>
       <Header />
@@ -39,8 +41,8 @@ export default function AboutPage() {
         <WhatWeBuild />
         <Stats />
         <MissionVision />
+        <Team members={teamMembers} />
         <WhyUs />
-        <CTA />
       </main>
     </>
   );

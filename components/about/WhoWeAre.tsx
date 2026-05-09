@@ -21,8 +21,14 @@ export function WhoWeAre() {
             <p className="text-base text-muted-foreground leading-relaxed mb-4">
               Two engineers who got tired of watching businesses settle for
               off-the-shelf tools that almost fit. We started Trimesha to build
-              the solutions we kept wishing existed — practical AI, not
+              the solutions we kept wishing existed - practical AI, not
               proof-of-concept AI.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Siddhant brings deep mobile expertise across iOS, Android, and
+              cross-platform frameworks, while Vishwam drives full-stack web
+              engineering and AI integration. Together, they cover every surface
+              your product needs to ship on.
             </p>
           </div>
 
@@ -36,20 +42,16 @@ export function WhoWeAre() {
           >
             <blockquote className="border-l-2 border-purple-600 dark:border-purple-400 pl-4 mb-5">
               <p className="font-serif italic text-lg text-foreground leading-relaxed">
-                &ldquo;Technology should solve something real — not just
+                &ldquo;Technology should solve something real - not just
                 exist.&rdquo;
               </p>
             </blockquote>
-            {/* Founders */}
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-medium text-muted-foreground shrink-0">
-                F1
-              </div>
-              <div className="w-10 h-10 rounded-full bg-muted border border-border flex items-center justify-center text-xs font-medium text-muted-foreground shrink-0">
-                F2
-              </div>
-              <p className="text-xs text-muted-foreground leading-tight">
-                Co-founders, Trimesha Digital Solutions
+            <div className="border-t border-border pt-4">
+              <p className="text-xs font-medium text-foreground leading-tight">
+                Siddhant & Vishwam
+              </p>
+              <p className="text-xs text-muted-foreground leading-tight mt-0.5">
+                Founders, Trimesha Digital Solutions
               </p>
             </div>
           </motion.div>

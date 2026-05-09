@@ -27,7 +27,7 @@ export function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.6 }}
           >
-            Founded 2025 · Ahmedabad, India
+            Founded 2025
           </motion.span>
           <motion.h1
             className="text-4xl md:text-5xl font-bold leading-tight text-foreground max-w-2xl mb-4"
@@ -46,7 +46,7 @@ export function Hero() {
           >
             Trimesha Digital Solutions partners with startups and growing
             businesses to replace guesswork with intelligent, tailored technology
-            — built to fit your operation, not the other way around.
+            - built to fit your operation, not the other way around.
           </motion.p>
         </motion.div>
       </div>

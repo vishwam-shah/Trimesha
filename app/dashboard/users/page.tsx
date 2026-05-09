@@ -67,6 +67,17 @@ export default function DashboardUsersPage() {
     setDialogOpen(true)
   }
 
+  function openCreate() {
+    setMsg(null)
+    setErr(null)
+    setEditId(null)
+    setName("")
+    setEmail("")
+    setRole("user")
+    setPassword("")
+    setDialogOpen(true)
+  }
+
   function closeDialog() {
     setDialogOpen(false)
     setEditId(null)
@@ -74,33 +85,55 @@ export default function DashboardUsersPage() {
     setSaving(false)
   }
 
-  async function saveEdit(e: React.FormEvent) {
+  async function saveUser(e: React.FormEvent) {
     e.preventDefault()
-    if (!editId) return
     setErr(null)
     setMsg(null)
     setSaving(true)
     try {
-      const body: Record<string, string> = {
-        name: name.trim(),
-        email: email.trim().toLowerCase(),
-        role,
+      if (editId) {
+        const body: Record<string, string> = {
+          name: name.trim(),
+          email: email.trim().toLowerCase(),
+          role,
+        }
+        if (password.trim()) {
+          body.password = password
+        }
+        const r = await fetch(`/api/v1/admin/users/${editId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        })
+        const j = await r.json().catch(() => ({}))
+        if (!r.ok) {
+          setErr(typeof j.error === "string" ? j.error : "Update failed")
+          return
+        }
+        setMsg("User updated.")
+      } else {
+        const pw = password.trim()
+        if (!pw) {
+          setErr("Password is required for a new user.")
+          return
+        }
+        const r = await fetch("/api/v1/admin/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim().toLowerCase(),
+            role,
+            password: pw,
+          }),
+        })
+        const j = await r.json().catch(() => ({}))
+        if (!r.ok) {
+          setErr(typeof j.error === "string" ? j.error : "Could not create user")
+          return
+        }
+        setMsg("User created.")
       }
-      if (password.trim()) {
-        body.password = password
-      }
-      const r = await fetch(`/api/v1/admin/users/${editId}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      })
-      const j = await r.json().catch(() => ({}))
-      if (!r.ok) {
-        setErr(typeof j.error === "string" ? j.error : "Update failed")
-        setSaving(false)
-        return
-      }
-      setMsg("User updated.")
       closeDialog()
       await load()
     } finally {
@@ -142,9 +175,12 @@ export default function DashboardUsersPage() {
       {err ? <p className="text-sm text-destructive">{err}</p> : null}
 
       <section className="rounded-xl border border-border bg-card p-4 shadow-sm sm:p-6">
-        <h2 className="mb-4 text-lg font-medium">
-          All users ({users.length})
-        </h2>
+        <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="text-lg font-medium">All users ({users.length})</h2>
+          <Button type="button" onClick={openCreate}>
+            Add user
+          </Button>
+        </div>
         {loading ? (
           <p className="text-muted-foreground">Loading…</p>
         ) : (
@@ -223,11 +259,13 @@ export default function DashboardUsersPage() {
 
       <Dialog open={dialogOpen} onOpenChange={(o) => !o && closeDialog()}>
         <DialogContent className="sm:max-w-md">
-          <form onSubmit={saveEdit}>
+          <form onSubmit={saveUser}>
             <DialogHeader>
-              <DialogTitle>Edit user</DialogTitle>
+              <DialogTitle>{editId ? "Edit user" : "Add user"}</DialogTitle>
               <DialogDescription>
-                Change name, email, role, or set a new password (optional).
+                {editId
+                  ? "Change name, email, role, or set a new password (optional)."
+                  : "Create a sign-in for a new user. They can log in at /login with this email and password."}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -267,17 +305,24 @@ export default function DashboardUsersPage() {
                 </select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor="edit-password">New password</Label>
+                <Label htmlFor="edit-password">
+                  {editId ? "New password" : "Password"}
+                </Label>
                 <Input
                   id="edit-password"
                   type="password"
                   autoComplete="new-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Leave blank to keep current"
+                  placeholder={
+                    editId ? "Leave blank to keep current" : "Min. 8 characters"
+                  }
+                  required={!editId}
                 />
                 <p className="text-xs text-muted-foreground">
-                  At least 8 characters if you change it.
+                  {editId
+                    ? "At least 8 characters if you change it."
+                    : "At least 8 characters. Share this securely with the user."}
                 </p>
               </div>
             </div>
@@ -291,7 +336,13 @@ export default function DashboardUsersPage() {
                 Cancel
               </Button>
               <Button type="submit" disabled={saving}>
-                {saving ? "Saving…" : "Save"}
+                {saving
+                  ? editId
+                    ? "Saving…"
+                    : "Creating…"
+                  : editId
+                    ? "Save"
+                    : "Create user"}
               </Button>
             </DialogFooter>
           </form>

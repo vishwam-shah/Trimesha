@@ -28,7 +28,7 @@ export const DEFAULT_PRICING_PLANS: Omit<
     tagline: "The Scale",
     priceDisplay: "Most teams start here",
     description:
-      "Catalyst AI for go-to-market acceleration and operational throughput at scale—our most popular tier for growing teams.",
+      "Catalyst AI for go-to-market acceleration and operational throughput at scale - our most popular tier for growing teams.",
     features: [
       "Multi-workflow automation & orchestration",
       "Advanced models, guardrails, and evals",
