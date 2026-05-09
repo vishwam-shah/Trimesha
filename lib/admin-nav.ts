@@ -4,6 +4,7 @@ import {
   Briefcase,
   LayoutDashboard,
   Package,
+  UsersRound,
   Wrench,
   Users,
 } from "lucide-react"
@@ -53,6 +54,13 @@ export const ADMIN_NAV_ITEMS: AdminNavItem[] = [
     label: "Users",
     description: "Accounts, roles, and passwords",
     icon: Users,
+    superadminOnly: true,
+  },
+  {
+    href: "/dashboard/team",
+    label: "Team",
+    description: "About page: team members",
+    icon: UsersRound,
     superadminOnly: true,
   },
 ]

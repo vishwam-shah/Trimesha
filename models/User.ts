@@ -1,4 +1,4 @@
-import mongoose, { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 
 export const USER_ROLES = ["user", "admin", "superadmin"] as const;
 export type UserRole = (typeof USER_ROLES)[number];
@@ -8,6 +8,8 @@ export interface IUser {
   password: string;
   role: UserRole;
   name?: string;
+  passwordResetToken?: string | null;
+  passwordResetExpires?: Date | null;
 }
 
 const UserSchema = new Schema<IUser>(
@@ -27,10 +29,15 @@ const UserSchema = new Schema<IUser>(
       default: "user",
     },
     name: { type: String, trim: true },
+    passwordResetToken: { type: String, default: null },
+    passwordResetExpires: { type: Date, default: null },
   },
   { timestamps: true },
 );
 
-const User = models.User ?? model<IUser>("User", UserSchema);
+// Next.js can keep a stale compiled model across HMR; strict mode then drops new paths on save.
+if (process.env.NODE_ENV !== "production" && mongoose.models.User) {
+  delete mongoose.models.User;
+}
 
-export default User;
+export default model<IUser>("User", UserSchema);

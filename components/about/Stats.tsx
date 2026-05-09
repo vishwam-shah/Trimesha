@@ -87,7 +87,7 @@ export function Stats() {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          We&apos;re early-stage by design — every project we take on gets our
+          We&apos;re early-stage by design - every project we take on gets our
           full attention. We don&apos;t split focus across dozens of clients.
         </motion.p>
       </div>

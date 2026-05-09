@@ -16,6 +16,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Separator } from "@/components/ui/separator"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet"
 import { AdminNavLinks } from "@/components/admin/admin-nav-links"
 
@@ -106,15 +107,29 @@ export function AdminHeader({
       </header>
 
       <Sheet open={mobileOpen} onOpenChange={onMobileOpenChange}>
-        <SheetContent side="left" className="w-[min(100%,18rem)] p-0">
+        <SheetContent
+          side="left"
+          className="flex h-full w-full max-w-[min(20rem,92vw)] flex-col gap-0 overflow-hidden border-r border-violet-500/10 bg-sidebar p-0 shadow-[4px_0_32px_-8px_rgba(0,0,0,0.12)] dark:border-violet-950/40 dark:shadow-[4px_0_32px_-8px_rgba(0,0,0,0.45)] sm:max-w-80"
+        >
           <SheetTitle className="sr-only">Admin navigation</SheetTitle>
-          <div className="flex h-14 items-center border-b border-sidebar-border px-4">
-            <span className="text-sm font-semibold">Trimesha Admin</span>
+          <div className="relative shrink-0 border-b border-sidebar-border bg-gradient-to-br from-violet-600/90 via-purple-600/85 to-indigo-800/90 px-4 pb-4 pt-14 text-white">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/70">
+              Menu
+            </p>
+            <p className="mt-1 text-lg font-semibold tracking-tight">
+              Trimesha Admin
+            </p>
+            <p className="mt-1 text-xs leading-relaxed text-violet-100/85">
+              Jump to a section. Your place is saved when you close this panel.
+            </p>
           </div>
-          <AdminNavLinks
-            onNavigate={() => onMobileOpenChange(false)}
-            className="bg-sidebar text-sidebar-foreground"
-          />
+          <ScrollArea className="min-h-0 flex-1">
+            <AdminNavLinks
+              layout="comfortable"
+              onNavigate={() => onMobileOpenChange(false)}
+              className="bg-sidebar text-sidebar-foreground"
+            />
+          </ScrollArea>
         </SheetContent>
       </Sheet>
     </>

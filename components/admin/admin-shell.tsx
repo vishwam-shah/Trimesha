@@ -46,7 +46,8 @@ export function AdminShell({ children }: AdminShellProps) {
     }
     if (
       session.user.role === "admin" &&
-      pathname?.startsWith("/dashboard/users")
+      (pathname?.startsWith("/dashboard/users") ||
+        pathname?.startsWith("/dashboard/team"))
     ) {
       router.replace("/dashboard/products")
     }
@@ -66,7 +67,9 @@ export function AdminShell({ children }: AdminShellProps) {
 
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="flex min-h-screen w-full bg-background text-foreground">
+      <div
+        className="flex min-h-screen w-full bg-background text-foreground [&_button:not(:disabled)]:cursor-pointer [&_input[type=button]:not(:disabled)]:cursor-pointer [&_input[type=submit]:not(:disabled)]:cursor-pointer [&_[role=button]:not([aria-disabled=true])]:cursor-pointer"
+      >
         <AdminSidebar />
         <div className="flex min-w-0 flex-1 flex-col">
           <AdminHeader

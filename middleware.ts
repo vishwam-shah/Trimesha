@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 import { getToken } from "next-auth/jwt";
 
 export async function middleware(req: NextRequest) {
+  if (req.nextUrl.pathname === "/signup") {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
   if (!req.nextUrl.pathname.startsWith("/dashboard")) {
     return NextResponse.next();
   }
@@ -25,7 +29,8 @@ export async function middleware(req: NextRequest) {
   }
 
   if (
-    req.nextUrl.pathname.startsWith("/dashboard/users") &&
+    (req.nextUrl.pathname.startsWith("/dashboard/users") ||
+      req.nextUrl.pathname.startsWith("/dashboard/team")) &&
     role !== "superadmin"
   ) {
     return NextResponse.redirect(new URL("/dashboard/products", req.url));
@@ -35,5 +40,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/dashboard/:path*", "/signup"],
 };

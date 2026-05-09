@@ -81,6 +81,8 @@ export async function PATCH(req: Request, ctx: Ctx) {
         )
       }
       target.password = await bcrypt.hash(pwd, 12)
+      target.passwordResetToken = null
+      target.passwordResetExpires = null
     }
 
     await target.save()

@@ -12,50 +12,43 @@ const IndianFlag = (
   </svg>
 );
 
-const coFounders = [
+const teamSpotlight = [
   {
-    imageUrl: "/testimonial/Siddhant_01.JPG",
-    location: "Siddhant Mehta",
+    imageUrl: "/testimonial/mayank.jpeg",
+    location: "Mayank Gautam",
     flag: IndianFlag,
-    stats: "Co-Founder",
-    desc: "Lead Software Engineer",
-    href: "#",
-    themeColor: "150 50% 25%",
+    stats: "Intern",
+    desc: "Full Stack Developer",
+    href: "#team",
+    themeColor: "180 50% 35%",
   },
   {
-    imageUrl: "/testimonial/vishwam_01.jpeg",
-    location: "Vishwam Shah",
+    imageUrl: "/testimonial/mehek.jpeg",
+    location: "Mehek",
     flag: IndianFlag,
-    stats: "Co-Founder",
-    desc: "AI Developer",
-    href: "#",
-    themeColor: "250 50% 30%",
-  },
-  {
-    imageUrl: "/testimonial/Jay_01.jpg",
-    location: "Jay Trivedi",
-    flag: IndianFlag,
-    stats: "Co-Founder",
-    desc: "AI Researcher",
-    href: "#",
-    themeColor: "30 70% 40%",
+    stats: "Intern",
+    desc: "Social Media Manager",
+    href: "#team",
+    themeColor: "330 60% 45%",
   },
 ];
 
 export function TestimonialsSection() {
   return (
     <>
-      {/* Co-Founders Section */}
       <section className="w-full py-20 bg-background">
         <div className="mx-auto max-w-5xl mb-12 text-center px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Meet Our Co-Founders
+            Team spotlight
           </h2>
+          <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+            A few of the people building and telling the Trimesha story.
+          </p>
         </div>
         <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 px-4">
-          {coFounders.map((founder) => (
-            <div key={founder.location} className="w-full max-w-[320px] h-112.5">
-              <ProfileCard {...founder} />
+          {teamSpotlight.map((member) => (
+            <div key={member.location} className="w-full max-w-[320px] h-112.5">
+              <ProfileCard {...member} />
             </div>
           ))}
         </div>

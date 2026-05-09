@@ -21,6 +21,7 @@ export const MenuItem = ({
   children,
   href,
   contentClassName,
+  routeActive,
 }: {
   setActive: (item: string) => void;
   active: string | null;
@@ -28,13 +29,28 @@ export const MenuItem = ({
   children?: React.ReactNode;
   href?: string;
   contentClassName?: string;
+  /** Current page matches this section (e.g. /services/*) */
+  routeActive?: boolean;
 }) => {
   const content = (
     <motion.p
       transition={{ duration: 0.3 }}
-      className="cursor-pointer text-black hover:text-secondary dark:text-white dark:hover:text-secondary text-sm font-medium transition-colors"
+      className={cn(
+        "flex cursor-pointer flex-col gap-1 text-sm font-medium transition-colors duration-200",
+        routeActive
+          ? "text-white font-semibold"
+          : "text-white/90 hover:text-white",
+      )}
     >
-      {item}
+      <span>{item}</span>
+      {/* Same-height row as plain nav links so labels share one baseline */}
+      <span
+        className={cn(
+          "h-0.5 w-full shrink-0 rounded-full",
+          routeActive ? "bg-white/80" : "bg-transparent",
+        )}
+        aria-hidden
+      />
     </motion.p>
   );
 
@@ -58,7 +74,7 @@ export const MenuItem = ({
               <motion.div
                 transition={transition}
                 layoutId={`nav-dropdown-${item}`}
-                className="bg-white dark:bg-black backdrop-blur-sm rounded-2xl overflow-hidden border border-black/20 dark:border-white/20 shadow-2xl shadow-black/10 dark:shadow-black/40"
+                className="bg-gray-950/90 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/[0.08] shadow-2xl shadow-black/40"
               >
                 <motion.div
                   layout
@@ -85,7 +101,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative rounded-full border border-transparent dark:bg-black dark:border-white/20 bg-white shadow-input flex justify-center space-x-8 px-8 py-4"
+      className="relative flex items-center justify-center space-x-8 rounded-full border border-white/[0.08] bg-white/[0.04] px-8 py-3.5 shadow-[0_2px_20px_rgba(0,0,0,0.15)] backdrop-blur-xl"
     >
       {children}
     </nav>
@@ -129,7 +145,7 @@ export const HoveredLink = ({ children, href, ...rest }: { children: React.React
     <Link
       href={href}
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-secondary dark:hover:text-secondary transition-colors"
+      className="text-neutral-400 hover:text-violet-400 transition-colors duration-200"
     >
       {children}
     </Link>

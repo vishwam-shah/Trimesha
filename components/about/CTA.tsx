@@ -20,7 +20,7 @@ export function CTA() {
           </h2>
           <p className="text-base text-muted-foreground mt-3 leading-relaxed">
             Whether you&apos;re a founder sketching something out or a business
-            looking to automate a real bottleneck — we&apos;re happy to talk
+            looking to automate a real bottleneck - we&apos;re happy to talk
             through what&apos;s possible.
           </p>
           <div className="mt-6 flex justify-center">
